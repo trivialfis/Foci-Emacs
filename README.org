@@ -1,0 +1,27 @@
+#+TITLE: Emacs configuration.
+* Introduction
+It's just my Emacs configuration.
+
+* Features
+** Excellent C/C++ IDE.
+
+** Fast loading speed.
+#+BEGIN_SRC shell
+time emacs -e "kill-emacs"
+
+real	0m0.731s
+user	0m0.537s
+sys	        0m0.067s
+#+END_SRC
+Pretty good, right?
+
+** Many pre-configured stuffs
+Check global-setting
+
+* To-do
++ Add packages auto installation.
++ Add better helm setup.
++ Add better Ecb faces.
++ Add langtool configuration
+
+#  LocalWords:  Ecb LocalWords IDE pre langtool
