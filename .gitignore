@@ -1,0 +1,14 @@
+auto-save-list
+elpa
+eshell
+irony
+semanticdb
+snippets
+url
+thumbs
+backup
+recentf
+elpa
+*.txt
+*token
+*.elc
