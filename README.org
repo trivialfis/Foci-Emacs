@@ -1,7 +1,21 @@
 #+TITLE: Emacs configuration.
 
+* Table of Contents                                                     :TOC_3_gh:
+- [[#introduction][Introduction]]
+- [[#features][Features]]
+  - [[#many-pre-configured-stuffs][Many pre-configured stuffs]]
+  - [[#some-scripts][Some scripts]]
+  - [[#excellent-cc-ide][Excellent C/C++ IDE.]]
+  - [[#other-languages][Other languages]]
+  - [[#fast-loading-speed][Fast loading speed.]]
+  - [[#theme][Theme]]
+  - [[#key-bindings][Key bindings]]
+  - [[#stuffs-not-in-this-repo][Stuffs not in this repo]]
+- [[#screenshots][Screenshots]]
+- [[#to-do][To-do]]
+
 * Introduction
-It's just my Emacs configuration. Everything is tested with both Emacs 25.2 and the latest master branch. If you intend to use it, you will have to install those packages by yourself. Packages are listed in the *init.el* /package-selected-packages/ like everybody does.
+It's just my Emacs configuration. Everything is tested with both Emacs 25.2 and the latest master branch. If you intend to use it, you will have to install those packages by yourself. Packages are listed in the *init.el* /package-selected-packages/ like everybody does. Following are a brief description of this repo.
 
 * Features
 ** Many pre-configured stuffs
@@ -10,6 +24,8 @@ It's just my Emacs configuration. Everything is tested with both Emacs 25.2 and 
 ** Some scripts
 I am not a lisp programmer, yet. But writing some little script is still possible.
  + =trivial-ansi-mode= is a minor mode for displaying 24 bit ANSI true colors.
+#+ATTR_ORG: :width 700
+   [[file:./screenshots/ansi.png]]
  + Minor scripts.
    Few minor scripts can make life easier. Have a look in *misc-trivialfis.el*
    - trivialfis/goto-pos
@@ -100,6 +116,15 @@ In *.emacs.d*, files looks like this:
  + *backup/* for =*~= temporary files.
  + *semanticd/b* for =semantic= tags databases.
  + *irony/* contains the =irony= binary file.
+
+* Screenshots
+#+ATTR_ORG: :width 700
+[[file:./screenshots/screenshot_0.png]]
+#+ATTR_ORG: :width 700
+[[file:./screenshots/screenshot_1.png]]
+
+#+ATTR_ORG: :width 600
+[[file:./screenshots/org-mode.png]]
 
 * To-do
 + Add packages auto installation.
