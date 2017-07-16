@@ -45,15 +45,15 @@ There are many packages configurated for C/C++ development. Mainly the following
 And I wrote a little script to configure libraries for these packages using Unix *pkg-config*.
 
 ** Other languages
-Not really, I have some basic configuration for =python= and =elisp=. For other languages, I only need proper highlight to view them. You can add whatever you want to *langs* directory.
+Not really, I have some basic configuration for =python= and =elisp=. For other languages, I only need proper highlighting to view them. You can add whatever you want to *langs* directory.
 
 ** Fast loading speed.
 #+BEGIN_SRC shell
 time emacs -e "kill-emacs"
 
-real	0m0.731s
-user	0m0.537s
-sys	        0m0.067s
+real	0m0.747s
+user	0m0.539s
+sys	0m0.076s
 #+END_SRC
 Pretty good, right?
 
@@ -119,9 +119,9 @@ In *.emacs.d*, files looks like this:
 
 * Screenshots
 #+ATTR_ORG: :width 700
-[[file:./screenshots/screenshot_0.png]]
+[[file:./screenshots/cpp_demo.png]]
 #+ATTR_ORG: :width 700
-[[file:./screenshots/screenshot_1.png]]
+[[file:./screenshots/screenshot_0.png]]
 
 #+ATTR_ORG: :width 600
 [[file:./screenshots/org-mode.png]]
