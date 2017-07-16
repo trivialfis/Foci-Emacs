@@ -115,14 +115,6 @@
 (set-face-foreground 'highlight nil) ; keep the syntex highlighting
 
 
-;; highlight current column
-(require 'col-highlight)
-(col-highlight-set-interval 2)
-(set-face-background 'col-highlight "#474747")
-(setf col-highlight-overlay-priority 30) ; Doesn't mess up with company mode
-(toggle-highlight-column-when-idle)
-
-
 ;; Highlight symbol at point
 (require 'highlight-symbol)
 (setq highlight-symbol-idle-delay 0)

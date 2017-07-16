@@ -184,6 +184,9 @@
  ;; Semantic
  '(semantic-idle-symbol-highlight ((t (:background "gold" :foreground "yellow"))))
  '(ecb-default-highlight-face ((t (:background "gold" :foreground "black"))))
+
+ ;; Col
+ '(col-highlight ((t (:background "#474747"))))
  )
 
 (defvar atom-dark-theme-force-faces-for-mode t

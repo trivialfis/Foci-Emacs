@@ -45,6 +45,9 @@ MODE: the major programming mode"
   "Added before any programming mode configuration."
   (add-hook 'eldoc-mode-hook #'(lambda ()
 				 (setf eldoc-idle-delay 0)))
+  (col-highlight-set-interval 2)
+  (setq col-highlight-overlay-priority 0)
+  (toggle-highlight-column-when-idle 1)
   (trivialfis/flycheck))
 
 
