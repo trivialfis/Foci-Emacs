@@ -58,7 +58,7 @@ sys	0m0.076s
 Pretty good, right?
 
 ** Theme
-I modified the atom-dark theme a little bit. The file =atom-dark-theme-c.el= in =.emacs.d= is the modified version. Change it back to =atom-dark-theme= then Emacs will load it correctly.
+I modified the atom-dark theme a little bit. The file =atom-dark-theme= in =.emacs.d= is the modified version. Change it back to =atom-dark-theme.el= then Emacs will load it correctly.
 
 ** Key bindings
 There are so so many key bindings, most of them are set by individual package or by Emacs itself, here is a list of customized key bindings in global key map, you can find the list in *init.el*

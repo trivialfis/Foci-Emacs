@@ -1,4 +1,4 @@
-;;; programming-trivialfis.el --- Summary
+;;; programming-trivialfis.el --- Configurations hooked to prog-mode.
 ;;; Commentary:
 ;;; Code:
 (use-package ecb

@@ -4,6 +4,7 @@
 
 ;; Global settings---------------------------------------------------------------------------------
 (load-theme 'atom-dark t)
+;; (load-theme 'gotham t)
 (setq initial-major-mode 'fundamental-mode  ; Prevents loading emacs lisp mode automatically
       inhibit-startup-screen t
       frame-title-format '((:eval (if (buffer-file-name) ; Set the frame title to display file path and name
@@ -13,7 +14,6 @@
       package-enable-at-startup nil)
 
 ;; (setq-default display-line-numbers t)
-
 ;; (modify-all-frames-parameters '((scroll-bar-width . 8)))
 
 (custom-set-variables
@@ -21,11 +21,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (atom-dark)))
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile cpputils-cmake clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol header2 company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
+    (toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile cpputils-cmake clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol header2 company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t))
 
@@ -213,6 +212,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 ;; C mode
 (autoload 'trivialfis/c "cc-trivialfis")
 (add-hook 'c-mode-hook 'trivialfis/c)
+
+;; rust mode
+(autoload 'trivialfis/rust "rust-trivialfis")
+(add-hook 'rust-mode-hook 'trivialfis/rust)
 
 ;; javascript  mode
 (autoload 'trivialfis/js "js-trivialfis")
