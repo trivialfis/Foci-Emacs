@@ -10,10 +10,13 @@
 (defun trivialfis/rust-compile ()
   "Compile rust code using cargo."
   (interactive)
-  (let ((current-buf (current-buffer))
-	(compile-buf (get-buffer-create "*Compile log*")))
+  (let ((compile-buf
+	 (get-buffer-create "*Compile log*")))
     (set-buffer compile-buf)
-    (insert (shell-command-to-string "cargo build"))
+    (goto-char (point-max))
+    (insert (concat
+	     (shell-command-to-string "cargo build")
+	     "\n\n"))
     (display-buffer compile-buf)))
 
 (defun trivialfis/rust ()
