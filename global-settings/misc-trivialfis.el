@@ -35,5 +35,13 @@ If you want to go to the middle, enter 50. 50 means 50% of the buffer."
       (save-buffers-kill-terminal)
     (delete-frame)))
 
+(defun trivialfis/local-set-keys (key-commands)
+  "Set multiple local bindings with KEY-COMMANDS list."
+  (dolist (kc key-commands)
+    (define-key (current-local-map)
+      (kbd (car kc))
+      (cdr kc))))
+
+
 (provide 'misc-trivialfis)
 ;;; misc-trivialfis.el ends here
