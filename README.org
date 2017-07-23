@@ -45,7 +45,7 @@ There are many packages configurated for C/C++ development. Mainly the following
 And I wrote a little script to configure libraries for these packages using Unix *pkg-config*.
 
 ** Other languages
-Not really, I have some basic configuration for =python= and =elisp=. For other languages, I only need proper highlighting to view them. You can add whatever you want to *langs* directory.
+Not really. Most of the basic stuff are configurated by other packages themselves, all I needed is to glue them together. For instance, I code in =python= sometimes and ~elpy~ is smart enough to do anything I want. I have tried reading the configuration for =python= from ~spacemacs~, but I find it unnecessarily complex. Besides, for other languages, all I need is the proper syntax highlighting so that I can read the code. For a complete list of non-trivially configurated languages set, please refer to the directory =langs=.
 
 ** Fast loading speed.
 #+BEGIN_SRC shell
@@ -58,10 +58,10 @@ sys	0m0.076s
 Pretty good, right?
 
 ** Theme
-I modified the atom-dark theme a little bit. The file =atom-dark-theme= in =.emacs.d= is the modified version. Change it back to =atom-dark-theme.el= then Emacs will load it correctly.
+I modified the ~atom-dark~ theme a little bit. The file =atom-dark-theme= in =global-settings= is the modified version. Change it back to =atom-dark-theme.el= and put it into =.emacs.d= then Emacs should load it correctly.
 
 ** Key bindings
-There are so so many key bindings, most of them are set by individual package or by Emacs itself, here is a list of customized key bindings in global key map, you can find the list in *init.el*
+There are so so many key bindings, most of them are set by individual package or by Emacs itself, here is a list of customized key bindings in global key map, you can find this list in *init.el*
 #+BEGIN_SRC emacs-lisp
 (trivialfis/global-set-keys
  '(
@@ -91,6 +91,7 @@ There are so so many key bindings, most of them are set by individual package or
 
    ))
 #+END_SRC
+For local key maps, please refer to specific configuration files.
 
 
 ** Stuffs not in this repo

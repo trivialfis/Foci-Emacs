@@ -11,7 +11,8 @@
 				      (abbreviate-file-name
 				       (buffer-file-name))
 				    "%b")))
-      package-enable-at-startup nil)
+      package-enable-at-startup nil
+      visible-bell t)			; Remove the beep
 
 ;; (setq-default display-line-numbers t)
 ;; (modify-all-frames-parameters '((scroll-bar-width . 8)))
@@ -82,7 +83,7 @@
 
 ;; Spaceline theme
 (require 'spaceline-config)
-(setq powerline-height 23
+(setq powerline-height 28
       powerline-default-separator 'wave
       spaceline-window-numbers-unicode t)
 ;; (spaceline-toggle-battery-off)

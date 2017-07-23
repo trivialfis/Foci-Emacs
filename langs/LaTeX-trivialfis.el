@@ -6,7 +6,7 @@
 (require 'latex)
 (require 'company)
 (defun trivialfis/LaTeX()
-  "Somehow the company-latex-commands conflicts with the other two latex backends"
+  "Somehow the company-latex-commands conflicts with the other two latex backends."
   ;; (auto-make-header)
   (LaTeX-math-mode)
   (setq TeX-auto-save t)
