@@ -1,19 +1,13 @@
 ;;; cc-pkg-trivialfis.el --- Summary
 ;;; Commentary:
 ;;; Code:
-(require 's)				; It's gonna be loaded anyway
 (require 'programming-trivialfis)
 (require 'flycheck)
 (require 'company-clang)
-(use-package f
-  :commands (f-traverse-upwards
-	     f-exists?
-	     f-expand
-	     f-read-text
-	     f-write-text
-	     f-join
-	     f-append-text)
-  :config (message "f loaded"))
+(require 'helm)
+(require 'f)
+(require 's)
+
 
 (use-package semantic
   :commands (semantic-add-system-include
@@ -44,7 +38,8 @@
 
 (defun config-libraries(lib-name)
   "Configurate c++ libraries for flycheck-clang, company-clang, semantic, irony"
-  (let* ((cflags-raw (shell-command-to-string (concat "pkg-config --libs --cflags " lib-name)))
+  (let* ((lib-name (car (split-string lib-name " " t)))
+	 (cflags-raw (shell-command-to-string (concat "pkg-config --libs --cflags " lib-name)))
 	 (cflags (s-split " " cflags-raw)))
     (if (featurep 'irony)
 	(config-irony-clang-cdb cflags))
@@ -63,13 +58,27 @@
   (semantic-force-refresh))
 
 
-(defun add-guile()
-  (interactive)
-  (config-libraries "guile-2.0"))
+(defun helm-source-pkg ()
+  "Return a `helm' source for libraries from pkg-config."
+  (helm-build-sync-source "PKG-CONFIG"
+    :candidates
+    (lambda ()
+      (split-string
+       (shell-command-to-string "pkg-config --list-all")
+       "\n"))
+    :candidate-number-limit 500
+    :candidate-transformer
+    (lambda (candidates)
+      (sort candidates #'string-lessp))
+    :nomark t
+    :action '(("Add" . config-libraries))))
 
-(defun add-gtkmm()
+(defun mumbo-find-library ()
+  "Find library by name."
   (interactive)
-  (config-libraries "gtkmm-3.0"))
+  (if (featurep 'helm)
+      (helm :sources (helm-source-pkg)
+	    :buffer "*helm pkg")))
 
 (provide 'cc-pkg-trivialfis)
 ;;; cc-pkg-trivialfis.el ends here

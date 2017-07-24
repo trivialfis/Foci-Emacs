@@ -41,11 +41,17 @@
 (add-to-list 'load-path "~/.emacs.d/global-settings/")
 (add-to-list 'load-path "~/.emacs.d/langs/")
 
-(let ((tr/commands '(trivialfis/pop-frame
-		     trivialfis/close-frame
-		     trivialfis/goto-pos)))
-  (dolist (c tr/commands)
-    (autoload c "misc-trivialfis" :interactive t)))
+;; (let ((tr/commands '(trivialfis/pop-frame
+;; 		     trivialfis/close-frame
+;; 		     trivialfis/goto-pos)))
+;;   (dolist (c tr/commands)
+;;     (autoload c "misc-trivialfis" :interactive t)))
+
+(use-package misc-trivialfis
+  :commands (trivialfis/pop-frame
+	     trivialfis/close-frame
+	     trivialfis/goto-pos)
+  :config (message "Misc loaded."))
 
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"

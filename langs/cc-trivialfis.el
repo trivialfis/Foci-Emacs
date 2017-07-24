@@ -26,8 +26,7 @@
   :config (message "Semantic loaded"))
 
 (use-package cc-pkg-trivialfis
-  :commands (add-guile
-	     add-gtkmm)
+  :commands mumbo-find-library
   :config (message "cc-pkg loaded"))
 
 (use-package rtags
@@ -81,9 +80,9 @@ Used only for nevigation."
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
 
-  (trivialfis/rtags)
+  ;; (trivialfis/rtags)
   (trivialfis/irony)
-  ;; (trivialfis/cc-base-srefactor)
+  (trivialfis/cc-base-srefactor)
 
   (trivialfis/local-set-keys
    '(
