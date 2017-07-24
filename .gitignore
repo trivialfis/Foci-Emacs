@@ -3,6 +3,7 @@ elpa
 eshell
 irony
 semanticdb
+rtagsdb
 snippets
 url
 thumbs
@@ -12,3 +13,4 @@ elpa
 *.txt
 *token
 *.elc
+bookmarks
