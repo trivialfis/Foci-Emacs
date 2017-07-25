@@ -39,8 +39,9 @@
 (defun config-libraries(lib-name)
   "Configurate c++ libraries for flycheck-clang, company-clang, semantic, irony"
   (let* ((lib-name (car (split-string lib-name " " t)))
-	 (cflags-raw (shell-command-to-string (concat "pkg-config --libs --cflags " lib-name)))
-	 (cflags (s-split " " cflags-raw)))
+	 (cflags (s-split
+		  " " (shell-command-to-string
+		       (concat "pkg-config --libs --cflags " lib-name)))))
     (if (featurep 'irony)
 	(config-irony-clang-cdb cflags))
     (dolist (pc c/c++-packages-list)
@@ -78,7 +79,7 @@
   (interactive)
   (if (featurep 'helm)
       (helm :sources (helm-source-pkg)
-	    :buffer "*helm pkg")))
+	    :buffer "*helm pkg*")))
 
 (provide 'cc-pkg-trivialfis)
 ;;; cc-pkg-trivialfis.el ends here

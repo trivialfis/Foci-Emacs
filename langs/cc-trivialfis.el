@@ -99,7 +99,7 @@ Used only for nevigation."
   "Custom C++ mode."
   (setf irony-additional-clang-options '("-std=c++14" "-cc1"))
   ;; (setf flycheck-clang-language-standard "c++14")
-  ;; (trivialfis/semantic 'c++-mode)
+  (trivialfis/semantic 'c++-mode)
   (trivialfis/cc-base))
 
 (defun trivialfis/c ()
