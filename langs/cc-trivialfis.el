@@ -72,14 +72,19 @@ Used only for nevigation."
   (trivialfis/local-set-keys
    '(
      ("M-RET"   .  srefactor-refactor-at-point)
-     ("C-c t"   .  senator-fold-tag-toggle))))
+     ("C-c t"   .  senator-fold-tag-toggle)
+     ("C-."     .  semantic-symref)
+     ("M-."     .  semantic-ia-fast-jump)
+     ("C-,"     .  semantic-mrub-switch-tags)))
+  (eval-after-load 'helm-trivialfis
+    (local-set-key (kbd "C-h ,") 'helm-semantic-or-imenu)))
 
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
-
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
   ;; (trivialfis/rtags)
   (trivialfis/irony)
   (trivialfis/cc-base-srefactor)
@@ -104,7 +109,7 @@ Used only for nevigation."
 
 (defun trivialfis/c ()
   "Custom c mode."
-  ;; (trivialfis/semantic 'c-mode)
+  (trivialfis/semantic 'c-mode)
   (trivialfis/cc-base))
 
 (provide 'c++-trivialfis)

@@ -36,9 +36,11 @@ MODE: the major programming mode"
 	  semantic-idle-scheduler-idle-time 1)
     (semanticdb-enable-gnu-global-databases 'MODE)
     ;; (set-face-attribute 'semantic-idle-symbol-highlight nil :background "gold" :foreground "yellow")
-    (local-set-key "\C-cr" 'semantic-symref)
-    (local-set-key "\C-cj" 'semantic-ia-fast-jump)
-    (local-set-key "\C-cb" 'semantic-mrub-switch-tags)
+    ;; (local-set-key "M-," 'semantic-symref)
+    ;; (local-set-key "C-." 'semantic-ia-fast-jump)
+    ;; (local-set-key "C-," 'semantic-mrub-switch-tags)
+    ;; (eval-after-load 'helm
+    ;;   (local-set-key (kbd "C-.") 'helm-semantic-or-imenu))
     (semantic-mode 1)))
 
 (defun trivialfis/programming-init ()
