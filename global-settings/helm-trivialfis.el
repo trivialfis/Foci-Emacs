@@ -15,6 +15,10 @@
 
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-z") 'helm-select-action)
+  (define-key helm-map (kbd "C-n") 'next-history-element)
+  (define-key helm-map (kbd "C-p") 'previous-history-element)
+  (define-key helm-map (kbd "M-n") 'helm-next-line)
+  (define-key helm-map (kbd "M-p") 'helm-previous-line)
 
   (when (executable-find "curl")
     (setq helm-net-prefer-curl t))
