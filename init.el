@@ -4,7 +4,6 @@
 
 ;; Global settings---------------------------------------------------------------------------------
 (load-theme 'atom-dark t)
-;; (load-theme 'gotham t)
 (setq initial-major-mode 'fundamental-mode  ; Prevents loading emacs lisp mode automatically
       inhibit-startup-screen t
       frame-title-format '((:eval (if (buffer-file-name) ; Set the frame title to display file path and name
