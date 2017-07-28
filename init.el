@@ -83,8 +83,8 @@
 
 ;; Spaceline theme
 (require 'spaceline-config)
-(setq powerline-height 28
-      powerline-default-separator 'wave
+(setq powerline-height 25
+      ;; powerline-default-separator 'wave
       spaceline-window-numbers-unicode t)
 ;; (spaceline-toggle-battery-off)
 ;; (spaceline-toggle-anzu-off)
@@ -122,9 +122,9 @@
 
 
 ;; Auto insert and update header info
-(autoload 'auto-make-header "header2")
-(autoload 'auto-update-file-header "header2")
-(add-hook 'write-file-hooks 'auto-update-file-header)
+;; (autoload 'auto-make-header "header2")
+;; (autoload 'auto-update-file-header "header2")
+;; (add-hook 'write-file-hooks 'auto-update-file-header)
 
 
 ;; company mode
