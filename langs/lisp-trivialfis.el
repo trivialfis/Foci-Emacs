@@ -16,8 +16,9 @@
   (add-to-list 'company-backends 'company-slime)
 
   (flycheck-mode 1)
-
-  (define-key slime-prefix-map (kbd "C-c h o") 'slime-documentation-lookup)
+  
+  (define-key slime-mode-map (kbd "C-c h o") 'slime-documentation-lookup)
+  (define-key slime-mode-map (kbd "C-c C-b") 'slime-eval-buffer)
   (define-key slime-mode-map (kbd "C-c C-a") 'slime-compile-file)
   (slime-setup)
   (slime-mode 1)
