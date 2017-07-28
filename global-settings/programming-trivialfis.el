@@ -50,7 +50,11 @@ MODE: the major programming mode"
   (col-highlight-set-interval 2)
   (setq col-highlight-overlay-priority 0)
   (toggle-highlight-column-when-idle 1)
-  (trivialfis/flycheck))
+  (trivialfis/flycheck)
+  (hs-minor-mode 1)
+  (hideshowvis-minor-mode 1)
+  (hideshowvis-symbols)
+  (local-set-key (kbd "C-c ; C-c") 'hs-toggle-hiding))
 
 
 (defun trivialfis/programming-post ()

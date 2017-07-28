@@ -43,6 +43,5 @@ If you want to go to the middle, enter 50. 50 means 50% of the buffer."
 	(kbd (car kc))
 	(cdr kc)))))
 
-
 (provide 'misc-trivialfis)
 ;;; misc-trivialfis.el ends here
