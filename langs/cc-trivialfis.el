@@ -85,9 +85,9 @@ Used only for nevigation."
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-  ;; (trivialfis/rtags)
+  (trivialfis/rtags)
   (trivialfis/irony)
-  (trivialfis/cc-base-srefactor)
+  ;; (trivialfis/cc-base-srefactor)
 
   (trivialfis/local-set-keys
    '(
@@ -104,12 +104,12 @@ Used only for nevigation."
   "Custom C++ mode."
   (setf irony-additional-clang-options '("-std=c++14" "-cc1"))
   ;; (setf flycheck-clang-language-standard "c++14")
-  (trivialfis/semantic 'c++-mode)
+  ;; (trivialfis/semantic 'c++-mode)
   (trivialfis/cc-base))
 
 (defun trivialfis/c ()
   "Custom c mode."
-  (trivialfis/semantic 'c-mode)
+  ;; (trivialfis/semantic 'c-mode)
   (trivialfis/cc-base))
 
 (provide 'c++-trivialfis)

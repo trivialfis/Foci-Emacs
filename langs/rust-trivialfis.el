@@ -21,9 +21,6 @@
 
 (defun trivialfis/rust ()
   "Common configuration for rust mode."
-  ;; (setq racer-rust-src-path "/home/fis/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src")
-  ;; (setenv "CARGO_HOME" "~/.cargo")
-  ;; (setenv "RUST_SRC_PATH" "/home/fis/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src")
   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
 
   (add-hook 'racer-mode-hook 'eldoc-mode)
