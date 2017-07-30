@@ -50,8 +50,8 @@ Used only for nevigation."
      ("M-."     .  rtags-find-symbol-at-point)
      ("M-,"     .  rtags-find-references-at-point)
      ("C-c r r" .  rtags-rename-symbolrtags-next-match)
-     ("C-c r n" .  rtags-next-match)
-     ("C-c r p" .  rtags-previous-match)
+     ;; ("C-c r n" .  rtags-next-match)
+     ;; ("C-c r p" .  rtags-previous-match)
      ))
   (add-hook 'kill-emacs-hook 'rtags-quit-rdm))
 

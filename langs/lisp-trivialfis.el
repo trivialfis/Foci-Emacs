@@ -6,9 +6,9 @@
 (require 'slime-company)
 
 (defun trivialfis/lisp ()
-  "Configuration for clisp."
-  (setq inferior-lisp-program "/usr/bin/sbcl"
-	slime-company-completion 'fuzzy
+  "Basic configuration for Lisp."
+  (setq inferior-lisp-program "/usr/bin/sbcl")
+  (setq slime-company-completion 'fuzzy
 	slime-contribs '(slime-fancy
 			 slime-company
 			 slime-scratch
@@ -23,7 +23,8 @@
   (slime-setup)
   (slime-mode 1)
   (unless (slime-connected-p)
-    (slime)))
+    (slime))
+  (parinfer-mode))
 
 (provide 'lisp-trivialfis)
 ;;; lisp-trivialfis ends here

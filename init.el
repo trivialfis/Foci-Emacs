@@ -24,7 +24,7 @@
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (hideshowvis xterm-color flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile cpputils-cmake clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol header2 company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
+    (parinfer geiser xterm-color flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile cpputils-cmake clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol header2 company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t))
 
@@ -39,6 +39,12 @@
 
 (add-to-list 'load-path "~/.emacs.d/global-settings/")
 (add-to-list 'load-path "~/.emacs.d/langs/")
+
+(add-hook 'after-init-hook
+	  #'(lambda ()
+	      (message "Loading time %s."
+		       (float-time
+			(time-subtract after-init-time before-init-time)))))
 
 (use-package misc-trivialfis
   :commands (trivialfis/pop-frame
@@ -201,6 +207,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 ;; Clisp
 (autoload 'trivialfis/lisp "lisp-trivialfis")
 (add-hook 'lisp-mode-hook 'trivialfis/lisp)
+
+;; Scheme
+(autoload 'trivialfis/scheme "scheme-trivialfis")
+(add-hook 'scheme-mode-hook 'trivialfis/scheme)
 
 ;; LaTeX mode
 (autoload 'trivialfis/LaTeX "LaTeX-trivialfis")

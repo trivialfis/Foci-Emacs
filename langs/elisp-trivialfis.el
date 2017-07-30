@@ -17,7 +17,9 @@
 
   (local-set-key (kbd "C-c C-a") 'byte-compile-file)
   (local-set-key (kbd "C-c C-b") 'eval-buffer)
-  (aggressive-indent-mode))
+  (aggressive-indent-mode)
+  (parinfer-mode))
+  
 
 ;; Semantic mode doesn't play well with elisp
 ;; (autoload 'semantic-add-system-include "semantic")

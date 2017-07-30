@@ -52,9 +52,9 @@ MODE: the major programming mode"
   (toggle-highlight-column-when-idle 1)
   (trivialfis/flycheck)
   (hs-minor-mode 1)
-  (hideshowvis-minor-mode 1)
-  (hideshowvis-symbols)
-  (local-set-key (kbd "C-c ; C-c") 'hs-toggle-hiding))
+  ;; (hideshowvis-minor-mode 1)
+  ;; (hideshowvis-symbols)
+  )
 
 
 (defun trivialfis/programming-post ()
