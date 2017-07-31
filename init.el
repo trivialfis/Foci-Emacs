@@ -42,7 +42,7 @@
 
 (add-hook 'after-init-hook
 	  #'(lambda ()
-	      (message "Loading time %s."
+	      (message "\nLoading time: %s.\n"
 		       (float-time
 			(time-subtract after-init-time before-init-time)))))
 

@@ -1,15 +1,27 @@
 ;;; programming-trivialfis.el --- Configurations hooked to prog-mode.
 ;;; Commentary:
+;;
+;;  Configuration for prog mode.
+;;
 ;;; Code:
+
 (use-package ecb
-  :commands (ecb-activate)
   :init (setf ecb-fix-window-size 'width
 	      ;; ecb-minor-mode-text "Ecb"
-	      ecb-windows-width 0.18))
+	      ecb-windows-width 0.18)
+  :commands (ecb-activate)
+  :config (message "ECB loaded."))
 
 (use-package semantic/idle
   :commands (semantic-mode
-	     semanticdb-enable-gnu-global-databases))
+	     semanticdb-enable-gnu-global-databases)
+  :config (message "Semantic loaded."))
+
+(use-package flycheck
+  :init (declare-function flycheck-display-error-messages-unless-error-list
+			  "Show messages of ERRORS unless the error list is visible.")
+  :commands (flycheck-mode)
+  :config (message "Flycheck loaded."))
 
 (defun trivialfis/flycheck ()
   "Configurate flycheck."
@@ -19,7 +31,9 @@
 		  display-buffer-in-side-window)
 		 (side            . bottom)
 		 (reusable-frames . visible)
-		 (window-height   . 0.23))))
+		 (window-height   . 0.23)))
+  (setq flycheck-display-errors-function
+	#'flycheck-display-error-messages-unless-error-list))
 
 (defun trivialfis/semantic (MODE)
   "Custom semantic mode.
@@ -35,10 +49,6 @@ MODE: the major programming mode"
     (setq semantic-default-submodes (append semantic-default-submodes semantic-submodes)
 	  semantic-idle-scheduler-idle-time 1)
     (semanticdb-enable-gnu-global-databases 'MODE)
-    ;; (set-face-attribute 'semantic-idle-symbol-highlight nil :background "gold" :foreground "yellow")
-    ;; (local-set-key "M-," 'semantic-symref)
-    ;; (local-set-key "C-." 'semantic-ia-fast-jump)
-    ;; (local-set-key "C-," 'semantic-mrub-switch-tags)
     ;; (eval-after-load 'helm
     ;;   (local-set-key (kbd "C-.") 'helm-semantic-or-imenu))
     (semantic-mode 1)))
@@ -51,10 +61,7 @@ MODE: the major programming mode"
   (setq col-highlight-overlay-priority 0)
   (toggle-highlight-column-when-idle 1)
   (trivialfis/flycheck)
-  (hs-minor-mode 1)
-  ;; (hideshowvis-minor-mode 1)
-  ;; (hideshowvis-symbols)
-  )
+  (hs-minor-mode 1))
 
 
 (defun trivialfis/programming-post ()

@@ -1,5 +1,15 @@
 ;;; rust-trivialfis.el --- Summary
 ;;; Commentary:
+
+;; Explain errors¶
+;; Flycheck also has the ability to display explanations for errors, provided the error checker is capable of producing these explanations.
+;; Currently, only the rust and rust-cargo checkers produce explanations.
+;; C-c ! e
+;; M-x flycheck-explain-error-at-point
+
+;; Display an explanation for the first explainable error at point.
+
+
 ;;; Code:
 
 (require 'programming-trivialfis)
