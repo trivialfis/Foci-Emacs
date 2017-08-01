@@ -48,6 +48,17 @@
     (insert "\n#+BEGIN_EXAMPLE \n"))
   (backward-char))
 
+(require 'auth-source)
+(use-package org2blog
+  :config (let (credentials)
+	    (add-to-list 'auth-sources "~/.netrc")
+	    (setq credentials (auth-source-user-and-password "fis"))
+	    (setq org2blog/wp-blog-alist
+		  `(("fis"
+		     :url "http://trivialfis.net/xmlrpc.php"
+		     :username ,(car credentials)
+		     :password ,(cadr credentials))))
+	    (setq org2blog/wp-use-sourcecode-shortcode t)))
 
 (defun trivialfis/org-init()
   "Run before org mode initialization"
