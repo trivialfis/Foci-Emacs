@@ -4,6 +4,8 @@
 ;;; Code:
 (require 'misc-trivialfis)
 (require 'cc-mode)
+(require 'cmake-ide)
+
 ;; (require 'flycheck)			; For language standard
 
 ;; (use-package company-clang
@@ -21,9 +23,9 @@
 ;;   (add-to-list 'company-c-headers-path-system "/usr/include/c++/6.3.1/")  ; Add c++ headers to company
 ;;   (add-to-list 'company-backends 'company-c-headers))
 
-(use-package programming-trivialfis
-  :commands trivialfis/semantic
-  :config (message "Semantic loaded"))
+;; (use-package programming-trivialfis
+;;   :commands trivialfis/semantic
+;;   :config (message "Semantic loaded"))
 
 (use-package cc-pkg-trivialfis
   :commands mumbo-find-library
@@ -84,10 +86,13 @@ Used only for nevigation."
   ;; Company mode
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
-  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
   (trivialfis/rtags)
   (trivialfis/irony)
   ;; (trivialfis/cc-base-srefactor)
+  (setq cmake-ide-build-dir (concat default-directory "build"))
+  (setq cmake-ide-build-pool-use-persistent-naming t)
+  (cmake-ide-setup)
+  (setq c-auto-newline nil)
 
   (trivialfis/local-set-keys
    '(
@@ -96,6 +101,7 @@ Used only for nevigation."
      ;; Clang formating
      ("C-c f b" . clang-format-buffer)
      ("C-c f r" . clang-format-region)
+     ("C-c C-a" .  cmake-ide-compile)
      ))
   (flycheck-mode 1))
 
@@ -105,6 +111,8 @@ Used only for nevigation."
   (setf irony-additional-clang-options '("-std=c++14" "-cc1"))
   ;; (setf flycheck-clang-language-standard "c++14")
   ;; (trivialfis/semantic 'c++-mode)
+  ;; (require 'rtags)
+
   (trivialfis/cc-base))
 
 (defun trivialfis/c ()

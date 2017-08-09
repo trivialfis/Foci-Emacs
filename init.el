@@ -13,6 +13,9 @@
       package-enable-at-startup nil
       visible-bell t)			; Remove the beep
 
+(tool-bar-mode 0)			;Remove tool-bar
+(scroll-bar-mode 0)
+
 ;; (setq-default display-line-numbers t)
 ;; (modify-all-frames-parameters '((scroll-bar-width . 8)))
 
@@ -24,7 +27,7 @@
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (htmlize parinfer geiser xterm-color flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile cpputils-cmake clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol header2 company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
+    (geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol header2 company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t))
 
@@ -42,16 +45,16 @@
 
 (add-hook 'after-init-hook
 	  #'(lambda ()
-	      (message "\nLoading time: %s.\n"
+	      (message "Loading time: %s."
 		       (float-time
 			(time-subtract after-init-time before-init-time)))))
 
-(use-package misc-trivialfis
-  :commands (trivialfis/pop-frame
-	     trivialfis/close-frame
-	     trivialfis/goto-pos
-	     trivialfis/local-set-keys)
-  :config (message "Misc loaded."))
+(let ((packages-autoload '(trivialfis/pop-frame
+			   trivialfis/close-frame
+			   trivialfis/goto-pos
+			   trivialfis/local-set-keys)))
+  (dolist (x packages-autoload)
+    (autoload x "misc-trivialfis" :interactive t)))
 
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"
@@ -70,13 +73,9 @@
       kept-old-versions 1		;How many of the old versions to keep
       )
 
-
-(tool-bar-mode 0)			;Remove tool-bar
-(scroll-bar-mode 0)
 (show-paren-mode 1)			;Show matching paras
 (global-linum-mode 1)
 (electric-pair-mode 1)
-
 
 ;; Paradox
 (let ((packages-autoload '(paradox-list-packages
@@ -132,7 +131,6 @@
 ;; (autoload 'auto-update-file-header "header2")
 ;; (add-hook 'write-file-hooks 'auto-update-file-header)
 
-
 ;; company mode
 (require 'company-dabbrev)
 (setq company-dabbrev-downcase 0
@@ -142,6 +140,15 @@
 (autoload 'company-quickhelp-setup "company-quickhelp-c")
 (add-hook 'company-mode-hook 'company-quickhelp-setup)
 
+;; (require 'company-quickhelp)
+;; (defun company-quickhelp-setup()
+;;   (setq company-quickhelp-color-background "yellow"
+;; 	company-quickhelp-color-foreground "black"
+;; 	company-quickhelp-delay 1
+;; 	company-quickhelp-max-lines nil)
+;;   (company-quickhelp-mode 1))
+;; (add-hook 'after-change-major-mode-hook 'global-company-mode)
+;; (add-hook 'after-change-major-mode-hook 'company-quickhelp-setup)
 
 ;; org mode
 (let ((org-init-func '(trivialfis/org-init
@@ -152,6 +159,11 @@
   (add-hook 'org-load-hook 'trivialfis/org-init)
   (add-hook 'org-mode-hook 'trivialfis/org-post))
 
+;; (let ((org-config-file "org-trivialfis"))
+;;   (autoload 'trivialfis/org-init org-config-file)
+;;   (autoload 'trivialfis/org-post org-config-file)
+;;   (add-hook 'org-load-hook 'trivialfis/org-init)
+;;   (add-hook 'org-mode-hook 'trivialfis/org-post))
 
 (global-unset-key (kbd "C-h C-o"))
 
@@ -217,6 +229,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (add-hook 'LaTeX-mode-hook 'trivialfis/LaTeX)
 
 ;; C++ mode
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (autoload 'trivialfis/c++ "cc-trivialfis")
 (add-hook 'c++-mode-hook 'trivialfis/c++)
 

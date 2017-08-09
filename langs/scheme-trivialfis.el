@@ -5,8 +5,7 @@
 (defun trivialfis/scheme ()
   "Run Geiser."
   (save-window-excursion
-    (run-geiser 'guile))
-  (parinfer-mode))
+    (run-geiser 'guile)))
 
 
 (provide 'scheme-trivialfis)

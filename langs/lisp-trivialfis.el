@@ -23,8 +23,7 @@
   (slime-setup)
   (slime-mode 1)
   (unless (slime-connected-p)
-    (slime))
-  (parinfer-mode))
+    (slime)))
 
 (provide 'lisp-trivialfis)
 ;;; lisp-trivialfis ends here
