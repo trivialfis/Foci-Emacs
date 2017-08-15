@@ -185,7 +185,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
    ("C-c g"        .             trivialfis/goto-pos)
 
    ;; Paradox
-   ("C-c C-l"      .           paradox-list-packages)
+   ("C-c p l"      .           paradox-list-packages)
    ("C-c C-u"               paradox-upgrade-packages)
 
    ;; Highlight symbols

@@ -50,7 +50,9 @@ Used only for nevigation."
   (trivialfis/local-set-keys
    '(
      ("M-."     .  rtags-find-symbol-at-point)
-     ("M-,"     .  rtags-find-references-at-point)
+     ("M-?"     .  rtags-find-references-at-point)
+     ("M-,"     .  rtags-location-stack-back)
+     ("C-,"   .    rtags-location-stack-forward)
      ("C-c r r" .  rtags-rename-symbolrtags-next-match)
      ;; ("C-c r n" .  rtags-next-match)
      ;; ("C-c r p" .  rtags-previous-match)
@@ -89,7 +91,7 @@ Used only for nevigation."
   (trivialfis/rtags)
   (trivialfis/irony)
   ;; (trivialfis/cc-base-srefactor)
-  (setq cmake-ide-build-dir (concat default-directory "build"))
+  ;; (setq cmake-ide-build-dir (concat default-directory "build"))
   (setq cmake-ide-build-pool-use-persistent-naming t)
   (cmake-ide-setup)
   (setq c-auto-newline nil)
