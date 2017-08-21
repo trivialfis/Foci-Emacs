@@ -63,9 +63,11 @@ MODE: the major programming mode"
   (trivialfis/flycheck)
   (hs-minor-mode 1))
 
-
+(autoload 'auto-update-file-header "header2")
 (defun trivialfis/programming-post ()
-  "Added after any programming mode configuration.")
+  "Added after any programming mode configuration.
+Enabled by specific programming language."
+  (auto-update-file-header))
 
 (provide 'programming-trivialfis)
 ;;; programming-trivialfis.el ends here
