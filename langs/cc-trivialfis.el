@@ -91,8 +91,8 @@ Used only for nevigation."
   (trivialfis/rtags)
   (trivialfis/irony)
   ;; (trivialfis/cc-base-srefactor)
-  ;; (setq cmake-ide-build-dir (concat default-directory "build"))
-  (setq cmake-ide-build-pool-use-persistent-naming t)
+  ;; (setq cmake-ide-build-pool-use-persistent-naming t)
+  (setq cmake-ide-build-dir (concat (cmake-ide--locate-project-dir) "build"))
   (cmake-ide-setup)
   (setq c-auto-newline nil)
 

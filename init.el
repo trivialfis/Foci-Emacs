@@ -140,15 +140,6 @@
 (autoload 'company-quickhelp-setup "company-quickhelp-c")
 (add-hook 'company-mode-hook 'company-quickhelp-setup)
 
-;; (require 'company-quickhelp)
-;; (defun company-quickhelp-setup()
-;;   (setq company-quickhelp-color-background "yellow"
-;; 	company-quickhelp-color-foreground "black"
-;; 	company-quickhelp-delay 1
-;; 	company-quickhelp-max-lines nil)
-;;   (company-quickhelp-mode 1))
-;; (add-hook 'after-change-major-mode-hook 'global-company-mode)
-;; (add-hook 'after-change-major-mode-hook 'company-quickhelp-setup)
 
 ;; org mode
 (let ((org-init-func '(trivialfis/org-init
@@ -159,11 +150,6 @@
   (add-hook 'org-load-hook 'trivialfis/org-init)
   (add-hook 'org-mode-hook 'trivialfis/org-post))
 
-;; (let ((org-config-file "org-trivialfis"))
-;;   (autoload 'trivialfis/org-init org-config-file)
-;;   (autoload 'trivialfis/org-post org-config-file)
-;;   (add-hook 'org-load-hook 'trivialfis/org-init)
-;;   (add-hook 'org-mode-hook 'trivialfis/org-post))
 
 (global-unset-key (kbd "C-h C-o"))
 
