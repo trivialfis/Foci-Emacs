@@ -5,6 +5,7 @@
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'cmake-ide)
+(require 'helm-xref)
 
 ;; (require 'flycheck)			; For language standard
 
@@ -83,6 +84,22 @@ Used only for nevigation."
   (eval-after-load 'helm-trivialfis
     (local-set-key (kbd "C-h ,") 'helm-semantic-or-imenu)))
 
+(defvar original-project nil
+  "A global variable to keep the directory for the CMake project before file jump.")
+(defvar-local current-project nil
+  "A local variable to keep the directory for current CMake project.")
+
+(defun get-project-dir ()
+  "When jumping around headers, keep the CMake project as the original one.
+If the newly opened file belongs to a new project, then change the current
+project to the new project."
+  (let ((project-dir (cmake-ide--locate-project-dir)))
+    (if project-dir
+	(progn
+	  (setq current-project project-dir
+		original-project project-dir))
+      (setq current-project original-project))))
+
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
@@ -91,9 +108,9 @@ Used only for nevigation."
   (trivialfis/rtags)
   (trivialfis/irony)
   ;; (trivialfis/cc-base-srefactor)
-  ;; (setq cmake-ide-build-pool-use-persistent-naming t)
-  (setq cmake-ide-build-dir (concat (cmake-ide--locate-project-dir) "build"))
+  (setq cmake-ide-build-dir (concat (get-project-dir) "build"))
   (cmake-ide-setup)
+
   (setq c-auto-newline nil)
 
   (trivialfis/local-set-keys
@@ -103,6 +120,7 @@ Used only for nevigation."
      ;; Clang formating
      ("C-c f b" . clang-format-buffer)
      ("C-c f r" . clang-format-region)
+
      ("C-c C-a" .  cmake-ide-compile)
      ))
   (flycheck-mode 1))
@@ -113,14 +131,13 @@ Used only for nevigation."
   (setf irony-additional-clang-options '("-std=c++14" "-cc1"))
   ;; (setf flycheck-clang-language-standard "c++14")
   ;; (trivialfis/semantic 'c++-mode)
-  ;; (require 'rtags)
-
   (trivialfis/cc-base))
 
 (defun trivialfis/c ()
   "Custom c mode."
   ;; (trivialfis/semantic 'c-mode)
-  (trivialfis/cc-base))
+  (trivialfis/cc-base)
+  )
 
 (provide 'c++-trivialfis)
 ;;; cc-trivialfis.el ends here
