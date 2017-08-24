@@ -27,7 +27,7 @@
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (helm-xref helm-gtags ggtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
+    (helm-xref helm-gtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t))
 
@@ -91,8 +91,6 @@
 (setq powerline-height 25
       ;; powerline-default-separator 'wave
       spaceline-window-numbers-unicode t)
-;; (spaceline-toggle-battery-off)
-;; (spaceline-toggle-anzu-off)
 (spaceline-helm-mode)
 (spaceline-emacs-theme)
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
@@ -102,13 +100,32 @@
 (set-face-attribute 'winum-face nil :weight 'bold)
 (winum-mode)
 
+(use-package helm-trivialfis
+  :defer t
+  :commands (trivialfis/replace-completion-region
+	     trivialfis/replace-completing-read
+	     trivialfis/replace-read-file))
+(let ((helm-commands '(helm-M-x
+		       helm-find-files
+		       helm-buffers-list
+		       helm-occur)))
+  (dolist (x helm-commands)
+    (autoload x "helm-trivialfis" :interactive t)))
 
-(defun load-helm ()
-  "Load up the helm settings and remove this function from hook."
-  (unless (eq this-command 'trivialfis/close-frame)
-    (load "helm-trivialfis" :nomessage t)
-    (remove-hook 'pre-command-hook 'load-helm)))
-(add-hook 'pre-command-hook 'load-helm)
+;; These functions will be removed in helm-trivialfis
+(add-function :override completing-read-function
+	      #'trivialfis/replace-completing-read)
+(add-function :override read-file-name-function
+	      #'trivialfis/replace-read-file)
+(add-function :override completion-in-region-function
+	      #'trivialfis/replace-completion-region)
+
+;; (defun load-helm ()
+;;   "Load up the helm settings and remove this function from hook."
+;;   (unless (eq this-command 'trivialfis/close-frame)
+;;     (load "helm-trivialfis" :nomessage t)
+;;     (remove-hook 'pre-command-hook 'load-helm)))
+;; (add-hook 'pre-command-hook 'load-helm)
 
 
 ;; Fill indicator mode
@@ -180,8 +197,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 
    ;; Helm
    ("M-x"          .                        helm-M-x)
-   ("C-x b"        .                       helm-mini)
+   ("C-x b"        .               helm-buffers-list)
    ("C-x C-f"      .                 helm-find-files)
+   ("M-s o"        .                      helm-occur)
 
    ;; Frames
    ("C-x 4"        .            trivialfis/pop-frame)
@@ -251,4 +269,3 @@ KEY-COMMANDS: A list containing one or more (key command)"
 
 (provide '.init.el)
 ;;; init.el ends here
-

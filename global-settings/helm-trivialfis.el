@@ -3,6 +3,7 @@
 ;;; Code:
 
 (require 'helm)
+(require 'helm-mode)
 (require 'helm-files)
 (require 'helm-config)
 (require 'helm-net)
@@ -29,7 +30,7 @@
 	helm-ff-file-name-history-use-recentf t
 	helm-echo-input-in-header-line        nil
 	helm-autoresize-max-height            0
-	helm-autoresize-min-height            20
+	helm-autoresize-min-height            32
 	helm-buffers-fuzzy-matching           t
 	helm-recentf-fuzzy-match              t)
 
@@ -55,7 +56,40 @@
 
   (helm-mode 1))
 
+(defun trivialfis/replace-completing-read (prompt collection
+						  &optional
+						  predicate require-match
+						  initial-input hist def
+						  inherit-input-method)
+  "Helper function for lazy loading helm configuration.
+Parameters here is the same as `completing-read-function'.
+PROMPT COLLECTION PREDICATE REQUIRE-MATCH INITIAL-INPUT HIST DEF
+	  INHERIT-INPUT-METHOD"
+  ;; (trivialfis/helm)
+  (remove-function completing-read-function #'trivialfis/replace-completing-read)
+  (helm--completing-read-default prompt collection
+				 predicate require-match
+				 initial-input hist def
+				 inherit-input-method))
+
+(defun trivialfis/replace-completion-region (start end collection
+						   &optional predicate)
+  "Helper function for lazy loading helm configuration.
+START END COLLECTION &OPTIONAL PREDICATE"
+  ;; (trivialfis/helm)
+  (remove-function completion-in-region-function #'trivialfis/replace-completion-region)
+  (helm--completion-in-region start end collection predicate))
+
+(defun trivialfis/replace-read-file
+    (prompt &optional dir default-filename mustmatch initial predicate)
+  "Helper function for lazy loading helm configuration.
+PROMPT &OPTIONAL DIR DEFAULT-FILENAME MUSTMATCH INITIAL PREDICATE"
+  ;; (trivialfis/helm)
+  (remove-function read-file-name-function #'trivialfis/replace-read-file)
+  (helm--generic-read-file-name
+   prompt dir default-filename mustmatch initial predicate))
 
 (trivialfis/helm)
+
 (provide 'helm-trivialfis)
 ;;; helm-trivialfis.el ends here
