@@ -5,7 +5,7 @@
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'cmake-ide)
-(require 'helm-xref)
+;; (require 'helm-xref)
 
 ;; (require 'flycheck)			; For language standard
 

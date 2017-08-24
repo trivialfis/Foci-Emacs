@@ -3,9 +3,10 @@
 ;;; Code:
 (use-package s
   :commands (s-chop-suffix))
-
+(require 'helm-xref)
 (defun trivialfis/elisp()
   (flycheck-mode 1)
+  (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
   (when (eq (buffer-size) 0)
     (insert ";;; " (buffer-name) " --- Summary\n"
