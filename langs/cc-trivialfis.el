@@ -5,7 +5,6 @@
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'cmake-ide)
-;; (require 'helm-xref)
 
 ;; (require 'flycheck)			; For language standard
 
@@ -41,8 +40,8 @@
 (defun trivialfis/rtags ()
   "Rtags configuration.
 Used only for nevigation."
-  (interactive)
   (rtags-start-process-unless-running)
+
   ;; (setq rtags-autostart-diagnostics t)
   ;; (rtags-diagnostics)
   ;; (setq rtags-completions-enabled 1)
@@ -55,8 +54,6 @@ Used only for nevigation."
      ("M-,"     .  rtags-location-stack-back)
      ("C-,"   .    rtags-location-stack-forward)
      ("C-c r r" .  rtags-rename-symbolrtags-next-match)
-     ;; ("C-c r n" .  rtags-next-match)
-     ;; ("C-c r p" .  rtags-previous-match)
      ))
   (add-hook 'kill-emacs-hook 'rtags-quit-rdm))
 
@@ -78,7 +75,7 @@ Used only for nevigation."
    '(
      ("M-RET"   .  srefactor-refactor-at-point)
      ("C-c t"   .  senator-fold-tag-toggle)
-     ("C-."     .  semantic-symref)
+     ("M-?"     .  semantic-symref)
      ("M-."     .  semantic-ia-fast-jump)
      ("C-,"     .  semantic-mrub-switch-tags)))
   (eval-after-load 'helm-trivialfis
@@ -89,8 +86,10 @@ Used only for nevigation."
 (defvar-local current-project nil
   "A local variable to keep the directory for current CMake project.")
 
-(defun get-project-dir ()
-  "When jumping around headers, keep the CMake project as the original one.
+(defun setup-ide ()
+  "Set up rtags and CMake-ide if CMakeLists.txt is presented.
+Otherwise do nothing.
+When jumping around headers, keep the CMake project as the original one.
 If the newly opened file belongs to a new project, then change the current
 project to the new project."
   (let ((project-dir (cmake-ide--locate-project-dir)))
@@ -98,18 +97,19 @@ project to the new project."
 	(progn
 	  (setq current-project project-dir
 		original-project project-dir))
-      (setq current-project original-project))))
+      (setq current-project original-project))
+    (when project-dir
+      (trivialfis/rtags)
+      (setq cmake-ide-build-dir (concat project-dir "build"))
+      (cmake-ide-setup))))
 
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
-  (trivialfis/rtags)
   (trivialfis/irony)
-  ;; (trivialfis/cc-base-srefactor)
-  (setq cmake-ide-build-dir (concat (get-project-dir) "build"))
-  (cmake-ide-setup)
+  (setup-ide)
 
   (setq c-auto-newline nil)
 
