@@ -267,5 +267,13 @@ KEY-COMMANDS: A list containing one or more (key command)"
 
 ;; End language settings------------------------------------------------------------------------
 
+(eval-when-compile
+  (with-temp-buffer
+    (insert (format "(setq package-selected-package '%s)
+(package-install-selected-packages)
+(load-file \"~/.emacs.d/init.el\")"
+ package-selected-packages))
+  (write-file "selected-packages.el" nil)))
+
 (provide '.init.el)
 ;;; init.el ends here
