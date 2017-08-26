@@ -273,7 +273,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (package-install-selected-packages)
 (load-file \"~/.emacs.d/init.el\")"
  package-selected-packages))
-  (write-file "selected-packages.el" nil)))
+  (write-file "selected-packages.el" nil))
+(when (file-exists-p "~/.emacs.d/selected-packages.el~")
+  (delete-file "~/.emacs.d/selected-packages.el~")))
 
-(provide '.init.el)
+(provide 'init.el)
 ;;; init.el ends here
