@@ -94,9 +94,8 @@ If the newly opened file belongs to a new project, then change the current
 project to the new project."
   (let ((project-dir (cmake-ide--locate-project-dir)))
     (if project-dir
-	(progn
-	  (setq current-project project-dir
-		original-project project-dir))
+	(setq current-project project-dir
+	      original-project project-dir)
       (setq current-project original-project))
     (when project-dir
       (trivialfis/rtags)
@@ -109,6 +108,8 @@ project to the new project."
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
   (trivialfis/irony)
+  ;; (trivialfis/rtags)
+  ;; (cmake-ide-setup)
   (setup-ide)
 
   (setq c-auto-newline nil)
