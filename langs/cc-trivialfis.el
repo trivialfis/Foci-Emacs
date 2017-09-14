@@ -6,6 +6,17 @@
 (require 'cc-mode)
 (require 'cmake-ide)
 
+(use-package window-purpose
+  :defer t
+  :commands purpose-mode
+  :config (progn
+	    (setq purpose-preferred-prompt 'helm)
+	    (define-key purpose-mode-map (kbd "C-x b") nil)
+	    (define-key purpose-mode-map (kbd "C-x C-f") nil)
+	    (add-to-list 'purpose-user-regexp-purposes '("\\*Man.*" . Man-page))
+	    (purpose-compile-user-configuration)
+	    (message "Purpose loaded.")))
+
 ;; (require 'flycheck)			; For language standard
 
 ;; (use-package company-clang
@@ -93,14 +104,15 @@ When jumping around headers, keep the CMake project as the original one.
 If the newly opened file belongs to a new project, then change the current
 project to the new project."
   (let ((project-dir (cmake-ide--locate-project-dir)))
+    ;; (message project-dir)
     (if project-dir
 	(setq current-project project-dir
 	      original-project project-dir)
       (setq current-project original-project))
-    (when project-dir
-      (trivialfis/rtags)
-      (setq cmake-ide-build-dir (concat project-dir "build"))
-      (cmake-ide-setup))))
+    (when current-project
+      (setq cmake-ide-build-dir (concat current-project "build")))
+    (trivialfis/rtags)
+    (cmake-ide-setup)))
 
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."

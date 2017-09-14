@@ -23,6 +23,7 @@
   :commands (flycheck-mode)
   :config (message "Flycheck loaded."))
 
+
 (defun trivialfis/flycheck ()
   "Configurate flycheck."
   (add-to-list 'display-buffer-alist
@@ -56,7 +57,7 @@ MODE: the major programming mode"
 (defun trivialfis/programming-init ()
   "Added before any programming mode configuration."
   (add-hook 'eldoc-mode-hook #'(lambda ()
-				 (setf eldoc-idle-delay 0)))
+				 (setf eldoc-idle-delay 0.5)))
   (col-highlight-set-interval 2)
   (setq col-highlight-overlay-priority 0)
   (toggle-highlight-column-when-idle 1)

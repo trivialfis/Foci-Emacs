@@ -10,7 +10,7 @@
     (buffer-string)))
 
 (setf package-archives '(
-			 ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")  ; tsinghua's mirror
+			 ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")  ; tsinghua's mirror
 			 ("org"   . "https://elpa.emacs-china.org/org/")
 			 ("gnu"   . "https://elpa.emacs-china.org/gnu/")
 			 )
