@@ -27,7 +27,7 @@
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
+    (opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t))
 
@@ -119,13 +119,6 @@
 	      #'trivialfis/replace-read-file)
 (add-function :override completion-in-region-function
 	      #'trivialfis/replace-completion-region)
-
-;; (defun load-helm ()
-;;   "Load up the helm settings and remove this function from hook."
-;;   (unless (eq this-command 'trivialfis/close-frame)
-;;     (load "helm-trivialfis" :nomessage t)
-;;     (remove-hook 'pre-command-hook 'load-helm)))
-;; (add-hook 'pre-command-hook 'load-helm)
 
 
 ;; Fill indicator mode

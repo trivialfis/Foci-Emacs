@@ -8,6 +8,7 @@
 (require 'helm-config)
 (require 'helm-net)
 (require 'spaceline-segments)
+(require 'bind-key)
 
 (defun trivialfis/helm ()
   "Helm mode configuration."
@@ -21,6 +22,9 @@
   (define-key helm-map (kbd "M-n") 'helm-next-line)
   (define-key helm-map (kbd "M-p") 'helm-previous-line)
 
+  (define-key helm-find-files-map (kbd "M-p") 'helm-previous-line)
+  (define-key helm-find-files-map (kbd "M-n") 'helm-next-line)
+
   (when (executable-find "curl")
     (setq helm-net-prefer-curl t))
   (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
@@ -31,24 +35,10 @@
 	helm-echo-input-in-header-line        nil
 	helm-autoresize-max-height            0
 	helm-autoresize-min-height            32
-	helm-buffers-fuzzy-matching           t
-	helm-recentf-fuzzy-match              t)
+	helm-buffers-fuzzy-matching           t)
+  ;; helm-recentf-fuzzy-match              t)
 
   (helm-autoresize-mode 1)
-
-  ;; (defun helm-hide-minibuffer-maybe ()
-  ;;   "Hide minibuffer in Helm session if we use the header line as input field."
-  ;;   (when (with-helm-buffer helm-echo-input-in-header-line)
-  ;;     (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
-  ;; 	(overlay-put ov 'window (selected-window))
-  ;; 	(overlay-put ov 'face
-  ;; 		     (let ((bg-color (face-background 'default nil)))
-  ;; 		       `(:background ,bg-color :foreground ,bg-color)))
-  ;; 	(setq-local cursor-type nil))))
-
-  ;; (add-hook 'helm-minibuffer-set-up-hook
-  ;; 	    'helm-hide-minibuffer-maybe)
-  ;; (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
 
   (spaceline-toggle-helm-buffer-id-on)
   (spaceline-toggle-helm-number-on)
@@ -65,7 +55,6 @@
 Parameters here is the same as `completing-read-function'.
 PROMPT COLLECTION PREDICATE REQUIRE-MATCH INITIAL-INPUT HIST DEF
 	  INHERIT-INPUT-METHOD"
-  ;; (trivialfis/helm)
   (remove-function completing-read-function #'trivialfis/replace-completing-read)
   (helm--completing-read-default prompt collection
 				 predicate require-match
@@ -76,7 +65,6 @@ PROMPT COLLECTION PREDICATE REQUIRE-MATCH INITIAL-INPUT HIST DEF
 						   &optional predicate)
   "Helper function for lazy loading helm configuration.
 START END COLLECTION &OPTIONAL PREDICATE"
-  ;; (trivialfis/helm)
   (remove-function completion-in-region-function #'trivialfis/replace-completion-region)
   (helm--completion-in-region start end collection predicate))
 
@@ -84,7 +72,6 @@ START END COLLECTION &OPTIONAL PREDICATE"
     (prompt &optional dir default-filename mustmatch initial predicate)
   "Helper function for lazy loading helm configuration.
 PROMPT &OPTIONAL DIR DEFAULT-FILENAME MUSTMATCH INITIAL PREDICATE"
-  ;; (trivialfis/helm)
   (remove-function read-file-name-function #'trivialfis/replace-read-file)
   (helm--generic-read-file-name
    prompt dir default-filename mustmatch initial predicate))
