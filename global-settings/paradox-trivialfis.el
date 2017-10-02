@@ -3,21 +3,18 @@
 ;;; code:
 (require 'paradox)
 (require 'paradox-github)
+(require 'archives-trivialfis)
+
 (defun get-token ()
   "Get token from file."
-  (with-temp-buffer
-    (insert-file-contents "~/.emacs.d/global-settings/github-token")
-    (buffer-string)))
+  (let ((token-path "~/.emacs.d/global-settings/github-token"))
+    (if (file-exists-p token-path)
+	(with-temp-buffer
+	  (insert-file-contents token-path)
+	  (buffer-string))
+      nil)))
 
-(setf package-archives '(
-			 ("melpa"     .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")  ; tsinghua's mirror
-			 ("org"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-			 ("marmalade" .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/marmalade/")
-			 ("gnu"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-			 ;; ("org"   . "https://elpa.emacs-china.org/org/")
-			 ;; ("gnu"   . "https://elpa.emacs-china.org/gnu/")
-			 )
-      paradox-github-token (get-token))
+(setq paradox-github-token (get-token))
 
 (package-initialize)
 
