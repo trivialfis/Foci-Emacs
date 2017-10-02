@@ -1,4 +1,4 @@
-;;; package --- Summary
+;;; package --- Summary  -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -279,8 +279,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 ;; flycheck-disabled-checkers: (emacs-lisp-checkdoc emacs-lisp)
 ;; End:" package-selected-packages))
 (write-file "selected-packages.el" nil))
-(when (file-exists-p "~/.emacs.d/selected-packages.el~")
-  (delete-file "~/.emacs.d/selected-packages.el~")))
+(let ((tempf "~/.emacs.d/selected-packages.el~"))
+  (when (file-exists-p tempf)
+    (delete-file tempf))))
 
 (provide 'init.el)
 ;;; init.el ends here
