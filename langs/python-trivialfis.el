@@ -1,24 +1,15 @@
 ;;; python-trivialfis --- Summary
 ;;; Commentary:
 ;;; Code:
-;; (require 'elpy)
-(require 'company)
-(require 'programming-trivialfis)
+
 (require 'elpy)
-(require 'lsp-mode)
-(require 'lsp-common)
-;; (require 'python)
+(require 'company)
+;; (require 'lsp-mode)
+;; (require 'lsp-python)
 
 (defun lsp-client()
-  "Not ready to use. Emacs hangs."
-  (lsp-define-stdio-client 'python-mode "python" 'stdio
-			   (lsp-make-traverser #'(lambda (dir)
-						   (directory-files
-						    dir
-						    nil
-						    "\\(__init__\\|setup\\)\\.py")))
-			   "Python Language Server"
-			   '("pyls"))
+  "Not ready to use."
+  ;; "LSP, configuration files confliction might happen."
   (lsp-mode))
 
 (defun elpy-setup()
@@ -34,7 +25,6 @@
     (add-to-list 'company-backends 'elpy-company-backend)))
 
 (defun trivialfis/python()
-  (trivialfis/programming-init)
   ;; (lsp-client)
   (elpy-setup)
   )
