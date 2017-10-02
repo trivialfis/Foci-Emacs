@@ -7,7 +7,7 @@
 (require 'window-purpose)
 (require 'helm-xref)
 
-(toggle-debug-on-error)
+;; (toggle-debug-on-error)
 (defvar info-buffers '("*Flycheck errors*" "*Compile-Log*"))
 (defun get-info-buffers ()
   "Get windows display info related buffers."

@@ -13,7 +13,7 @@
 			 ("melpa"     .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")  ; tsinghua's mirror
 			 ("org"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
 			 ("marmalade" .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/marmalade/")
-			 ("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+			 ("gnu"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
 			 ;; ("org"   . "https://elpa.emacs-china.org/org/")
 			 ;; ("gnu"   . "https://elpa.emacs-china.org/gnu/")
 			 )
