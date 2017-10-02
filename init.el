@@ -38,10 +38,10 @@
  ;; If there is more than one, they won't work right.
  )
 
-(let ((path (shell-command-to-string ". ~/.bash_profile; echo $PATH")))
-  (setenv "PATH" path)
-  (setq exec-path (append (split-string path ":")
-			  exec-path)))
+;; (let ((path (shell-command-to-string ". ~/.bash_profile; echo $PATH")))
+;;   (setenv "PATH" path)
+;;   (setq exec-path (append (split-string path ":")
+;; 			  exec-path)))
 
 (add-to-list 'load-path "~/.emacs.d/global-settings/")
 (add-to-list 'load-path "~/.emacs.d/langs/")
