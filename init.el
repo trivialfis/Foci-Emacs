@@ -80,11 +80,12 @@
 (electric-pair-mode 1)
 
 ;; Paradox
+;; The following commands don't work, use paradox instead.
+;; package-list-packages
+;; package-list-packages-no-fetch
+;; package-install
 (let ((packages-autoload '(paradox-list-packages
-			   paradox-upgrade-packages
-			   ;; package-list-packages
-			   ;; package-list-packages-no-fetch
-			   package-install)))
+			   paradox-upgrade-packages)))
   (dolist (x packages-autoload)
     (autoload x "paradox-trivialfis" :interactive t)))
 
