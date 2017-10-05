@@ -62,7 +62,11 @@ MODE: the major programming mode"
   (setq col-highlight-overlay-priority 0)
   (toggle-highlight-column-when-idle 1)
   (trivialfis/flycheck)
-  (hs-minor-mode 1))
+  (hs-minor-mode 1)
+
+  ;; Quickhelp
+  (autoload 'trivialfis/company-quickhelp "quickhelp-trivialfis")
+  (add-hook 'company-mode-hook 'trivialfis/company-quickhelp))
 
 (autoload 'auto-update-file-header "header2")
 (defun trivialfis/programming-post ()

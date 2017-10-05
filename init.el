@@ -38,10 +38,6 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; (let ((path (shell-command-to-string ". ~/.bash_profile; echo $PATH")))
-;;   (setenv "PATH" path)
-;;   (setq exec-path (append (split-string path ":")
-;; 			  exec-path)))
 
 (add-to-list 'load-path "~/.emacs.d/global-settings/")
 (add-to-list 'load-path "~/.emacs.d/langs/")
@@ -86,8 +82,8 @@
 ;; Paradox
 (let ((packages-autoload '(paradox-list-packages
 			   paradox-upgrade-packages
-			   package-list-packages
-			   package-list-packages-no-fetch
+			   ;; package-list-packages
+			   ;; package-list-packages-no-fetch
 			   package-install)))
   (dolist (x packages-autoload)
     (autoload x "paradox-trivialfis" :interactive t)))
@@ -152,9 +148,6 @@
 (setq company-dabbrev-downcase 0
       company-idle-delay 0)
 (add-hook 'after-init-hook 'global-company-mode)
-;; Quickhelp
-(autoload 'company-quickhelp-setup "company-quickhelp-c")
-(add-hook 'company-mode-hook 'company-quickhelp-setup)
 
 
 ;; org mode
