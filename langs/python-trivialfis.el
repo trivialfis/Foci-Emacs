@@ -4,7 +4,7 @@
 
 (require 'elpy)
 (require 'company)
-(require 'helm-xref)
+;; (require 'helm-xref)
 (require 'f)
 ;; (require 'lsp-mode)
 ;; (require 'lsp-python)
@@ -30,8 +30,8 @@
 	  elpy-rpc-backend "jedi")
     ;; (elpy-use-ipython)
     (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)) ;; Replace flymake with flycheck
-    (add-to-list 'company-backends 'elpy-company-backend))
-  (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
+    (add-to-list 'company-backends 'elpy-company-backend)))
+  ;; (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
 (defun trivialfis/python()
   "Python configuration."
