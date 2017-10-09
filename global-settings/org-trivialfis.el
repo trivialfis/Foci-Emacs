@@ -71,7 +71,7 @@
   "Run after org mode initialization"
   (setf org-bullets-bullet-list '("◉" "○" "■" "◆")
 	org-image-actual-width nil)
-  (org-indent-mode 1)
+  ;; (org-indent-mode 1)
   (org-bullets-mode 1)
   (toc-org-enable)
   (org-display-inline-images)
