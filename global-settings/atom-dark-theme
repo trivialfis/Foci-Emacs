@@ -164,7 +164,7 @@
  '(whitespace-trailing ((t (:inherit (trailing-whitespace)))))
 
  ;; Org
- '(org-block ((t (:background "gray7" :foreground "#b2b2b2"))))
+ '(org-block ((t (:background "gray8" :foreground "#b2b2b2"))))
  '(org-block-begin-line ((t (:background "gray4" :foreground "gray8"))))
  '(org-block-end-line ((t (:background "gray4" :foreground "gray8"))))
  '(org-document-title ((t (:weight bold :height 1.44 :foreground "#afeeee"))))

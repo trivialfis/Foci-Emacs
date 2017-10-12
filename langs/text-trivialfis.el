@@ -14,7 +14,8 @@
 (defun trivialfis/text ()
   "Guard for trivialfis/_text."
   (when (or (eq major-mode 'text-mode)
-	    (eq major-mode 'org-mode))
+	    (eq major-mode 'org-mode)
+	    (eq major-mode 'markdown-mode))
     (trivialfis/_text)))
 
 (provide 'text-trivialfis)
