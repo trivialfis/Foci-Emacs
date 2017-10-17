@@ -22,14 +22,14 @@
 (defun trivialfis/elpy-setup()
   "Elpy configuration."
   (flycheck-mode 1)
-  (elpy-enable)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)) ;; Replace flymake with flycheck
   (elpy-mode 1)
   (with-eval-after-load 'elpy
     (setq elpy-rpc-python-command "python3"
   	  python-shell-interpreter "python3"
 	  elpy-rpc-backend "jedi")
+    ;; ipython makes use of xterm ansi code.
     ;; (elpy-use-ipython)
-    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)) ;; Replace flymake with flycheck
     (add-to-list 'company-backends 'elpy-company-backend))
   (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
@@ -38,8 +38,7 @@
   ;; lsp is not ready.
   ;; (lsp-mode)
   (trivialfis/elpy-setup)
-  (trivialfis/activate-virtualenv)
-  )
+  (trivialfis/activate-virtualenv))
 
 (provide 'python-trivialfis)
 ;;; python-trivialfis.el ends here
