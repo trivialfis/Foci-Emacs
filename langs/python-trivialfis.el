@@ -33,10 +33,19 @@
     (add-to-list 'company-backends 'elpy-company-backend))
   (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
+(defun trivialfis/eval-file()
+  "Eval the default buffer by sending file.
+This can make use of __name__ == '__main__'."
+  (interactive)
+  (let ((path (buffer-file-name)))
+    (run-python)
+    (python-shell-send-file path)))
+
 (defun trivialfis/python()
   "Python configuration."
   ;; lsp is not ready.
   ;; (lsp-mode)
+  (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
   (trivialfis/elpy-setup)
   (trivialfis/activate-virtualenv))
 
