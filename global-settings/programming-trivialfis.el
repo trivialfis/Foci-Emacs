@@ -64,6 +64,7 @@ MODE: the major programming mode"
   (trivialfis/flycheck)
   (hs-minor-mode 1)
 
+  (local-set-key (kbd "TAB") 'company-indent-or-complete-common)
   ;; Quickhelp
   (autoload 'trivialfis/company-quickhelp "quickhelp-trivialfis")
   (add-hook 'company-mode-hook 'trivialfis/company-quickhelp))
