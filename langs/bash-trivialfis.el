@@ -3,6 +3,7 @@
 ;;; Code:
 (require 'company)
 (require 'company-shell)
+
 (defun trivialfis/bash()
   (require 'company-shell)
   (add-to-list 'company-backends 'company-shell)
