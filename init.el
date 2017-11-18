@@ -3,7 +3,7 @@
 ;;; Code:
 
 ;; Global settings---------------------------------------------------------------------------------
-(load-theme 'atom-dark t)
+;; (load-theme 'atom-dark t)
 (setq initial-major-mode 'fundamental-mode  ; Prevents loading emacs lisp mode automatically
       inhibit-startup-screen t
       frame-title-format '((:eval (if (buffer-file-name) ; Set the frame title to display file path and name
@@ -16,6 +16,7 @@
 (tool-bar-mode 0)			; Remove tool-bar
 (scroll-bar-mode 0)
 
+(global-display-line-numbers-mode t)
 ;; (setq-default display-line-numbers t)
 ;; (modify-all-frames-parameters '((scroll-bar-width . 8)))
 
@@ -24,10 +25,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ ;; '(custom-enabled-themes (quote (atom-dark)))
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode lsp-python opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
+    (sage-shell-mode realgud meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode lsp-python opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t))
 
@@ -76,7 +78,7 @@
       )
 
 (show-paren-mode 1)			;Show matching paras
-(global-linum-mode 1)
+;; (global-linum-mode 1)
 (electric-pair-mode 1)
 
 ;; Paradox
