@@ -21,6 +21,7 @@
 
 (defun trivialfis/elpy-setup()
   "Elpy configuration."
+  (setq ffip-prefer-ido-mode t)
   (flycheck-mode 1)
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)) ;; Replace flymake with flycheck
   (elpy-mode 1)
@@ -44,7 +45,7 @@ This can make use of __name__ == '__main__'."
 (defun trivialfis/python()
   "Python configuration."
   ;; lsp is not ready.
-  ;; (lsp-mode)
+  ;; (lsp-python-enable)
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
   (trivialfis/elpy-setup)
   (trivialfis/activate-virtualenv))
