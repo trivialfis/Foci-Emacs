@@ -1,12 +1,19 @@
 #+TITLE: Emacs configuration.
 
 * Introduction
-It's just my Emacs configuration. Everything is tested with both Emacs 25.2 and the latest master branch. If you intend to use it, you will have to install those packages by yourself. Packages are listed in the *init.el* /package-selected-packages/ like everybody does. Use `package-install-selected-packages'.
+It's just my Emacs configuration. Due the line:
+#+BEGIN_BLOCK emacs-lisp
+(global-display-line-numbers-mode t)
+#+END_BLOCK
+It only works with the master branch of Emacs. If you intend to use it with normal release, remove that line in *init.el* and use /global-linum-mode/ instead. Theme are dumped during compilation.
+
+Needed packages are listed in *selected-packages.el*. Use `package-install-selected-packages' to install them all at once.
 
 * To-do
-+ Add packages auto installation.
 + Add better helm setup.
 + Add better Ecb faces.
 + Add langtool configuration.
 + Add some useful macros.
 + Add better windows management.
+
+#  LocalWords:  init linum el LocalWords
