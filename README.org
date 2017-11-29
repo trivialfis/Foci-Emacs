@@ -1,11 +1,13 @@
 #+TITLE: Emacs configuration.
 
 * Introduction
-It's just my Emacs configuration. Due the line:
-#+BEGIN_BLOCK emacs-lisp
+It's just my Emacs configuration.
+ Due the line:
+
 (global-display-line-numbers-mode t)
-#+END_BLOCK
-It only works with the master branch of Emacs. If you intend to use it with normal release, remove that line in *init.el* and use /global-linum-mode/ instead. Theme are dumped during compilation.
+
+It only works with the master branch of Emacs. If you intend to use it with normal release, remove that line in *init.el* and use /global-linum-mode/ instead.
+Theme are dumped during compilation.
 
 Needed packages are listed in *selected-packages.el*. Use `package-install-selected-packages' to install them all at once.
 
