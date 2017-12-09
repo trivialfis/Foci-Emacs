@@ -75,6 +75,7 @@
   (org-bullets-mode 1)
   (toc-org-enable)
   (org-display-inline-images)
+  (setq org-preview-latex-default-process 'dvisvgm)
 
   (trivialfis/local-set-keys
    '(
