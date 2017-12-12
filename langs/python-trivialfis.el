@@ -26,8 +26,8 @@
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)) ;; Replace flymake with flycheck
   (elpy-mode 1)
   (with-eval-after-load 'elpy
-    (setq elpy-rpc-python-command "python3"
-  	  python-shell-interpreter "python3"
+    (setq elpy-rpc-python-command "python"
+  	  python-shell-interpreter "python"
 	  elpy-rpc-backend "jedi")
     ;; ipython makes use of xterm ansi code.
     ;; (elpy-use-ipython)
