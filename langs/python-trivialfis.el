@@ -26,6 +26,7 @@
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)) ;; Replace flymake with flycheck
   (elpy-mode 1)
   (with-eval-after-load 'elpy
+    ;; FIXME: Find virtualenv then decide python version.
     (setq elpy-rpc-python-command "python"
   	  python-shell-interpreter "python"
 	  elpy-rpc-backend "jedi")

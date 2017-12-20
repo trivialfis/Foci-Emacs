@@ -27,7 +27,7 @@
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (nix-mode lsp-go sage-shell-mode realgud meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode lsp-python opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
+    (guix nix-mode lsp-go sage-shell-mode realgud meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode lsp-python opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t))
 
@@ -103,6 +103,7 @@
 (set-face-attribute 'winum-face nil :weight 'bold)
 (winum-mode)
 
+;; FIXME: If the first time invoke of helm is via xref-helm, these functions won't be loaded.
 (use-package helm-trivialfis
   :defer t
   :commands (trivialfis/replace-completion-region
