@@ -8,7 +8,8 @@
 (defun trivialfis/_text ()
   "Configuration for normal text."
   (flyspell-mode 1)
-  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+  ;; (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-at-point)
   (add-to-list 'company-backends 'company-ispell))
 
 (defun trivialfis/text ()
