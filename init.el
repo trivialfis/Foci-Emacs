@@ -263,6 +263,8 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/bash "bash-trivialfis")
 (add-hook 'sh-mode-hook 'trivialfis/bash)
 
+;; (autoload 'mu4e "mu4e" :interactive t)
+
 ;; End language settings------------------------------------------------------------------------
 
 (eval-when-compile
@@ -277,11 +279,11 @@ KEY-COMMANDS: A list containing one or more (key command)"
 
 (load-file \"~/.emacs.d/init.el\")\n" package-selected-packages))
 
-(add-file-local-variable 'flycheck-disabled-checkers '(emacs-lisp-checkdoc emacs-lisp))
-(write-file "selected-packages.el" nil))
-(let ((tempf "~/.emacs.d/selected-packages.el~"))
-  (when (file-exists-p tempf)
-    (delete-file tempf))))
+    (add-file-local-variable 'flycheck-disabled-checkers '(emacs-lisp-checkdoc emacs-lisp))
+    (write-file "selected-packages.el" nil))
+  (let ((tempf "~/.emacs.d/selected-packages.el~"))
+    (when (file-exists-p tempf)
+      (delete-file tempf))))
 
 (provide 'init.el)
 ;;; init.el ends here
