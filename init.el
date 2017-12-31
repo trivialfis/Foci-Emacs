@@ -29,7 +29,12 @@
    (quote
     (flycheck-haskell guix nix-mode lsp-go sage-shell-mode realgud meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode lsp-python opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm org-dashboard toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode slime vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
- '(paradox-github-token t))
+ '(paradox-github-token t)
+ '(safe-local-variable-values
+   (quote
+    ((eval modify-syntax-entry 43 "'")
+     (eval modify-syntax-entry 36 "'")
+     (eval modify-syntax-entry 126 "'")))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -263,7 +268,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/bash "bash-trivialfis")
 (add-hook 'sh-mode-hook 'trivialfis/bash)
 
-;; (autoload 'mu4e "mu4e" :interactive t)
+(autoload 'trivialfis/mail "mail-trivialfis" :interactive t)
 
 ;; End language settings------------------------------------------------------------------------
 
