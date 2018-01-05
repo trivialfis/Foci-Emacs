@@ -53,10 +53,10 @@
 Used only for nevigation."
   (rtags-start-process-unless-running)
 
-  ;; (setq rtags-autostart-diagnostics t)
-  ;; (rtags-diagnostics)
-  ;; (setq rtags-completions-enabled 1)
-  ;; (add-to-list 'company-backends 'company-rtags)
+  (setq rtags-autostart-diagnostics t)
+  (rtags-diagnostics)
+  (setq rtags-completions-enabled 1)
+  (add-to-list 'company-backends 'company-rtags)
   (setq rtags-display-result-backend 'helm)
   (trivialfis/local-set-keys
    '(
@@ -77,7 +77,8 @@ Used only for nevigation."
   (add-hook 'flycheck-mode-hook 'flycheck-irony-setup)
   (when (or (eq major-mode 'c-mode)	; Prevent from being loaded by c derived mode
   	    (eq major-mode 'c++-mode))
-    (irony-mode 1)))
+    (ignore-errors
+      (irony-mode 1))))
 
 
 (defun trivialfis/cc-base-srefactor ()
@@ -119,7 +120,7 @@ project to the new project."
   ;; Company mode
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
-  (trivialfis/irony)
+  ;; (trivialfis/irony)
   ;; (trivialfis/rtags)
   ;; (cmake-ide-setup)
   (setup-ide)
