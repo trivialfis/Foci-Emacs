@@ -141,9 +141,9 @@
 
 
 ;; Highlight symbol at point
-(require 'highlight-symbol)
-(setq highlight-symbol-idle-delay 0)
-(add-hook 'after-change-major-mode-hook 'highlight-symbol-mode)
+;; (require 'highlight-symbol)
+;; (setq highlight-symbol-idle-delay 0)
+;; (add-hook 'after-change-major-mode-hook 'highlight-symbol-mode)
 
 
 ;; Auto insert and update header info
