@@ -27,8 +27,8 @@
   (elpy-mode 1)
   (with-eval-after-load 'elpy
     ;; FIXME: Find virtualenv then decide python version.
-    (setq elpy-rpc-python-command "python"
-  	  python-shell-interpreter "python"
+    (setq elpy-rpc-python-command "python3"
+  	  python-shell-interpreter "python3"
 	  elpy-rpc-backend "jedi")
     ;; ipython makes use of xterm ansi code.
     ;; (elpy-use-ipython)
