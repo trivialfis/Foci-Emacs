@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (require 'gnus)
+(require 'nnimap)
 (require 'smtpmail)
 
 (defun trivialfis/mail()
@@ -18,6 +19,14 @@
 
   (setq smtpmail-smtp-server "smpt-mail.outlook.com"
 	smtpmail-smtp-service 587)
+
+  (setq nnimap-split-methods
+	'(
+	  ;; ("guix")
+	  ;; ("guix:devel")
+	  ("guix:debug" "List-Id:.*\n.*<guix-devel.gnu.org>")
+	  ("guix:patch" "List-Id:.*<guix-patches.gnu.org>")
+	  ("guix:help" "^To:.*help-guix@gnu.org|Cc:.*help-guix@gnu.org|List-ID:.*\n.*<guix-devel.gnu.org>")))
 
   ;; (eval-and-compile
   ;;   (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp/"))
