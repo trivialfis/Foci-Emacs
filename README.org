@@ -19,4 +19,7 @@ All packages are listed in *selected-packages.el*. Use `package-install-selected
 + Add some useful macros.
 + Add better windows management.
 
+* License
+GPL-v3
+
 #  LocalWords:  init linum el LocalWords emacs
