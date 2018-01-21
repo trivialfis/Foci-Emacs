@@ -4,6 +4,7 @@
 (require 'company-quickhelp)
 
 (defun trivialfis/company-quickhelp()
+  "Configuration for company quickhelp."
   (setq company-quickhelp-color-background "yellow"
 	company-quickhelp-color-foreground "black"
 	company-quickhelp-delay 1
