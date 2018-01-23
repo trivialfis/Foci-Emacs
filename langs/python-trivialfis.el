@@ -27,6 +27,37 @@
 ;; (require 'lsp-mode)
 ;; (require 'lsp-python)
 
+(defun trivialfis/python-from-shebang ()
+  "Get python command.
+Given COMMAND-START, the start position of python[2|3], return python[2|3]."
+  (save-window-excursion
+    (goto-char 0)
+    (let* ((has-command-p (search-forward-regexp "python[2|3]"))
+	   (start (if has-command-p
+		      (match-beginning 0)
+		    nil))
+	   (end (if has-command-p
+		    (match-end 0)
+		  nil)))
+      (buffer-substring start end))))
+
+(defun trivialfis/shebang-p ()
+  "Detect whether python command is declared in shebang."
+  (save-window-excursion
+    (goto-char (point-min))
+    (save-match-data
+      (search-forward "#!" (line-end-position) t 1))))
+
+(defun trivialfis/virtualenv-p ()
+  "Find and activate virtualenv."
+  (let ((env-path (f-traverse-upwards
+		   (lambda (path)
+		     (or (equal path (f-expand "~"))
+			 (f-exists? (f-join path "bin/activate")))))))
+    (when (and env-path
+	       (not (equal env-path (f-expand "~"))))
+      t)))
+
 (defun trivialfis/activate-virtualenv ()
   "Find and activate virtualenv."
   (let ((env-path (f-traverse-upwards
@@ -37,21 +68,27 @@
 	       (not (equal env-path (f-expand "~"))))
       (pyvenv-activate env-path))))
 
+(defun trivialfis/determine-python ()
+  "Get python path."
+  (trivialfis/activate-virtualenv)
+  (cond (pyvenv-activate "python")
+	((trivialfis/shebang-p) (trivialfis/python-from-shebang))
+	(t "python")))
+
 (defun trivialfis/elpy-setup()
   "Elpy configuration."
   (setq ffip-prefer-ido-mode t)
   (flycheck-mode 1)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)) ;; Replace flymake with flycheck
-  (elpy-mode 1)
+  ;; Replace flymake with flycheck
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (with-eval-after-load 'elpy
-    ;; FIXME: Find virtualenv then decide python version.
-    (setq elpy-rpc-python-command "python3"
-  	  python-shell-interpreter "python3"
-	  elpy-rpc-backend "jedi")
+    (let ((command (trivialfis/determine-python)))
+      (setq elpy-rpc-python-command command
+	    python-shell-interpreter command))
     ;; ipython makes use of xterm ansi code.
     ;; (elpy-use-ipython)
-    (add-to-list 'company-backends 'elpy-company-backend))
-  (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
+    (add-to-list 'company-backends 'elpy-company-backend)
+    (elpy-mode 1)))
 
 (defun trivialfis/eval-file()
   "Eval the default buffer by sending file.
@@ -67,7 +104,7 @@ This can make use of __name__ == '__main__'."
   ;; (lsp-python-enable)
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
   (trivialfis/elpy-setup)
-  (trivialfis/activate-virtualenv))
+  (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
 (provide 'python-trivialfis)
 ;;; python-trivialfis.el ends here
