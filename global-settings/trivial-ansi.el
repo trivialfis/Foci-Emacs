@@ -3,20 +3,20 @@
 ;;; Copyright © 2015-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;; All rights reserved
 ;;; 
-;;; This file is part of Trimacs.
+;;; This file is part of Foci-Emacs.
 ;;; 
-;;; Trimacs is free software: you can redistribute it and/or modify
+;;; Foci-Emacs is free software: you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
 ;;; the Free Software Foundation, either version 3 of the License, or
 ;;; (at your option) any later version.
 ;;; 
-;;; Trimacs is distributed in the hope that it will be useful,
+;;; Foci-Emacs is distributed in the hope that it will be useful,
 ;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;;; GNU General Public License for more details.
 ;;; 
 ;;; You should have received a copy of the GNU General Public License
-;;; along with Trimacs.  If not, see <http://www.gnu.org/licenses/>.
+;;; along with Foci-Emacs.  If not, see <http://www.gnu.org/licenses/>.
 ;;;
 
 ;; Version: 0.1

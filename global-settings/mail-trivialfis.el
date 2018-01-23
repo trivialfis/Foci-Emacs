@@ -1,22 +1,22 @@
 ;;; mail-trivialfis.el --- Summary
-;;; 
+;;;
 ;;; Copyright © 2015-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;; Copyright © 2012-2018 Sylvain Benner & Contributors
-;;; 
-;;; This file is part of Trimacs.
-;;; 
-;;; Trimacs is free software: you can redistribute it and/or modify
+;;;
+;;; This file is part of Foci-Emacs.
+;;;
+;;; Foci-Emacs is free software: you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
 ;;; the Free Software Foundation, either version 3 of the License, or
 ;;; (at your option) any later version.
-;;; 
-;;; Trimacs is distributed in the hope that it will be useful,
+;;;
+;;; Foci-Emacs is distributed in the hope that it will be useful,
 ;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;;; GNU General Public License for more details.
-;;; 
+;;;
 ;;; You should have received a copy of the GNU General Public License
-;;; along with Trimacs.  If not, see <http://www.gnu.org/licenses/>.
+;;; along with Foci-Emacs.  If not, see <http://www.gnu.org/licenses/>.
 ;;;
 ;;; Commentary:
 ;;; Code:
@@ -39,10 +39,14 @@
 	'(nnimap "outlook"
 		 (nnimap-address "imap-mail.outlook.com")
 		 (nnimap-server-port "imaps")
-		 (nnimap-stream ssl)))
+		 (nnimap-stream ssl)
+		 (nnimap-split-methods default)
+		 (nnir-search-engine imap)))
 
   (setq nnml-directory "~/.Mail")
   (setq message-directory "~/.Mail")
+
+  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 
   (setq smtpmail-smtp-server "smpt-mail.outlook.com"
 	smtpmail-smtp-service 587
@@ -55,13 +59,14 @@
   (setq gnus-sorted-header-list
         '("^From:" "^Reply-To" "^Organization:" "^To:" "^Cc:" "^Newsgroups:" "^List-id:"
           "^Subject:" "^Date:" "^Gnus"))
-  (setq nnimap-split-methods
-	'(
-	  ;; ("guix")
-	  ;; ("guix:devel")
-	  ("guix:debug" "List-Id:.*\n.*<guix-devel.gnu.org>")
-	  ("guix:patch" "List-Id:.*<guix-patches.gnu.org>")
-	  ("guix:help" "^To:.*help-guix@gnu.org|Cc:.*help-guix@gnu.org|List-ID:.*\n.*<guix-devel.gnu.org>")))
+  (setq nnmail-split-methods
+	'(("guix:devel" "List-Id:.*\n.*<guix-devel.gnu.org>")
+	  ("guix:bugs" "List-Id:.*<bug-guix.gnu.org>")
+	  ("guix:patches" "List-Id:.*<guix-patches.gnu.org>")
+	  ("guix:help" "To:.*help-guix@gnu.org|Cc:.*help-guix@gnu.org")
+	  ("pytorch:issues" "Message-ID: .*pytorch/issue\\(.*\\)")
+	  ("pytorch:pr" "Message-ID: .*pytorch/pull\\(.*\\)")
+	  ("Inbox" "")))
 
   (setq-default
    gnus-summary-line-format "%U%R%z %(%&user-date;  %-15,15f  %B (%c) %s%)\n"
