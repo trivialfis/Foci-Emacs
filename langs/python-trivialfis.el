@@ -77,6 +77,7 @@ Given COMMAND-START, the start position of python[2|3], return python[2|3]."
 	    python-shell-interpreter command))
     ;; ipython makes use of xterm ansi code.
     ;; (elpy-use-ipython)
+    (setq elpy-rpc-timeout 3)
     (add-to-list 'company-backends 'elpy-company-backend)
     (elpy-mode 1)))
 
