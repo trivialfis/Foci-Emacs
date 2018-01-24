@@ -172,6 +172,7 @@
 ;; company mode
 (require 'company-dabbrev)
 (setq company-dabbrev-downcase 0
+      company-async-timeout 3
       company-idle-delay 0)
 (add-hook 'after-init-hook 'global-company-mode)
 
