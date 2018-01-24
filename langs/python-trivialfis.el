@@ -48,16 +48,6 @@ Given COMMAND-START, the start position of python[2|3], return python[2|3]."
     (save-match-data
       (search-forward "#!" (line-end-position) t 1))))
 
-(defun trivialfis/virtualenv-p ()
-  "Find and activate virtualenv."
-  (let ((env-path (f-traverse-upwards
-		   (lambda (path)
-		     (or (equal path (f-expand "~"))
-			 (f-exists? (f-join path "bin/activate")))))))
-    (when (and env-path
-	       (not (equal env-path (f-expand "~"))))
-      t)))
-
 (defun trivialfis/activate-virtualenv ()
   "Find and activate virtualenv."
   (let ((env-path (f-traverse-upwards
