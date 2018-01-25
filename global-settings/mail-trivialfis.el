@@ -31,6 +31,13 @@
 (add-to-list 'load-path "~/.local/share/emacs/site-lisp/mu4e")
 (require 'mu4e)
 
+(defun trivialfis/smtp()
+  "Configuration for sending mails."
+  (setq smtpmail-smtp-server "smpt-mail.outlook.com"
+	smtpmail-smtp-service 587
+	message-send-mail-function 'smtpmail-send-it
+	smtpmail-default-smtp-server "smtp-mail.outlook.com"))
+
 (defun trivialfis/mu4e ()
   "Mu4e mail configuration."
   (interactive)
@@ -39,16 +46,29 @@
 	mu4e-drafts-folder "/Drafts"
 	mu4e-trash-folder "/Deleted"
 	mu4e-refile-folder "/Archive")
+
   (setq mu4e-get-mail-command "offlineimap"
-	mu4e-headers-auto-update t)
+	mu4e-headers-auto-update 't
+	mu4e-headers-full-search 't)
+
+  (setq mu4e-completing-read-function 'completing-read
+	mu4e-use-fancy-chars 't
+	message-kill-buffer-on-exit 't)
+
+  (let ((dir "~/Downloads/"))
+    (when (file-directory-p dir)
+      (setq mu4e-attachment-dir dir)))
+
   (setq mu4e-headers-fields '((:human-date . 12)
 			      (:flags . 6)
 			      (:mailing-list . 10)
 			      (:from . 22)
-			      (:thread-subject)))
+			      (:subject)))
   (setq mu4e-view-show-images t)
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
+
+  (trivialfis/smtp)
   (mu4e))
 
 (defun trivialfis/gnus ()
@@ -68,11 +88,6 @@
   (setq message-directory "~/.Mail")
 
   (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-
-  (setq smtpmail-smtp-server "smpt-mail.outlook.com"
-	smtpmail-smtp-service 587
-	message-send-mail-function 'smtpmail-send-it
-	smtpmail-default-smtp-server "smtp-mail.outlook.com")
 
   (setq gnus-visible-headers
         "^From:\\|^Reply-To\\|^Organization:\\|^To:\\|^Cc:\\|^Newsgroups:\\|^Subject:\\|^Date:\\|^List-Id:\\|^Gnus")
@@ -111,6 +126,8 @@
    smiley-style 'medium
    gnus-keep-backlog '0)
 
+  (trivialfis/smtp)
+  
   (gnus)
   (highlight-symbol-mode 0)
   (delq 'after-change-major-mode-hook highlight-symbol-mode))
