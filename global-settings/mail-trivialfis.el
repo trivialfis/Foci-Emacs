@@ -28,11 +28,32 @@
 (require 'smtpmail)
 (eval-when-compile
   (require 'highlight-symbol))
+(add-to-list 'load-path "~/.local/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
 
-(defun trivialfis/mail()
-  "My mail configuration."
+(defun trivialfis/mu4e ()
+  "Mu4e mail configuration."
   (interactive)
+  (setq mu4e-maildir "~/.Mail"
+	mu4e-sent-folder "/Sent"
+	mu4e-drafts-folder "/Drafts"
+	mu4e-trash-folder "/Deleted"
+	mu4e-refile-folder "/Archive")
+  (setq mu4e-get-mail-command "offlineimap"
+	mu4e-headers-auto-update t)
+  (setq mu4e-headers-fields '((:human-date . 12)
+			      (:flags . 6)
+			      (:mailing-list . 10)
+			      (:from . 22)
+			      (:thread-subject)))
+  (setq mu4e-view-show-images t)
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+  (mu4e))
 
+(defun trivialfis/gnus ()
+  "Gnus news reader configuration."
+  (interactive)
   (global-hl-line-mode 0)
 
   (setq gnus-select-method
@@ -60,12 +81,12 @@
         '("^From:" "^Reply-To" "^Organization:" "^To:" "^Cc:" "^Newsgroups:" "^List-id:"
           "^Subject:" "^Date:" "^Gnus"))
   (setq nnmail-split-methods
-	'(("guix:devel" "List-Id:.*\n.*<guix-devel.gnu.org>")
-	  ("guix:bugs" "List-Id:.*<bug-guix.gnu.org>")
-	  ("guix:patches" "List-Id:.*<guix-patches.gnu.org>")
-	  ("guix:help" "To:.*help-guix@gnu.org|Cc:.*help-guix@gnu.org")
-	  ("pytorch:issues" "Message-ID: .*pytorch/issue\\(.*\\)")
-	  ("pytorch:pr" "Message-ID: .*pytorch/pull\\(.*\\)")
+	'(("guix.devel" "List-Id:.*\n.*<guix-devel.gnu.org>")
+	  ("guix.bugs" "List-Id:.*<bug-guix.gnu.org>")
+	  ("guix.patches" "List-Id:.*<guix-patches.gnu.org>")
+	  ("guix.help" "To:.*help-guix@gnu.org|Cc:.*help-guix@gnu.org")
+	  ("pytorch.issues" "Message-ID: .*pytorch/issue\\(.*\\)")
+	  ("pytorch.pr" "Message-ID: .*pytorch/pull\\(.*\\)")
 	  ("Inbox" "")))
 
   (setq-default
@@ -93,6 +114,7 @@
   (gnus)
   (highlight-symbol-mode 0)
   (delq 'after-change-major-mode-hook highlight-symbol-mode))
+
 
 (provide 'mail-trivialfis)
 ;;; mail-trivialfis.el ends here

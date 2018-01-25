@@ -288,7 +288,8 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/bash "bash-trivialfis")
 (add-hook 'sh-mode-hook 'trivialfis/bash)
 
-(autoload 'trivialfis/mail "mail-trivialfis" :interactive t)
+(autoload 'trivialfis/gnus "mail-trivialfis" :interactive t)
+(autoload 'trivialfis/mu4e "mail-trivialfis" :interactive t)
 
 ;; End language settings------------------------------------------------------------------------
 

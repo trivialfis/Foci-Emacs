@@ -1,16 +1,27 @@
+# His
 auto-save-list
-elpa
 eshell
+recentf
+
+# Compiled code
+*.elc
+*.pyc
+
+# Indexing
 irony
 semanticdb
 rtagsdb
+
+# Private
+*token
+bookmarks
 snippets
 url
+
+# Garbage
 thumbs
 backup
-recentf
-elpa
 *.txt
-*token
-*.elc
-bookmarks
+
+# Packages
+elpa
