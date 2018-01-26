@@ -26,6 +26,8 @@
 (require 'nnml)
 (require 'nnimap)
 (require 'smtpmail)
+(require 'smtpmail-async)
+
 (eval-when-compile
   (require 'highlight-symbol))
 (add-to-list 'load-path "~/.local/share/emacs/site-lisp/mu4e")
@@ -33,14 +35,24 @@
 
 (defun trivialfis/smtp()
   "Configuration for sending mails."
-  (setq smtpmail-smtp-server "smpt-mail.outlook.com"
+  (setq	message-send-mail-function 'async-smtpmail-send-it
+	send-mail-function 'async-smtpmail-send-it
+	smtpmail-smtp-server "smtp-mail.outlook.com"
+	smtpmail-default-smtp-server "smtp-mail.outlook.com"
 	smtpmail-smtp-service 587
-	message-send-mail-function 'smtpmail-send-it
-	smtpmail-default-smtp-server "smtp-mail.outlook.com"))
+	smtpmail-stream-type 'starttls
+	smtpmail-debug-info 't)
+  (setq mu4e-sent-messages-behavior 'delete))
+
+(defun trivialfis/mail-general()
+  "General info about my mail account."
+  (setq user-mail-address "ybbs.daans@hotmail.com"
+	user-full-name "Fis Trivial"))
 
 (defun trivialfis/mu4e ()
   "Mu4e mail configuration."
   (interactive)
+  (trivialfis/mail-general)
   (setq mu4e-maildir "~/.Mail"
 	mu4e-sent-folder "/Sent"
 	mu4e-drafts-folder "/Drafts"

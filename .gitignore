@@ -17,6 +17,7 @@ rtagsdb
 bookmarks
 snippets
 url
+*.data
 
 # Garbage
 thumbs
