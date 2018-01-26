@@ -42,16 +42,18 @@
 
 (defun trivialfis/python-from-filename ()
   "Get python command from `w/buffer-file-name'."
+  (message "Find from filename")
   (save-match-data
     (let* ((file-name (buffer-file-name))
 	   (start (string-match "python[2|3]" file-name))
 	   (end (if start
 		    (match-end 0)
 		  nil)))
-      (message (substring file-name start end) ))))
+      (substring file-name start end))))
 
 (defun trivialfis/shebang-p ()
   "Detect whether python command is declared in shebang."
+  (message "Find from shebang")
   (save-window-excursion
     (goto-char (point-min))
     (save-match-data
@@ -63,14 +65,16 @@
 		   (lambda (path)
 		     (or (equal path (f-expand "~"))
 			 (f-exists? (f-join path "bin/activate")))))))
-    (when (and env-path
-	       (not (equal env-path (f-expand "~"))))
-      (pyvenv-activate env-path))))
+    (if (and env-path
+	     (not (equal env-path (f-expand "~"))))
+	(progn
+	  (pyvenv-activate env-path)
+	  't)
+      'nil)))
 
 (defun trivialfis/determine-python ()
   "Get python path."
-  (trivialfis/activate-virtualenv)
-  (cond (pyvenv-activate "python")
+  (cond ((trivialfis/activate-virtualenv) "python")
 	((trivialfis/shebang-p) (trivialfis/python-from-shebang))
 	((buffer-file-name) (trivialfis/python-from-filename))
 	(t "python")))
@@ -99,11 +103,23 @@ This can make use of __name__ == '__main__'."
     (run-python)
     (python-shell-send-file path)))
 
+(defun trivialfis/clear-python ()
+  "Clear the python environment."
+  (interactive)
+  (python-shell-send-string
+   "
+import sys
+this = sys.modules[__name__]
+for n in dir():
+    if n[0] != '_' and n[-1] != '_': delattr(this, n)
+"))
+
 (defun trivialfis/python()
   "Python configuration."
   ;; lsp is not ready.
   ;; (lsp-python-enable)
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
+  (local-set-key (kbd "C-c C-k") 'trivialfis/clear-python)
   (trivialfis/elpy-setup)
   (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
