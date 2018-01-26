@@ -28,8 +28,7 @@
 ;; (require 'lsp-python)
 
 (defun trivialfis/python-from-shebang ()
-  "Get python command.
-Given COMMAND-START, the start position of python[2|3], return python[2|3]."
+  "Get python command."
   (save-window-excursion
     (goto-char 0)
     (let* ((has-command-p (search-forward-regexp "python[2|3]"))
@@ -40,6 +39,16 @@ Given COMMAND-START, the start position of python[2|3], return python[2|3]."
 		    (match-end 0)
 		  nil)))
       (buffer-substring start end))))
+
+(defun trivialfis/python-from-filename ()
+  "Get python command from `w/buffer-file-name'."
+  (save-match-data
+    (let* ((file-name (buffer-file-name))
+	   (start (string-match "python[2|3]" file-name))
+	   (end (if start
+		    (match-end 0)
+		  nil)))
+      (message (substring file-name start end) ))))
 
 (defun trivialfis/shebang-p ()
   "Detect whether python command is declared in shebang."
@@ -63,6 +72,7 @@ Given COMMAND-START, the start position of python[2|3], return python[2|3]."
   (trivialfis/activate-virtualenv)
   (cond (pyvenv-activate "python")
 	((trivialfis/shebang-p) (trivialfis/python-from-shebang))
+	((buffer-file-name) (trivialfis/python-from-filename))
 	(t "python")))
 
 (defun trivialfis/elpy-setup()
