@@ -111,7 +111,9 @@ This can make use of __name__ == '__main__'."
 import sys
 this = sys.modules[__name__]
 for n in dir():
-    if n[0] != '_' and n[-1] != '_': delattr(this, n)
+    if (n[0] != '_' and n[-1] != '_' and
+     type(getattr(this, n)) is not type(this)):
+        delattr(this, n)
 "))
 
 (defun trivialfis/python()
@@ -119,7 +121,7 @@ for n in dir():
   ;; lsp is not ready.
   ;; (lsp-python-enable)
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
-  (local-set-key (kbd "C-c C-k") 'trivialfis/clear-python)
+  (local-set-key (kbd "C-c k") 'trivialfis/clear-python)
   (trivialfis/elpy-setup)
   (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
