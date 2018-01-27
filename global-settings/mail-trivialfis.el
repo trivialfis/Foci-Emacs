@@ -49,9 +49,8 @@
   (setq user-mail-address "ybbs.daans@hotmail.com"
 	user-full-name "Fis Trivial"))
 
-(defun trivialfis/mu4e ()
+(defun trivialfis/mu4e-config ()
   "Mu4e mail configuration."
-  (interactive)
   (trivialfis/mail-general)
   (setq mu4e-maildir "~/.Mail"
 	mu4e-sent-folder "/Sent"
@@ -81,7 +80,12 @@
   (setq mu4e-view-show-images t)
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
-  (trivialfis/smtp)
+  (trivialfis/smtp))
+
+(defun trivialfis/mu4e ()
+  "Call mu4e."
+  (interactive)
+  (trivialfis/mu4e-config)
   (mu4e))
 
 (defun trivialfis/gnus ()

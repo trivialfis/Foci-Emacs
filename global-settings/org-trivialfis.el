@@ -103,7 +103,10 @@
      ("C-c r s" .  trivialfis/org-region-src)
      ("C-c r e" .  trivialfis/org-region-example)
      )
-   ))
+   )
+  (autoload 'foci-project-mode "foci-org-projects"
+    :interactive t
+    "Use org mode and mu4e for managing projects."))
 
 (provide 'org-trivialfis)
 ;;; org-trivialfis ends here
