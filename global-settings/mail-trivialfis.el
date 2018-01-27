@@ -61,7 +61,9 @@
 
   (setq mu4e-get-mail-command "offlineimap"
 	mu4e-headers-auto-update 't
-	mu4e-headers-full-search 't)
+	mu4e-headers-full-search 't
+	mu4e-headers-skip-duplicates 't
+	mu4e-headers-include-related 't) ; toggle via W
 
   (setq mu4e-completing-read-function 'completing-read
 	mu4e-use-fancy-chars 't
@@ -79,7 +81,6 @@
   (setq mu4e-view-show-images t)
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
-
   (trivialfis/smtp)
   (mu4e))
 
