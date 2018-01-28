@@ -44,11 +44,14 @@ If USE-MSGID is t, then use message-id rather than list-id."
 		 (shell-command-to-string (string-join
 					   `("mu find flag:unread AND "
 					     ,query-command
-					     " | wc -l"))))))
+					     " | wc -l")))))
+	 (no-matches (string-prefix-p "mu: no matches" count)))
     (search-forward "Unread")
     (search-forward-regexp "\([0-9]*\)")
     (message (match-string 0))
-    (replace-match (string-join `("(" ,count ")")))))
+    (if no-matches
+	(replace-match "(0)")
+      (replace-match (string-join `("(" ,count ")"))))))
 
 (defun goto-unread ()
   "Go to unread messages view."
