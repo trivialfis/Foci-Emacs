@@ -104,9 +104,10 @@
      ("C-c r e" .  trivialfis/org-region-example)
      )
    )
-  (autoload 'foci-project-mode "foci-org-projects"
-    :interactive t
-    "Use org mode and mu4e for managing projects."))
+  (autoload 'fpg-mode "fpg-mode" "\
+Minor mode for using org and mu4e to manage projects (Foci playground).
+
+\(fn)" t nil))
 
 (provide 'org-trivialfis)
 ;;; org-trivialfis ends here
