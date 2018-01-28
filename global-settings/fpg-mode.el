@@ -22,7 +22,6 @@
 
 (require 'mail-trivialfis)
 (require 'subr-x)
-(require 'map)
 (require 'mu4e)
 (require 'org)
 
@@ -34,11 +33,15 @@
     "** Description:\n\n"
     "** Source dir: "))
 
+(defvar *mu4e-search* "mu4e-headers-search"
+  "Mu4e search command.")
+
 ;; It's really hard to find suitable keys with org-mode around.
 (defvar fpg-mode-map
   (let ((map (make-keymap)))
     (define-key map (kbd "C-c f u") 'fpg-update-unread-at-line)
     (define-key map (kbd "C-c f U") 'fpg-update-lists)
+    (define-key map (kbd "C-c m u") 'fpg-mu4e-update)
     (define-key map (kbd "C-c f i q") 'fpg-insert-list)
     (define-key map (kbd "C-c f i i") 'fpg-insert-list-id)
     (define-key map (kbd "C-c f i m") 'fpg-insert-message-id)
@@ -48,6 +51,7 @@
   "Menu for FPG mode"
   '("FPG"
     "---"
+    ["Update mail and index" fpg-mu4e-update]
     ["Update list at point" fpg-update-unread-at-line]
     ["Update all lists" fpg-update-lists]
     "---"
@@ -56,17 +60,17 @@
     ["Insert message id" fpg-insert-message-id]
     ))
 
-(defvar *mu4e-search* "mu4e-headers-search"
-  "Mu4e search command.")
-
 (defun fpg-come-back (buffer-name)
   "Come back to BUFFER-NAME."
   (lambda ()
     (interactive)
     (switch-to-buffer buffer-name)
-    (fpg-update-unread-at-line)
-    (if (buffer-file-name)
-	(save-buffer))))
+    (fpg-update-unread-at-line)))
+
+(defun fpg-mu4e-update ()
+  "Wrapper to call mu4e update mail and index."
+  (interactive)
+  (mu4e-update-mail-and-index nil))
 
 (defun fpg-update-lists-iter ()
   "Internal function for updating lists."
@@ -80,17 +84,19 @@
 			       (string-join `("[[elisp:(" ,*mu4e-search*))
 			       (line-end-position) t)))
 	(when search-succeed-p
-	  (fpg-update-unread-at-line))
+	  (fpg-update-unread-at-line t))
 	t))))
 
 (defun fpg-update-lists ()
-  "Upgrade all mailing lists."
+  "Update all mailing lists in current file."
   (interactive)
   (let ((point (point)))
     (goto-char (point-min))
     (cl-loop
      while (fpg-update-lists-iter))
-    (goto-char point)))
+    (goto-char point)
+    (if (buffer-file-name)
+	(save-buffer))))
 
 (defun fpg-get-query-at-line ()
   "Get the query string at current line."
@@ -101,8 +107,9 @@
 		     (search-backward "\""))))
     (buffer-substring-no-properties query-start query-end)))
 
-(defun fpg-update-unread-at-line()
-  "Update the numbers of unread mails with point at current line."
+(defun fpg-update-unread-at-line(&optional no-save)
+  "Update the numbers of unread mails of the mailing list at current line.
+Optional parameter NO-SAVE, if t, specifies don't save the buffer."
   (interactive)
   (let* ((query-command (fpg-get-query-at-line))
 	 (query-unread (string-join
@@ -116,11 +123,13 @@
     (search-forward-regexp "\([0-9]*\)")
     (if no-matches
 	(replace-match "(0)")
-      (replace-match (string-join `("(" ,count ")"))))))
+      (replace-match (string-join `("(" ,count ")"))))
+    (if (and (not no-save)
+	     buffer-file-name)
+	(save-buffer))))
 
 (defun fpg-goto-unread ()
-  "Go to unread messages view."
-  (trivialfis/mu4e-config)
+  "Go to unread messages view, called from embeded link."
   (let ((query-command (fpg-get-query-at-line)))
     (mu4e-headers-search (string-join `(,query-command
 					" AND flag:unread ")))))
