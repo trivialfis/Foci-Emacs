@@ -100,18 +100,20 @@
 
 (defun fpg-get-query-at-line ()
   "Get the query string at current line."
-  (beginning-of-line)
-  (let ((query-start (search-forward "\""))
-	(query-end (progn
-		     (end-of-line)
-		     (search-backward "\""))))
-    (buffer-substring-no-properties query-start query-end)))
+  (save-excursion
+    (beginning-of-line)
+    (let ((query-start (search-forward "\""))
+	  (query-end (progn
+		       (end-of-line)
+		       (search-backward "\""))))
+      (buffer-substring-no-properties query-start query-end))))
 
 (defun fpg-update-unread-at-line(&optional no-save)
   "Update the numbers of unread mails of the mailing list at current line.
 Optional parameter NO-SAVE, if t, specifies don't save the buffer."
   (interactive)
-  (let* ((query-command (fpg-get-query-at-line))
+  (let* ((cur-point (point))
+	 (query-command (fpg-get-query-at-line))
 	 (query-unread (string-join
 			`("mu find "
 			  ,query-command
@@ -126,7 +128,8 @@ Optional parameter NO-SAVE, if t, specifies don't save the buffer."
       (replace-match (string-join `("(" ,count ")"))))
     (if (and (not no-save)
 	     buffer-file-name)
-	(save-buffer))))
+	(save-buffer))
+    (goto-char cur-point)))
 
 (defun fpg-goto-unread ()
   "Go to unread messages view, called from embeded link."
