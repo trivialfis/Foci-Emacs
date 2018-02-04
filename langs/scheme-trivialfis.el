@@ -38,7 +38,7 @@
       (run-geiser 'guile))
     )
 
-  (add-to-list 'geiser-guile-load-path "~/Workspace/guix"))
+  (add-to-list 'geiser-guile-load-path "~/.config/guix/latest"))
 
 (provide 'scheme-trivialfis)
 ;;; scheme-trivialfis.el ends here
