@@ -98,15 +98,22 @@
     (if (buffer-file-name)
 	(save-buffer))))
 
+(defmacro save-point (&rest body)
+  "Save current and run BODY."
+  (declare (indent 0) (debug t))
+  (let ((c (make-symbol "saved-point")))
+    `(let ((,c (point)))
+       (unwind-protect (progn ,@body)
+	 (goto-char ,c)))))
+
 (defun fpg-get-query-at-line ()
   "Get the query string at current line."
-  (save-excursion
-    (beginning-of-line)
-    (let ((query-start (search-forward "\""))
-	  (query-end (progn
-		       (end-of-line)
-		       (search-backward "\""))))
-      (buffer-substring-no-properties query-start query-end))))
+  (beginning-of-line)
+  (let ((query-start (search-forward "\""))
+	(query-end (progn
+		     (end-of-line)
+		     (search-backward "\""))))
+    (buffer-substring-no-properties query-start query-end)))
 
 (defun fpg-update-unread-at-line(&optional no-save)
   "Update the numbers of unread mails of the mailing list at current line.
@@ -133,9 +140,10 @@ Optional parameter NO-SAVE, if t, specifies don't save the buffer."
 
 (defun fpg-goto-unread ()
   "Go to unread messages view, called from embeded link."
-  (let ((query-command (fpg-get-query-at-line)))
-    (mu4e-headers-search (string-join `(,query-command
-					" AND flag:unread ")))))
+  (save-point
+   (let ((query-command (fpg-get-query-at-line)))
+     (mu4e-headers-search (string-join `(,query-command
+					 " AND flag:unread "))))))
 
 (defun fpg-construct-query-link (query desc)
   "Construct link for a mailing list.
