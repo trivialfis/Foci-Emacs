@@ -95,7 +95,7 @@
   (toc-org-enable)
   (org-display-inline-images)
   (setq org-preview-latex-default-process 'dvisvgm)
-
+  (add-to-list 'org-link-frame-setup '(file . find-file))
   (trivialfis/local-set-keys
    '(
      ("C-c s"   .  trivialfis/org-insert-src)
