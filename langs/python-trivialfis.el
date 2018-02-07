@@ -287,8 +287,8 @@ this = sys.modules[__name__]
 for n in dir():
     if (n[0] != '_' and n[-1] != '_' and
      type(getattr(this, n)) is not type(this)):
-        delattr(this, n)
-"))
+        delattr(this, n)")
+  (comint-clear-buffer))
 
 (defun trivialfis/python()
   "Python configuration."
