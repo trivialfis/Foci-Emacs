@@ -246,9 +246,17 @@ Similarly for Soar, Scheme, etc."
 	  't)
       'nil)))
 
+(defun trivialfis/get-command-from-shell ()
+  "Used after activating virtualenv."
+  (let* ((raw-version (shell-command-to-string "python --version"))
+	 (version-index (string-match "[2|3]" raw-version))
+	 (version (substring-no-properties
+		   raw-version version-index (+ 1 version-index))))
+    (concat "python" version)))
+
 (defun trivialfis/determine-python ()
   "Get python path."
-  (cond ((trivialfis/activate-virtualenv) "python")
+  (cond ((trivialfis/activate-virtualenv) (trivialfis/get-command-from-shell))
 	((trivialfis/shebang-p) (trivialfis/python-from-shebang))
 	((buffer-file-name) (trivialfis/python-from-filename))
 	(t "python")))
@@ -295,10 +303,11 @@ for n in dir():
   ;; lsp is not ready.
   ;; (lsp-python-enable)
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
-  (local-set-key (kbd "C-c k") 'trivialfis/clear-python)
+  ;; (local-set-key (kbd "C-c k") 'trivialfis/clear-python)
   (trivialfis/elpy-setup)
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
+		(local-set-key (kbd "C-c k") 'trivialfis/clear-python)
 		(fset 'comint-send-input 'trivialfis/comint-send-input)))
   (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
