@@ -20,7 +20,6 @@
 ;;; Commentary:
 ;;; Code:
 
-;; (require 'outline)
 (require 'org)
 (require 'org-faces)
 (require 'org-bullets)
@@ -68,7 +67,7 @@
   (backward-char))
 
 (defun trivialfis/org-init()
-  "Run before org mode initialization"
+  "Run before org mode initialization."
   (setf org-startup-truncated nil
 	org-startup-folded nil)
   (setf org-agenda-files '("~/Workspace/note/reading_list/reading-progress.org"))
@@ -87,7 +86,7 @@
       (setf level (- level 0.1)))))
 
 (defun trivialfis/org-post()
-  "Run after org mode initialization"
+  "Run after org mode initialization."
   (setf org-bullets-bullet-list '("◉" "○" "■" "◆")
 	org-image-actual-width nil)
   ;; (org-indent-mode 1)
