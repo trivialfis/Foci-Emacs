@@ -23,6 +23,8 @@
 (require 'tex)
 (require 'latex)
 (require 'company)
+(require 'text-trivialfis)
+
 (defun trivialfis/LaTeX()
   "Somehow the company-latex-commands conflicts with the other two latex backends."
   ;; (auto-make-header)
@@ -34,6 +36,7 @@
   (add-to-list 'company-backends 'company-math-symbols-unicode)
   (add-to-list 'company-backends 'company-latex-commands)
   (flycheck-mode 1)
-  )
+  (trivialfis/_text))
+
 (provide 'latex-trivialfis)
 ;;; latex-trivialfis ends here
