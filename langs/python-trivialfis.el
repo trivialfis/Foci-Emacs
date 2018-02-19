@@ -24,8 +24,10 @@
 (require 'company)
 (require 'helm-xref)
 (require 'f)
-;; (require 'lsp-mode)
 ;; (require 'lsp-python)
+;; (require 'lsp-mode)
+;; (require 'company-lsp)
+
 
 (defun trivialfis/comint-send-input (&optional no-newline artificial)
   "Send input to process.
@@ -214,6 +216,12 @@ Similarly for Soar, Scheme, etc."
 		  nil)))
       (buffer-substring start end))))
 
+(defun trivialfis/filename-python-p ()
+  "Whether filename contain python version."
+  (save-match-data
+    (let ((filename (buffer-file-name)))
+      (string-match "python[2|3]" filename))))
+
 (defun trivialfis/python-from-filename ()
   "Get python command from `w/buffer-file-name'."
   (message "Find from filename")
@@ -223,7 +231,9 @@ Similarly for Soar, Scheme, etc."
 	   (end (if start
 		    (match-end 0)
 		  nil)))
-      (substring file-name start end))))
+      (if end
+	  (substring file-name start end)
+	nil))))
 
 (defun trivialfis/shebang-p ()
   "Detect whether python command is declared in shebang."
@@ -258,7 +268,7 @@ Similarly for Soar, Scheme, etc."
   "Get python path."
   (cond ((trivialfis/activate-virtualenv) (trivialfis/get-command-from-shell))
 	((trivialfis/shebang-p) (trivialfis/python-from-shebang))
-	((buffer-file-name) (trivialfis/python-from-filename))
+	((trivialfis/filename-python-p) (trivialfis/python-from-filename))
 	(t "python")))
 
 (defun trivialfis/elpy-setup()
@@ -277,14 +287,6 @@ Similarly for Soar, Scheme, etc."
     (add-to-list 'company-backends 'elpy-company-backend)
     (elpy-mode 1)))
 
-(defun trivialfis/eval-file()
-  "Eval the default buffer by sending file.
-This can make use of __name__ == '__main__'."
-  (interactive)
-  (let ((path (buffer-file-name)))
-    (run-python)
-    (python-shell-send-file path)))
-
 (defun trivialfis/clear-python ()
   "Clear the python environment."
   (interactive)
@@ -298,12 +300,23 @@ for n in dir():
         delattr(this, n)")
   (comint-clear-buffer))
 
+(defun trivialfis/eval-file()
+  "Eval the default buffer by sending file.
+This can make use of __name__ == '__main__'."
+  (interactive)
+  (let ((path (buffer-file-name)))
+    ;; (kill-process "Python")
+    ;; (kill-buffer "*Python*")
+    (run-python)
+    (python-shell-send-file path)))
+
 (defun trivialfis/python()
   "Python configuration."
   ;; lsp is not ready.
   ;; (lsp-python-enable)
+  ;; (push 'company-lsp company-backends)
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
-  ;; (local-set-key (kbd "C-c k") 'trivialfis/clear-python)
+  ;; (local-set-key (kbd "C-c k") 'trivialfis/restart-python)
   (trivialfis/elpy-setup)
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
