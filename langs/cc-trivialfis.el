@@ -73,8 +73,8 @@ Used only for nevigation."
 
   ;; (setq rtags-autostart-diagnostics t)
   ;; (rtags-diagnostics)
-  ;; (setq rtags-completions-enabled 1)
-  ;; (add-to-list 'company-backends 'company-rtags)
+  (setq rtags-completions-enabled 1)
+  (add-to-list 'company-backends 'company-rtags)
   (setq rtags-display-result-backend 'helm)
   (trivialfis/local-set-keys
    '(
@@ -138,7 +138,7 @@ project to the new project."
   ;; Company mode
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
-  (trivialfis/irony)
+  ;; (trivialfis/irony)
   ;; (trivialfis/rtags)
   ;; (cmake-ide-setup)
   (setup-ide)
