@@ -138,10 +138,9 @@ project to the new project."
   ;; Company mode
   (setf company-backends '())
   (add-to-list 'company-backends 'company-keywords)
-  ;; (trivialfis/irony)
-  ;; (trivialfis/rtags)
-  ;; (cmake-ide-setup)
-  (setup-ide)
+  (trivialfis/irony)
+  (trivialfis/rtags)
+  ;; (setup-ide)
 
   (setq c-auto-newline nil)
 
