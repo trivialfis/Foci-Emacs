@@ -29,8 +29,9 @@
 (require 'smtpmail-async)
 
 (eval-when-compile
-  (require 'highlight-symbol))
-(add-to-list 'load-path "~/.local/share/emacs/site-lisp/mu4e")
+  (require 'highlight-symbol)
+  (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp"))
+(add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
 (require 'mu4e)
 
 (defun trivialfis/smtp()
@@ -60,7 +61,7 @@
 
   (setq mu4e-get-mail-command "offlineimap"
 	mu4e-headers-auto-update 't
-	mu4e-headers-full-search 't
+	;; mu4e-headers-full-search 't
 	mu4e-headers-skip-duplicates 't
 	mu4e-headers-include-related 't) ; toggle via W
 
