@@ -78,7 +78,9 @@ Used only for nevigation."
   (setq rtags-display-result-backend 'helm)
   (trivialfis/local-set-keys
    '(
-     ("M-."     .  rtags-find-symbol-at-point)
+     ("M-." . (lambda () (interactive)
+		(if (not (rtags-find-symbol-at-point))
+     		    (helm-gtags-dwim))))
      ("M-?"     .  rtags-find-references-at-point)
      ("M-,"     .  rtags-location-stack-back)
      ("C-,"   .    rtags-location-stack-forward)
