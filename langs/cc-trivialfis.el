@@ -78,15 +78,20 @@ Used only for nevigation."
   (setq rtags-display-result-backend 'helm)
   (trivialfis/local-set-keys
    '(
-     ("M-." . (lambda () (interactive)
+     ("M-." . (lambda (arg) (interactive "P")
+		(if arg
+		    (rtags-find-symbol))
 		(if (not (rtags-find-symbol-at-point))
      		    (helm-gtags-dwim))))
-     ("M-?"     .  rtags-find-references-at-point)
+     ("M-?"     .  (lambda () (interactive)
+		     (if (not (rtags-find-references-at-point))
+			 (helm-gtags-find-rtag))))
      ("M-,"     .  rtags-location-stack-back)
      ("C-,"   .    rtags-location-stack-forward)
      ("C-c r r" .  rtags-rename-symbolrtags-next-match)
      ))
-  (add-hook 'kill-emacs-hook 'rtags-quit-rdm))
+  ;; (add-hook 'kill-emacs-hook 'rtags-quit-rdm)
+  )
 
 (defun trivialfis/irony ()
   "Irony mode configuration."
@@ -144,7 +149,12 @@ project to the new project."
   (trivialfis/rtags)
   ;; (setup-ide)
 
+  (defconst trivialfis/cc-style
+    '("gnu"
+      (c-offsets-alist . ((innamespace . [0])))))
+  (c-add-style "trivialfis/cc-style" trivialfis/cc-style)
   (setq c-auto-newline nil)
+  (c-set-style "trivialfis/cc-style")
 
   (trivialfis/local-set-keys
    '(
@@ -153,6 +163,7 @@ project to the new project."
      ;; Clang formating
      ("C-c f b" . clang-format-buffer)
      ("C-c f r" . clang-format-region)
+     ("C-c C-f" . find-file-in-project)
 
      ("C-c C-a" .  cmake-ide-compile)
      ))
