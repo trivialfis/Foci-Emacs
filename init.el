@@ -199,12 +199,13 @@ KEY-COMMANDS: A list containing one or more (key command)"
 
 (trivialfis/global-set-keys
  '(
-
    ;; Misc
    ("C-c d w"      .      delete-trailing-whitespace)
    ("C-x C-b"      .                         ibuffer)
    ("C-c i"        .                        fci-mode)
    ("C-c g"        .             trivialfis/goto-pos)
+   ("C-x C-g"      .        (lambda ()(interactive))) ; regret
+   ("C-c C-g"      .        (lambda ()(interactive))) ; regret
 
    ;; Paradox
    ("C-c p l"      .           paradox-list-packages)
