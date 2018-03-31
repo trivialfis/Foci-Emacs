@@ -42,11 +42,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(auth-source-save-behavior nil)
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (company-lsp lsp-python foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell guix lsp-go sage-shell-mode realgud meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
+    (matlab-mode paredit lsp-java company-lsp lsp-python foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell guix lsp-go sage-shell-mode realgud meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm toc-org vala-mode flycheck-irony company-rtags flycheck-rtags helm-rtags rtags toml-mode rust-mode package-lint font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox helm org markdown-mode vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb magit elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t)
  '(safe-local-variable-values
@@ -204,6 +206,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
    ("C-x C-b"      .                         ibuffer)
    ("C-c i"        .                        fci-mode)
    ("C-c g"        .             trivialfis/goto-pos)
+   ("C-c o"        .      previous-multiframe-window)
    ("C-x C-g"      .        (lambda ()(interactive))) ; regret
    ("C-c C-g"      .        (lambda ()(interactive))) ; regret
 
@@ -288,6 +291,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 ;; bash mode
 (autoload 'trivialfis/bash "bash-trivialfis")
 (add-hook 'sh-mode-hook 'trivialfis/bash)
+
+;; java mode
+(autoload 'trivialfis/java "java-trivialfis")
+(add-hook 'java-mode-hook 'trivialfis/java)
 
 (autoload 'trivialfis/gnus "mail-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mail-trivialfis" :interactive t)

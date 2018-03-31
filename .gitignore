@@ -26,3 +26,5 @@ backup
 
 # Packages
 elpa
+
+eclipse.jdt.ls
