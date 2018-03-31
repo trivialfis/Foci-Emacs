@@ -26,7 +26,8 @@
 
 (defun trivialfis/lisp ()
   "Basic configuration for Lisp."
-  (setq inferior-lisp-program "/usr/bin/sbcl")
+
+  (setq inferior-lisp-program (shell-command-to-string "which sbcl"))
   (setq slime-company-completion 'fuzzy
 	slime-contribs '(slime-fancy
 			 slime-company
@@ -35,7 +36,7 @@
   (add-to-list 'company-backends 'company-slime)
 
   (flycheck-mode 1)
-  
+
   (define-key slime-mode-map (kbd "C-c h o") 'slime-documentation-lookup)
   (define-key slime-mode-map (kbd "C-c C-b") 'slime-eval-buffer)
   (define-key slime-mode-map (kbd "C-c C-a") 'slime-compile-file)
