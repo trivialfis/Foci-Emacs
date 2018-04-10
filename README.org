@@ -2,14 +2,8 @@
 
 * Introduction
 It's just my Emacs configuration abstracted as a usable distribution.
-Due to the line:
-#+BEGIN_SRC elisp
-(global-display-line-numbers-mode t)
-#+END_SRC
 
 Emacs 25+ are supported.
-
-Theme are dumped during compilation phase. Search /dumping emacs/.
 
 All packages are listed in *selected-packages.el*. Use `package-install-selected-packages' to install them all at once.
 
