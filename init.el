@@ -33,8 +33,9 @@
 (tool-bar-mode 0)			; Remove tool-bar
 (scroll-bar-mode 0)
 
-(global-display-line-numbers-mode t)
-;; (setq-default display-line-numbers t)
+(if (> emacs-major-version 25)
+    (global-display-line-numbers-mode t)
+  (global-linum-mode t))
 ;; (modify-all-frames-parameters '((scroll-bar-width . 8)))
 
 (custom-set-variables

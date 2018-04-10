@@ -1,12 +1,13 @@
 #+TITLE: Emacs configuration.
 
 * Introduction
-It's just my Emacs configuration.
+It's just my Emacs configuration abstracted as a usable distribution.
 Due to the line:
 #+BEGIN_SRC elisp
 (global-display-line-numbers-mode t)
 #+END_SRC
-It only works with the /master/ branch and /emacs-26/ branch of Emacs. If you intend to use it with regular release, remove that line in *init.el* and use /global-linum-mode/ instead.
+
+Emacs 25+ are supported.
 
 Theme are dumped during compilation phase. Search /dumping emacs/.
 
