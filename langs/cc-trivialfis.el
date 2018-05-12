@@ -172,7 +172,7 @@ project to the new project."
 
 (defun trivialfis/c++ ()
   "Custom C++ mode."
-  (setf irony-additional-clang-options '("-std=c++14" "-cc1"))
+  (setf irony-additional-clang-options '("-std=c++14"))
   ;; (setf flycheck-clang-language-standard "c++14")
   ;; (trivialfis/semantic 'c++-mode)
   (trivialfis/cc-base))
