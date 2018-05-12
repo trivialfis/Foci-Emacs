@@ -237,11 +237,16 @@ Similarly for Soar, Scheme, etc."
 
 (defun trivialfis/shebang-p ()
   "Detect whether python command is declared in shebang."
-  (message "Find from shebang")
   (save-window-excursion
     (goto-char (point-min))
     (save-match-data
       (search-forward "#!" (line-end-position) t 1))))
+
+(defun trivialfis/python-from-which ()
+  "Get python path by which."
+  (let* ((which (shell-command-to-string "which python"))
+	 (path (car (reverse (split-string which)))))
+    path))
 
 (defun trivialfis/activate-virtualenv ()
   "Find and activate virtualenv."
@@ -269,7 +274,7 @@ Similarly for Soar, Scheme, etc."
   (cond ((trivialfis/activate-virtualenv) (trivialfis/get-command-from-shell))
 	((trivialfis/shebang-p) (trivialfis/python-from-shebang))
 	((trivialfis/filename-python-p) (trivialfis/python-from-filename))
-	(t "python")))
+	(t (trivialfis/python-from-which))))
 
 (defun trivialfis/elpy-setup()
   "Elpy configuration."
@@ -279,6 +284,8 @@ Similarly for Soar, Scheme, etc."
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (with-eval-after-load 'elpy
     (let ((command (trivialfis/determine-python)))
+      (message "python command")
+      (message command)
       (setq elpy-rpc-python-command command
 	    python-shell-interpreter command))
     ;; ipython makes use of xterm ansi code.
