@@ -205,6 +205,7 @@ Similarly for Soar, Scheme, etc."
 
 (defun trivialfis/python-from-shebang ()
   "Get python command."
+  (message "Python from shebang.")
   (save-window-excursion
     (goto-char 0)
     (let* ((has-command-p (search-forward-regexp "python[2|3]"))
@@ -224,7 +225,7 @@ Similarly for Soar, Scheme, etc."
 
 (defun trivialfis/python-from-filename ()
   "Get python command from `w/buffer-file-name'."
-  (message "Find from filename")
+  (message "Find from filename.")
   (save-match-data
     (let* ((file-name (buffer-file-name))
 	   (start (string-match "python[2|3]" file-name))
@@ -243,10 +244,22 @@ Similarly for Soar, Scheme, etc."
       (search-forward "#!" (line-end-position) t 1))))
 
 (defun trivialfis/python-from-which ()
-  "Get python path by which."
+  "Get python path by which shell command."
+  (message "Python from `which'")
+  (defun foundp (str)
+    (not (equal (car (split-string str)) "which:")))
+
   (let* ((which (shell-command-to-string "which python"))
-	 (path (car (reverse (split-string which)))))
-    path))
+	 (which-python3 (shell-command-to-string "which python3"))
+	 (which-python2 (shell-command-to-string "which python2"))
+	 (has-python-p (foundp which))
+	 (has-python3-p (foundp which-python3))
+	 (has-python2-p (foundp which-python2)))
+    (cond
+     (has-python-p (car (reverse (split-string which))))
+     (has-python3-p (car (reverse (split-string which-python3))))
+     (has-python2-p (car (reverse (split-string which-python2))))
+     (t "python"))))
 
 (defun trivialfis/activate-virtualenv ()
   "Find and activate virtualenv."
@@ -263,6 +276,7 @@ Similarly for Soar, Scheme, etc."
 
 (defun trivialfis/get-command-from-shell ()
   "Used after activating virtualenv."
+  (message "Python from shell")
   (let* ((raw-version (shell-command-to-string "python --version"))
 	 (version-index (string-match "[2|3]" raw-version))
 	 (version (substring-no-properties
@@ -284,8 +298,7 @@ Similarly for Soar, Scheme, etc."
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (with-eval-after-load 'elpy
     (let ((command (trivialfis/determine-python)))
-      (message "python command")
-      (message command)
+      (message (format "Python command: %s" command))
       (setq elpy-rpc-python-command command
 	    python-shell-interpreter command))
     ;; ipython makes use of xterm ansi code.
