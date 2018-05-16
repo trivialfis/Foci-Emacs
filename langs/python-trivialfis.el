@@ -24,11 +24,8 @@
 (require 'company)
 (require 'helm-xref)
 (require 'f)
-;; (require 'lsp-python)
-;; (require 'lsp-mode)
-;; (require 'company-lsp)
 
-
+;; Modified to keep syntax highlight in comint-send-input
 (defun trivialfis/comint-send-input (&optional no-newline artificial)
   "Send input to process.
 After the process output mark, sends all text from the process mark to
@@ -243,12 +240,13 @@ Similarly for Soar, Scheme, etc."
     (save-match-data
       (search-forward "#!" (line-end-position) t 1))))
 
+(defun foundp (str)
+  "Whether STR returned by `which' contain python."
+  (not (equal (car (split-string str)) "which:")))
+
 (defun trivialfis/python-from-which ()
   "Get python path by which shell command."
   (message "Python from `which'")
-  (defun foundp (str)
-    (not (equal (car (split-string str)) "which:")))
-
   (let* ((which (shell-command-to-string "which python"))
 	 (which-python3 (shell-command-to-string "which python3"))
 	 (which-python2 (shell-command-to-string "which python2"))
@@ -276,7 +274,7 @@ Similarly for Soar, Scheme, etc."
 
 (defun trivialfis/get-command-from-shell ()
   "Used after activating virtualenv."
-  (message "Python from shell")
+  (message "Python from shell(virtual envs).")
   (let* ((raw-version (shell-command-to-string "python --version"))
 	 (version-index (string-match "[2|3]" raw-version))
 	 (version (substring-no-properties
@@ -332,9 +330,6 @@ This can make use of __name__ == '__main__'."
 
 (defun trivialfis/python()
   "Python configuration."
-  ;; lsp is not ready.
-  ;; (lsp-python-enable)
-  ;; (push 'company-lsp company-backends)
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
   ;; (local-set-key (kbd "C-c k") 'trivialfis/restart-python)
