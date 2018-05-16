@@ -26,15 +26,22 @@
 (require 'geiser-guile)
 (require 'geiser-compile)
 
+(use-package repl-trivialfis
+  :commands (trivialfis/comint-send-input))
+
 (defun trivialfis/scheme ()
   "Run Geiser."
   ;; (setq geiser-active-implementations '(guile racket chicken))
   (setq geiser-active-implementations '(guile))
   (setq geiser-repl-query-on-kill-p nil)
 
-  (define-key geiser-mode-map (kbd "C-c C-a") 'geiser-compile-current-buffer)
-  (define-key geiser-mode-map (kbd "C-c C-k") 'geiser-mode-switch-to-repl-and-enter)
-
+  (define-key geiser-mode-map (kbd "C-c C-a")
+    'geiser-compile-current-buffer)
+  (define-key geiser-mode-map (kbd "C-c C-k")
+    'geiser-mode-switch-to-repl-and-enter)
+  (add-hook 'geiser-mode-hook
+	    #'(lambda ()
+		(fset 'comint-send-input 'trivialfis/comint-send-input)))
   (eval-after-load 'geiser
     (save-window-excursion
       (run-geiser 'guile)))
