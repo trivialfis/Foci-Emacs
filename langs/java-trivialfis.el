@@ -12,6 +12,7 @@
   ;; Don't know why prog mode isn't loaded.
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   (c-set-style "gnu")
+  (setq lsp-before-save-edits nil)
   (setq lsp-java--workspace-folders (list "/home/fis/Workspace/bitwar"))
   (trivialfis/programming-init)
   (flycheck-mode 1)
