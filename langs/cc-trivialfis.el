@@ -1,19 +1,19 @@
 ;;; cc-trivialfis --- Summary
-;;; 
+;;;
 ;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
-;;; 
+;;;
 ;;; Foci-Emacs is free software: you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
 ;;; the Free Software Foundation, either version 3 of the License, or
 ;;; (at your option) any later version.
-;;; 
+;;;
 ;;; Foci-Emacs is distributed in the hope that it will be useful,
 ;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;;; GNU General Public License for more details.
-;;; 
+;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with Foci-Emacs.  If not, see <http://www.gnu.org/licenses/>.
 ;;;
@@ -35,26 +35,22 @@
 	    (purpose-compile-user-configuration)
 	    (message "Purpose loaded.")))
 
-;; (require 'flycheck)			; For language standard
+(use-package company-c-headers)
 
-;; (use-package company-clang
-;;   :commands (trivialfis/company-clang))
-;; (use-package company-c-headers)
+(require 'company-clang)
 
+(defun trivialfis/company-clang ()
+  "Company clang configuration."
+  (setq company-backends (delete 'company-semantic company-backends))
+  (setq company-clang-arguments '("-std=c++14"))
+  (require 'company-c-headers)
+  ;; (add-to-list 'company-c-headers-path-system "/usr/include/c++/6.3.1/")  ; Add c++ headers to company
+  (add-to-list 'company-backends 'company-c-headers)
+  (add-to-list 'company-backends 'company-clang))
 
-;; (defun trivialfis/company-clang ()
-;;   "Company clang configuration."
-;;   (require 'company-clang)
-;;   (require 'company-c-headers)
-;;   (setq company-backends (delete 'company-semantic company-backends))
-;;   (setq company-clang-arguments '("-std=c++14"))
-;;   (require 'company-c-headers)
-;;   (add-to-list 'company-c-headers-path-system "/usr/include/c++/6.3.1/")  ; Add c++ headers to company
-;;   (add-to-list 'company-backends 'company-c-headers))
-
-;; (use-package programming-trivialfis
-;;   :commands trivialfis/semantic
-;;   :config (message "Semantic loaded"))
+(use-package programming-trivialfis
+  :commands trivialfis/semantic
+  :config (message "Semantic loaded"))
 
 (use-package cc-pkg-trivialfis
   :commands mumbo-find-library
@@ -73,8 +69,8 @@ Used only for nevigation."
 
   ;; (setq rtags-autostart-diagnostics t)
   ;; (rtags-diagnostics)
+  ;; (add-to-list 'company-backends 'company-rtags)
   (setq rtags-completions-enabled 1)
-  (add-to-list 'company-backends 'company-rtags)
   (setq rtags-display-result-backend 'helm)
   (trivialfis/local-set-keys
    '(
@@ -92,6 +88,12 @@ Used only for nevigation."
      ))
   ;; (add-hook 'kill-emacs-hook 'rtags-quit-rdm)
   )
+
+(defun trivialfis/cc-flycheck ()
+  "Flycheck configuration for c/c++ mode."
+  (setq flycheck-clang-language-standard "gnu++14"
+	flycheck-gcc-language-standard "gnu++14")
+  (flycheck-mode 1))
 
 (defun trivialfis/irony ()
   "Irony mode configuration."
@@ -123,14 +125,14 @@ Used only for nevigation."
 (defvar-local current-project nil
   "A local variable to keep the directory for current CMake project.")
 
-(defun setup-ide ()
+(defun trivialfis/setup-cide ()
   "Set up rtags and CMake-ide if CMakeLists.txt is presented.
 Otherwise do nothing.
 When jumping around headers, keep the CMake project as the original one.
 If the newly opened file belongs to a new project, then change the current
 project to the new project."
-  (let ((project-dir (cmake-ide--locate-project-dir)))
-    ;; (message project-dir)
+  (interactive)
+  (let ((project-dir (cide--locate-project-dir)))
     (if project-dir
 	(setq current-project project-dir
 	      original-project project-dir)
@@ -147,7 +149,9 @@ project to the new project."
   (add-to-list 'company-backends 'company-keywords)
   (trivialfis/irony)
   (trivialfis/rtags)
-  ;; (setup-ide)
+
+  ;; (trivialfis/company-clang)
+  ;; (trivialfis/setup-cide)
 
   (defconst trivialfis/cc-style
     '("gnu"
@@ -167,7 +171,8 @@ project to the new project."
 
      ("C-c C-a" .  cmake-ide-compile)
      ))
-  (flycheck-mode 1))
+  ;; (trivialfis/cc-flycheck)
+  )
 
 
 (defun trivialfis/c++ ()
