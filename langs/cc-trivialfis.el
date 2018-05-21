@@ -74,19 +74,20 @@ Used only for nevigation."
   (setq rtags-display-result-backend 'helm)
   (trivialfis/local-set-keys
    '(
-     ("M-." . (lambda (arg) (interactive "P")
-		(if arg
-		    (rtags-find-symbol))
-		(if (not (rtags-find-symbol-at-point))
-     		    (helm-gtags-dwim))))
+     ("M-."     . (lambda (arg) (interactive "P")
+		    (until-success
+		     'rtags-find-symbol-at-point
+		     'rtags-find-symbol
+		     'helm-gtags-dwim)))
      ("M-?"     .  (lambda () (interactive)
-		     (if (not (rtags-find-references-at-point))
-			 (helm-gtags-find-rtag))))
+		     (until-success
+		      'rtags-find-references-at-point
+		      'rtags-find-references
+		      'helm-gtags-find-rtag)))
      ("M-,"     .  rtags-location-stack-back)
      ("C-,"   .    rtags-location-stack-forward)
      ("C-c r r" .  rtags-rename-symbolrtags-next-match)
      ))
-  ;; (add-hook 'kill-emacs-hook 'rtags-quit-rdm)
   )
 
 (defun trivialfis/cc-flycheck ()
