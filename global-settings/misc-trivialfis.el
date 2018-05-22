@@ -61,12 +61,13 @@ If you want to go to the middle, enter 50. 50 means 50% of the buffer."
 	(kbd (car kc))
 	(cdr kc)))))
 
-(defun until-success (&rest args)
-  "Run until one of ARGS succeed."
+(defun until-success (args)
+  "Run until one of ARGS succeed.
+ARGS: A quoted list containing all functions to be tried."
   (if (equal args 'nil)
       'nil
     (if (not (apply (list (car args))))
-	(until-success (cadr args))
+  	(until-success (cdr args))
       't)))
 
 (provide 'misc-trivialfis)

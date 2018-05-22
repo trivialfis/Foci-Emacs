@@ -62,11 +62,14 @@
 	    (message "Rtags loaded")
 	    (use-package company-rtags)))
 
+(use-package helm-gtags
+  :commands (helm-gtags-dwim
+	     helm-gtags-find-rtag))
+
 (defun trivialfis/rtags ()
   "Rtags configuration.
 Used only for nevigation."
   (rtags-start-process-unless-running)
-
   ;; (setq rtags-autostart-diagnostics t)
   ;; (rtags-diagnostics)
   ;; (add-to-list 'company-backends 'company-rtags)
@@ -76,19 +79,19 @@ Used only for nevigation."
    '(
      ("M-."     . (lambda (arg) (interactive "P")
 		    (until-success
-		     'rtags-find-symbol-at-point
-		     'rtags-find-symbol
-		     'helm-gtags-dwim)))
-     ("M-?"     .  (lambda () (interactive)
+		     '(rtags-find-symbol-at-point
+		       rtags-find-symbol
+		       helm-gtags-dwim))))
+     ("M-?"     .  (lambda (arg) (interactive "P")
 		     (until-success
-		      'rtags-find-references-at-point
-		      'rtags-find-references
-		      'helm-gtags-find-rtag)))
+		      '(rtags-find-references-at-point
+			rtags-find-references
+			helm-gtags-find-tag-from-here))))
      ("M-,"     .  rtags-location-stack-back)
      ("C-,"   .    rtags-location-stack-forward)
      ("C-c r r" .  rtags-rename-symbolrtags-next-match)
-     ))
-  )
+     )
+   ))
 
 (defun trivialfis/cc-flycheck ()
   "Flycheck configuration for c/c++ mode."
@@ -172,8 +175,7 @@ project to the new project."
 
      ("C-c C-a" .  cmake-ide-compile)
      ))
-  ;; (trivialfis/cc-flycheck)
-  )
+  (trivialfis/cc-flycheck))
 
 
 (defun trivialfis/c++ ()
