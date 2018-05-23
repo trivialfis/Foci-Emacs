@@ -93,12 +93,6 @@ Used only for nevigation."
      )
    ))
 
-(defun trivialfis/cc-flycheck ()
-  "Flycheck configuration for c/c++ mode."
-  (setq flycheck-clang-language-standard "gnu++14"
-	flycheck-gcc-language-standard "gnu++14")
-  (flycheck-mode 1))
-
 (defun trivialfis/irony ()
   "Irony mode configuration."
   (add-hook 'irony-mode-hook 'irony-eldoc)
@@ -174,22 +168,26 @@ project to the new project."
      ("C-c C-f" . find-file-in-project)
 
      ("C-c C-a" .  cmake-ide-compile)
-     ))
-  (trivialfis/cc-flycheck))
+     )
+   ))
 
 
 (defun trivialfis/c++ ()
   "Custom C++ mode."
-  (setf irony-additional-clang-options '("-std=c++14"))
-  ;; (setf flycheck-clang-language-standard "c++14")
   ;; (trivialfis/semantic 'c++-mode)
-  (trivialfis/cc-base))
+  (trivialfis/cc-base)
+  (setq flycheck-clang-language-standard "gnu++14"
+	flycheck-gcc-language-standard "gnu++14"
+	irony-additional-clang-options '("-std=c++14"))
+  (flycheck-mode 1))
 
 (defun trivialfis/c ()
   "Custom c mode."
   ;; (trivialfis/semantic 'c-mode)
   (trivialfis/cc-base)
-  )
+  (setq flycheck-clang-language-standard "-std=gnu11"
+	flycheck-gcc-language-standard "-std=gnu11")
+  (flycheck-mode 1))
 
 (provide 'c++-trivialfis)
 ;;; cc-trivialfis.el ends here
