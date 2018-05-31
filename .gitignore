@@ -27,4 +27,6 @@ backup
 # Packages
 elpa
 
+# lsp
 eclipse.jdt.ls
+workspace
