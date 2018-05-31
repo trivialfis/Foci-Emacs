@@ -181,6 +181,16 @@ project to the new project."
 	irony-additional-clang-options '("-std=c++14"))
   (flycheck-mode 1))
 
+(defun trivialfis/cuda ()
+  "Custom CUDA mode."
+  (trivialfis/cc-base)
+  (setq flycheck-clang-language-standard "cuda"
+	irony-additional-clang-options '("-std=cuda")
+	flycheck-clang-args '("-nocudainc"
+			      "-I/usr/include/cuda"
+			      "-nocudalib"))
+  (flycheck-mode 1))
+
 (defun trivialfis/c ()
   "Custom c mode."
   ;; (trivialfis/semantic 'c-mode)
