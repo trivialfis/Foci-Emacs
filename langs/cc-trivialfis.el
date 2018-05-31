@@ -101,7 +101,8 @@ Used only for nevigation."
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
   (add-hook 'flycheck-mode-hook 'flycheck-irony-setup)
   (when (or (eq major-mode 'c-mode)	; Prevent from being loaded by c derived mode
-  	    (eq major-mode 'c++-mode))
+  	    (eq major-mode 'c++-mode)
+	    (eq major-mode 'cuda-mode))
     (ignore-errors
       (irony-mode 1))))
 
@@ -184,11 +185,18 @@ project to the new project."
 (defun trivialfis/cuda ()
   "Custom CUDA mode."
   (trivialfis/cc-base)
+  (eval-and-compile
+    (require 'company-irony-c-headers))
   (setq flycheck-clang-language-standard "cuda"
-	irony-additional-clang-options '("-std=cuda")
+	irony-additional-clang-options '("-std=cuda"
+					 "-nocudainc"
+					 "-nocudalib"
+					 "-I/usr/include/cuda")
 	flycheck-clang-args '("-nocudainc"
 			      "-I/usr/include/cuda"
-			      "-nocudalib"))
+			      "-nocudalib")
+	company-irony-c-headers--modes (cons 'cuda-mode
+					     company-irony-c-headers--modes))
   (flycheck-mode 1))
 
 (defun trivialfis/c ()
