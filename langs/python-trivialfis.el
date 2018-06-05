@@ -28,6 +28,17 @@
 (use-package repl-trivialfis
   :commands (trivialfis/comint-send-input))
 
+(defun trivialfis/shebang-p ()
+  "Detect whether python command is declared in shebang."
+  (save-window-excursion
+    (goto-char (point-min))
+    (save-match-data
+      (if (search-forward "#!" (line-end-position) t 1)
+	  (progn
+	    (goto-char (point-min))
+	    (search-forward "python[2|3]" (line-end-position) t 1))
+	'nil))))
+
 (defun trivialfis/python-from-shebang ()
   "Get python command."
   (message "Python from shebang.")
@@ -60,13 +71,6 @@
       (if end
 	  (substring file-name start end)
 	nil))))
-
-(defun trivialfis/shebang-p ()
-  "Detect whether python command is declared in shebang."
-  (save-window-excursion
-    (goto-char (point-min))
-    (save-match-data
-      (search-forward "#!" (line-end-position) t 1))))
 
 (defun foundp (str)
   "Whether STR returned by `which' contain python."
