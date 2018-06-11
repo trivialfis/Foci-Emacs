@@ -29,10 +29,10 @@
 (use-package repl-trivialfis
   :commands (trivialfis/comint-send-input))
 
-(defun trivialfis/scheme ()
+
+(cl-defun trivialfis/scheme (&optional (impl 'chicken))
   "Run Geiser."
-  ;; (setq geiser-active-implementations '(guile racket chicken))
-  (setq geiser-active-implementations '(guile))
+  (setq geiser-active-implementations '(chez chicken racket))
   (setq geiser-repl-query-on-kill-p nil)
 
   (define-key geiser-mode-map (kbd "C-c C-a")
@@ -42,9 +42,14 @@
   (add-hook 'geiser-mode-hook
 	    #'(lambda ()
 		(fset 'comint-send-input 'trivialfis/comint-send-input)))
-  (eval-after-load 'geiser
-    (save-window-excursion
-      (run-geiser 'guile)))
+
+  (save-window-excursion
+    (eval-after-load 'geiser
+      (cond ((string-suffix-p ".rkt" (buffer-file-name))
+	     (run-geiser 'racket))
+	    ((string-suffix-p ".scm" (buffer-file-name))
+	     (run-geiser impl)))))
+
 
   (add-to-list 'geiser-guile-load-path "~/.config/guix/latest"))
 
