@@ -1,5 +1,7 @@
 ;;; mail-trivialfis.el --- Summary
 ;;;
+;;; Commentary:
+;;;
 ;;; Copyright © 2015-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;; Copyright © 2012-2018 Sylvain Benner & Contributors
 ;;;
@@ -18,7 +20,6 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with Foci-Emacs.  If not, see <http://www.gnu.org/licenses/>.
 ;;;
-;;; Commentary:
 ;;; Code:
 
 (require 'gnus)
@@ -34,7 +35,7 @@
 (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
 (require 'mu4e)
 
-(defun trivialfis/smtp()
+(defun trivialfis/smtp ()
   "Configuration for sending mails."
   (setq	message-send-mail-function 'async-smtpmail-send-it
 	send-mail-function 'async-smtpmail-send-it
@@ -43,12 +44,25 @@
 	smtpmail-smtp-service 587
 	smtpmail-stream-type 'starttls
 	smtpmail-debug-info 't)
-  (setq mu4e-sent-messages-behavior 'delete))
+  (setq mu4e-sent-messages-behavior 'delete)) ; handled by outlook or gmail.
 
-(defun trivialfis/mail-general()
-  "General info about my mail account."
-  (setq user-mail-address "ybbs.daans@hotmail.com"
-	user-full-name "Fis Trivial"))
+(defun trivialfis/mail-general ()
+  "Set general info about mail account, read from .offlineimaprc."
+  (save-window-excursion
+    (with-temp-buffer
+      (insert-file-contents-literally "~/.offlineimaprc")
+      (save-match-data
+	(let* ((offlineimap-rc (buffer-string))
+	       (_ (string-match "remoteuser ?= ?\\([0-9A-Za-z\\\.]*@[a-z]*\\\.com\\)"
+				offlineimap-rc))
+	       (address (substring offlineimap-rc (match-beginning 1)
+				   (match-end 1)))
+	       (_ (string-match "accounts ?= ?\\([a-zA-Z0-9]*\\)" offlineimap-rc))
+	       (user (substring
+		      offlineimap-rc (match-beginning 1) (match-end 1))))
+	  (message (format "Address: %s\nUser: %s" address user))
+	  (setq user-mail-address address
+		user-full-name user))))))
 
 (defun trivialfis/mu4e-config ()
   "Mu4e mail configuration."
@@ -64,6 +78,9 @@
 	;; mu4e-headers-full-search 't
 	mu4e-headers-skip-duplicates 't
 	mu4e-headers-include-related 't) ; toggle via W
+
+  (add-to-list 'mu4e-bookmarks
+	       `(,(concat "to:" user-mail-address) "To me" ?m))
 
   (setq mu4e-completing-read-function 'completing-read
 	mu4e-use-fancy-chars 't
@@ -146,7 +163,7 @@
    gnus-keep-backlog '0)
 
   (trivialfis/smtp)
-  
+
   (gnus)
   (highlight-symbol-mode 0)
   (delq 'after-change-major-mode-hook highlight-symbol-mode))
