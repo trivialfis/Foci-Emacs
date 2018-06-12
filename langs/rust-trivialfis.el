@@ -34,6 +34,7 @@
 (require 'rust-mode)
 (require 'racer)
 (require 'company)
+(require 'flycheck)
 
 (defun trivialfis/rust-compile ()
   "Compile rust code using cargo."
@@ -53,11 +54,15 @@
 
   (add-hook 'racer-mode-hook 'eldoc-mode)
   (add-hook 'racer-mode-hook 'company-mode)
+
+  (setq company-backends '((company-capf
+			    company-dabbrev-code
+			    company-yasnippet
+			    company-files
+			    company-keywords)))
   (flycheck-mode 1)
   (racer-mode 1)
-  ;; (add-to-list 'company-backends 'company-racer)
 
-  (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
   (define-key rust-mode-map (kbd "C-c C-a") #'trivialfis/rust-compile)
   (setq company-tooltip-align-annotations t))
 

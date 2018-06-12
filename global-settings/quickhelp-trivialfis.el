@@ -28,6 +28,7 @@
 	company-quickhelp-color-foreground "black"
 	company-quickhelp-delay 1
 	company-quickhelp-max-lines nil)
+
   (company-quickhelp-mode 1))
 
 (provide 'quickhelp-trivialfis.el)
