@@ -261,7 +261,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/c++ "cc-trivialfis")
 (add-hook 'c++-mode-hook 'trivialfis/c++)
 
-(autoload 'trivialfis/cuda "cc-trivialfis")
+(autoload 'trivialfis/cuda "cuda-trivialfis")
 (add-hook 'cuda-mode-hook 'trivialfis/cuda)
 
 ;; C mode
