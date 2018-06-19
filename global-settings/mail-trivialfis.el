@@ -29,6 +29,8 @@
 (require 'smtpmail)
 (require 'smtpmail-async)
 
+(require 'text-trivialfis)
+
 (eval-when-compile
   (require 'highlight-symbol)
   (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp"))
@@ -99,6 +101,7 @@
   (setq mu4e-view-show-images t)
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
+  (add-hook 'mu4e-compose-mode-hook 'trivialfis/_text)
   (trivialfis/smtp))
 
 (defun trivialfis/mu4e ()
