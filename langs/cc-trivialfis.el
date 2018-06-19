@@ -48,10 +48,6 @@
   (add-to-list 'company-backends 'company-c-headers)
   (add-to-list 'company-backends 'company-clang))
 
-(use-package programming-trivialfis
-  :commands trivialfis/semantic
-  :config (message "Semantic loaded"))
-
 (use-package cc-pkg-trivialfis
   :commands mumbo-find-library
   :config (message "cc-pkg loaded"))
@@ -145,6 +141,7 @@ project to the new project."
   "Common configuration for c and c++ mode."
   ;; Company mode
   (setf company-backends '())
+  (setq-default indent-tabs-mode 'nil)
   (add-to-list 'company-backends 'company-keywords)
   (trivialfis/irony)
   (trivialfis/rtags)
