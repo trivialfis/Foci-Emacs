@@ -10,7 +10,7 @@ All packages are listed in *selected-packages.el*. Use `package-install-selected
 * To-do
 + Add better helm setup.
 + Add better Ecb faces.
-+ Add langtool configuration.
++ Better langtool support.
 + Add some useful macros.
 + Add better windows management.
 

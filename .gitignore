@@ -30,3 +30,6 @@ elpa
 # lsp
 eclipse.jdt.ls
 workspace
+
+# langtool
+LanguageTool-4.2

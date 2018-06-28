@@ -21,20 +21,28 @@
 ;;; Code:
 
 (require 'company)
+(require 'langtool)
 (eval-when-compile			; Get rid of the free reference
   (defvar flyspell-mode-map))
+
+(defvar accepted-mode-list '(text-mode org-mode markdown-mode))
 
 (defun trivialfis/_text ()
   "Configuration for normal text."
   (flyspell-mode 1)
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-at-point)
-  (add-to-list 'company-backends 'company-ispell))
+  (add-to-list 'company-backends 'company-ispell)
+  (setq langtool-language-tool-jar
+	"~/.emacs.d/LanguageTool-4.2/languagetool-commandline.jar"
+	langtool-default-language "en-US")
+  (add-hook 'after-save-hook '(lambda ()
+				(when (memq major-mode accepted-mode-list)
+				  (unless langtool-buffer-process
+				    (langtool-check-buffer))))))
 
 (defun trivialfis/text ()
   "Guard for trivialfis/_text."
-  (when (or (eq major-mode 'text-mode)
-	    (eq major-mode 'org-mode)
-	    (eq major-mode 'markdown-mode))
+  (when (memq major-mode accepted-mode-list)
     (trivialfis/_text)))
 
 (provide 'text-trivialfis)
