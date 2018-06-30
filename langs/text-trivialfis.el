@@ -25,7 +25,7 @@
 (eval-when-compile			; Get rid of the free reference
   (defvar flyspell-mode-map))
 
-(defvar accepted-mode-list '(text-mode org-mode markdown-mode))
+(defvar accepted-mode-list '(text-mode org-mode markdown-mode mu4e-compose-mode))
 
 (defun trivialfis/_text ()
   "Configuration for normal text."
