@@ -82,7 +82,8 @@
 	mu4e-headers-include-related 't) ; toggle via W
 
   (add-to-list 'mu4e-bookmarks
-	       `(,(concat "to:" user-mail-address) "To me" ?m))
+	       `(,(concat "to:" user-mail-address " and not flag:trashed")
+		 "To me" ?m))
 
   (setq mu4e-completing-read-function 'completing-read
 	mu4e-use-fancy-chars 't
