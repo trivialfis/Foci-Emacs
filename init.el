@@ -49,7 +49,7 @@
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (markdown-toc racket-mode ninja-mode cuda-mode helm-rtags flycheck-rtags company-rtags rtags guix lsp-ui matlab-mode paredit company-lsp lsp-python foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell lsp-go sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm toc-org vala-mode flycheck-irony toml-mode rust-mode font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox org markdown-mode vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company)))
+    (groovy-mode markdown-toc racket-mode ninja-mode cuda-mode helm-rtags flycheck-rtags company-rtags rtags guix lsp-ui matlab-mode paredit company-lsp lsp-python foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell lsp-go sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm toc-org vala-mode flycheck-irony toml-mode rust-mode font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent spaceline disaster paradox org markdown-mode vline cmake-mode go-mode all-the-icons-dired use-package company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t)
  '(safe-local-variable-values
@@ -261,6 +261,8 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/c++ "cc-trivialfis")
 (add-hook 'c++-mode-hook 'trivialfis/c++)
 
+;; Cuda mode
+(add-to-list 'auto-mode-alist '("\\.cuh\\'" . cuda-mode))
 (autoload 'trivialfis/cuda "cuda-trivialfis")
 (add-hook 'cuda-mode-hook 'trivialfis/cuda)
 
@@ -299,6 +301,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 ;; java mode
 (autoload 'trivialfis/java "java-trivialfis")
 (add-hook 'java-mode-hook 'trivialfis/java)
+
+;; makefile mode
+(autoload 'trivialfis/makefile "makefile-trivialfis")
+(add-hook 'makefile-gmake-mode-hook 'trivialfis/makefile)
 
 (autoload 'trivialfis/gnus "mail-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mail-trivialfis" :interactive t)
