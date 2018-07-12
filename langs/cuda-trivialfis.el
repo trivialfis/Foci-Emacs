@@ -31,15 +31,12 @@
     (require 'company-irony-c-headers))
 
   (setq flycheck-clang-language-standard "cuda"
-	flycheck-clang-args '("-nocudainc"
-			      "-nocudalib")
-	irony-additional-clang-options '("-nocudainc"
-					 "-nocudalib"
-					 "-I/usr/include/cuda")
+	flycheck-clang-args '("-nocudalib")
+	irony-additional-clang-options '("-nocudalib")
 	company-irony-c-headers--modes (cons 'cuda-mode
 					     company-irony-c-headers--modes))
 
-  (setq flycheck-clang-include-path '("/usr/include/cuda"))
+  (setq flycheck-clang-include-path '("/usr/local/cuda/include"))
   (defvar cuda-gpu-arch "sm_50")
 
   (flycheck-define-checker cuda-clang
