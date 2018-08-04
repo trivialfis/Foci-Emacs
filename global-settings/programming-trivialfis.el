@@ -41,6 +41,7 @@
   :commands (flycheck-mode)
   :config (message "Flycheck loaded."))
 
+(require 'helm-xref)
 
 (defun trivialfis/flycheck ()
   "Configurate flycheck."
@@ -78,9 +79,11 @@ MODE: the major programming mode"
 				 (setf eldoc-idle-delay 0.5)))
   (col-highlight-set-interval 2)
   (setq col-highlight-overlay-priority 0)
-  (toggle-highlight-column-when-idle 1)
+  ;; (toggle-highlight-column-when-idle 1)
   (trivialfis/flycheck)
   (hs-minor-mode 1)
+
+  (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
   (local-set-key (kbd "TAB") 'company-indent-or-complete-common)
   ;; Quickhelp
