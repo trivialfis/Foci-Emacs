@@ -23,6 +23,9 @@
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'cmake-ide)
+(require 'google-c-style)
+(require 'cquery)
+(require 'company-lsp)
 
 (use-package window-purpose
   :defer t
@@ -42,7 +45,8 @@
 (defun trivialfis/company-clang ()
   "Company clang configuration."
   (setq company-backends (delete 'company-semantic company-backends))
-  (setq company-clang-arguments '("-std=c++14"))
+  (setq company-clang-arguments '("-std=c++14"
+				  "-I/usr/local/cuda/include"))
   (require 'company-c-headers)
   ;; (add-to-list 'company-c-headers-path-system "/usr/include/c++/6.3.1/")  ; Add c++ headers to company
   (add-to-list 'company-backends 'company-c-headers)
@@ -95,7 +99,9 @@ Used only for nevigation."
   (add-to-list 'company-backends 'company-irony)
   (add-to-list 'company-backends 'company-irony-c-headers)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  (add-hook 'flycheck-mode-hook 'flycheck-irony-setup)
+  (add-hook 'flycheck-mode-hook #'(lambda ()
+				    (flycheck-irony-setup)
+				    (flycheck-select-checker 'irony)))
   (when (or (eq major-mode 'c-mode)	; Prevent from being loaded by c derived mode
   	    (eq major-mode 'c++-mode)
 	    (eq major-mode 'cuda-mode))
@@ -137,14 +143,27 @@ project to the new project."
     (trivialfis/rtags)
     (cmake-ide-setup)))
 
+(defun trivialfis/cquery ()
+  "Cquery configuration."
+  (setq cquery-executable (expand-file-name "~/.local/bin/cquery"))
+  (setq company-transformers nil company-lsp-async t company-lsp-cache-candidates nil)
+  (setq cquery-extra-init-params '(:completion (:detailedLabel t)))
+  (setq cquery-sem-highlight-method 'font-lock)
+  ;; (cquery-use-default-rainbow-sem-highlight)
+  (set-buffer-multibyte nil)
+  (lsp-cquery-enable)
+  (lsp-ui-mode))
+
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
   (setf company-backends '())
   (setq-default indent-tabs-mode 'nil)
   (add-to-list 'company-backends 'company-keywords)
-  (trivialfis/irony)
-  (trivialfis/rtags)
+
+  (trivialfis/cquery)
+  ;; (trivialfis/irony)
+  ;; (trivialfis/rtags)
 
   ;; (trivialfis/company-clang)
   ;; (trivialfis/setup-cide)
@@ -153,8 +172,10 @@ project to the new project."
     '("gnu"
       (c-offsets-alist . ((innamespace . [0])))))
   (c-add-style "trivialfis/cc-style" trivialfis/cc-style)
+  (c-add-style "google-c-style" google-c-style)
   (setq c-auto-newline nil)
-  (c-set-style "trivialfis/cc-style")
+  ;; (c-set-style "trivialfis/cc-style")
+  (c-set-style "google-c-style")
 
   (trivialfis/local-set-keys
    '(
@@ -169,15 +190,17 @@ project to the new project."
      )
    ))
 
-
 (defun trivialfis/c++ ()
   "Custom C++ mode."
   ;; (trivialfis/semantic 'c++-mode)
   (trivialfis/cc-base)
-  (setq flycheck-clang-language-standard "gnu++14"
-	flycheck-gcc-language-standard "gnu++14"
-	irony-additional-clang-options '("-std=c++14"))
-  (flycheck-mode 1))
+  ;; (setq flycheck-clang-language-standard "gnu++14"
+  ;; 	flycheck-gcc-language-standard "gnu++14"
+  ;; 	flycheck-clang-include-path '("/usr/local/cuda/include")
+  ;; 	irony-additional-clang-options '("-std=c++14"
+  ;; 					 "-I/usr/local/cuda/include"))
+  ;; (flycheck-mode 1)
+  )
 
 (defun trivialfis/c ()
   "Custom c mode."
