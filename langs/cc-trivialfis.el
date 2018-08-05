@@ -22,10 +22,16 @@
 
 (require 'misc-trivialfis)
 (require 'cc-mode)
-(require 'cmake-ide)
 (require 'google-c-style)
-(require 'cquery)
 (require 'company-lsp)
+
+(use-package cquery
+  :defer t
+  :commands lsp-cquery-enable)
+
+(use-package cmake-ide
+  :defer t
+  :commands cide--locate-project-dir)
 
 (use-package window-purpose
   :defer t
