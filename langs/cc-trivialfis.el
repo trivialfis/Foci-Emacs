@@ -40,7 +40,9 @@
 
 (use-package company-c-headers)
 
-(require 'company-clang)
+(use-package company-clang
+  :commands company-clang
+  :config (message "company-clang loaded"))
 
 (defun trivialfis/company-clang ()
   "Company clang configuration."
@@ -66,7 +68,10 @@
   :commands (helm-gtags-dwim
 	     helm-gtags-find-rtag))
 
-(defun trivialfis/rtags ()
+(defvar-local cc-current-backend 'nil
+  "Current backend for C++")
+
+(defun trivialfis/use-rtags ()
   "Rtags configuration.
 Used only for nevigation."
   (rtags-start-process-unless-running)
@@ -93,7 +98,7 @@ Used only for nevigation."
      )
    ))
 
-(defun trivialfis/irony ()
+(defun trivialfis/use-irony ()
   "Irony mode configuration."
   (add-hook 'irony-mode-hook 'irony-eldoc)
   (add-to-list 'company-backends 'company-irony)
@@ -106,8 +111,18 @@ Used only for nevigation."
   	    (eq major-mode 'c++-mode)
 	    (eq major-mode 'cuda-mode))
     (ignore-errors
-      (irony-mode 1))))
+      (irony-mode 1)))
+  (setq cc-current-backend 'irony))
 
+(defun trivialfis/cc-semantic ()
+  "Use semantic mode as cc backend."
+  (trivialfis/semantic 'c++-mode)
+  (setq cc-current-backend 'cc-semantic))
+
+(defun trivialfis/c-semantic ()
+  "Use semantic mode as c backend."
+  (trivialfis/semantic 'c-mode)
+  (setq cc-current-backend 'c-semantic))
 
 (defun trivialfis/cc-base-srefactor ()
   "Configuration for refactor."
@@ -126,7 +141,7 @@ Used only for nevigation."
 (defvar-local current-project nil
   "A local variable to keep the directory for current CMake project.")
 
-(defun trivialfis/setup-cide ()
+(defun trivialfis/use-cide ()
   "Set up rtags and CMake-ide if CMakeLists.txt is presented.
 Otherwise do nothing.
 When jumping around headers, keep the CMake project as the original one.
@@ -140,17 +155,20 @@ project to the new project."
       (setq current-project original-project))
     (when current-project
       (setq cmake-ide-build-dir (concat current-project "build")))
-    (trivialfis/rtags)
+    (trivialfis/use-rtags)
     (cmake-ide-setup)))
 
 (defun trivialfis/cquery ()
   "Cquery configuration."
-  (setq cquery-executable (expand-file-name "~/.local/bin/cquery"))
-  (setq company-transformers nil company-lsp-async t company-lsp-cache-candidates nil)
-  (setq cquery-extra-init-params '(:completion (:detailedLabel t)))
-  (setq cquery-sem-highlight-method 'font-lock)
+  (setq cquery-executable (expand-file-name "~/.local/bin/cquery")
+	company-transformers nil
+	company-lsp-async t
+	company-lsp-cache-candidates nil
+	cquery-extra-init-params '(:completion (:detailedLabel t))
+	cquery-sem-highlight-method 'font-lock)
+  (setq cc-current-backend 'cquery)
   ;; (cquery-use-default-rainbow-sem-highlight)
-  (set-buffer-multibyte nil)
+  ;; (set-buffer-multibyte nil)
   (lsp-cquery-enable)
   (lsp-ui-mode))
 
@@ -161,20 +179,21 @@ project to the new project."
   (setq-default indent-tabs-mode 'nil)
   (add-to-list 'company-backends 'company-keywords)
 
-  (trivialfis/cquery)
-  ;; (trivialfis/irony)
-  ;; (trivialfis/rtags)
+  (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
+    (if cdb-file
+	(trivialfis/cquery)
+      (trivialfis/use-irony)))
 
   ;; (trivialfis/company-clang)
-  ;; (trivialfis/setup-cide)
 
   (defconst trivialfis/cc-style
     '("gnu"
       (c-offsets-alist . ((innamespace . [0])))))
+  (setq c-auto-newline nil)
+
   (c-add-style "trivialfis/cc-style" trivialfis/cc-style)
   (c-add-style "google-c-style" google-c-style)
-  (setq c-auto-newline nil)
-  ;; (c-set-style "trivialfis/cc-style")
+
   (c-set-style "google-c-style")
 
   (trivialfis/local-set-keys
@@ -192,23 +211,22 @@ project to the new project."
 
 (defun trivialfis/c++ ()
   "Custom C++ mode."
-  ;; (trivialfis/semantic 'c++-mode)
   (trivialfis/cc-base)
-  ;; (setq flycheck-clang-language-standard "gnu++14"
-  ;; 	flycheck-gcc-language-standard "gnu++14"
-  ;; 	flycheck-clang-include-path '("/usr/local/cuda/include")
-  ;; 	irony-additional-clang-options '("-std=c++14"
-  ;; 					 "-I/usr/local/cuda/include"))
-  ;; (flycheck-mode 1)
-  )
+  (if (equal cc-current-backend 'irony)
+      (progn
+	(setq flycheck-clang-language-standard "gnu++14"
+  	      flycheck-gcc-language-standard "gnu++14"
+  	      irony-additional-clang-options '("-std=c++14"))
+	(flycheck-mode 1))))
 
 (defun trivialfis/c ()
   "Custom c mode."
-  ;; (trivialfis/semantic 'c-mode)
   (trivialfis/cc-base)
-  (setq flycheck-clang-language-standard "-std=gnu11"
-	flycheck-gcc-language-standard "-std=gnu11")
-  (flycheck-mode 1))
+  (if (equal cc-current-backend 'irony)
+      (progn
+	(setq flycheck-clang-language-standard "-std=gnu11"
+	      flycheck-gcc-language-standard "-std=gnu11")
+	(flycheck-mode 1))))
 
 (provide 'cc-trivialfis)
 ;;; cc-trivialfis.el ends here
