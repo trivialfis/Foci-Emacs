@@ -38,10 +38,12 @@
   (add-hook 'after-save-hook '(lambda ()
 				(when (memq major-mode accepted-mode-list)
 				  (unless langtool-buffer-process
-				    (langtool-check-buffer))))))
+				    (langtool-check-buffer)))))
+  (set-fill-column 79))
 
 (defun trivialfis/text ()
   "Guard for trivialfis/_text."
+  (interactive)
   (when (memq major-mode accepted-mode-list)
     (trivialfis/_text)))
 
