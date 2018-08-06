@@ -31,7 +31,7 @@
 
 (use-package cmake-ide
   :defer t
-  :commands cide--locate-project-dir)
+  :commands (cide--locate-project-dir cmake-ide-setup))
 
 (use-package window-purpose
   :defer t
@@ -171,12 +171,16 @@ project to the new project."
 	company-lsp-async t
 	company-lsp-cache-candidates nil
 	cquery-extra-init-params '(:completion (:detailedLabel t))
-	cquery-sem-highlight-method 'font-lock)
+	;; cquery-sem-highlight-method 'font-lock
+	cquery-sem-highlight-method 'overlay)
+  (set-buffer-multibyte nil)
+  (add-to-list 'company-backends 'company-lsp)
+
   (setq cc-current-backend 'cquery)
   ;; (cquery-use-default-rainbow-sem-highlight)
-  ;; (set-buffer-multibyte nil)
   (lsp-cquery-enable)
-  (lsp-ui-mode))
+  (lsp-ui-mode)
+  (flycheck-mode 1))
 
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
