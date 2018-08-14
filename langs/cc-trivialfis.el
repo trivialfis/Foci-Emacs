@@ -118,7 +118,8 @@ Used only for nevigation."
 	    (eq major-mode 'cuda-mode))
     (ignore-errors
       (irony-mode 1)))
-  (setq cc-current-backend 'irony))
+  (setq cc-current-backend 'irony)
+  (message "Use irony mode as backend."))
 
 (defun trivialfis/cc-semantic ()
   "Use semantic mode as cc backend."
@@ -171,8 +172,9 @@ project to the new project."
 	company-lsp-async t
 	company-lsp-cache-candidates nil
 	cquery-extra-init-params '(:completion (:detailedLabel t))
-	;; cquery-sem-highlight-method 'font-lock
-	cquery-sem-highlight-method 'overlay)
+	cquery-sem-highlight-method 'font-lock
+	;; cquery-sem-highlight-method 'overlay
+	)
   (set-buffer-multibyte nil)
   (add-to-list 'company-backends 'company-lsp)
 
@@ -190,9 +192,11 @@ project to the new project."
   (add-to-list 'company-backends 'company-keywords)
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
-    (if cdb-file
+    (if (or cdb-file buffer-read-only)
 	(trivialfis/cquery)
-      (trivialfis/use-irony)))
+      (progn
+	(trivialfis/use-irony)
+	(trivialfis/use-rtags))))
 
   ;; (trivialfis/company-clang)
 

@@ -27,19 +27,6 @@
 (require 'google-c-style)
 (require 'cuda-mode)
 
-;; (require 'lsp-mode)
-
-;; (lsp-define-stdio-client lsp-clangd-cuda
-;; 			 "cuda"
-;; 			 (lsp-make-traverser "compile_commands.json")
-;; 			 (list (expand-file-name "~/.local/bin/clang++"))
-;; 			 :ignore-regexps
-;; 			 '("^Error -[0-9]+: .+$"))
-
-;; (defun trivialfis/cuda-lsp ()
-;;   "Lsp-mode for cuda."
-;;   (lsp-clangd-cuda-enable))
-
 (defun clang-wrapper--get-pos ()
   "Get current position."
   (save-excursion
@@ -73,7 +60,6 @@
 		     (clang-wrapper--get-pos)))
 	 (candidates
 	  (execute-complete args)))
-    
     candidates))
 
 (defun clang-wrapper-backend (command &optional arg &rest ignored)
@@ -86,23 +72,11 @@
 		 (company-grab-symbol)))
     (candidates (clang-wrapper--get-candidates))))
 
-
-(defun trivialfis/cuda ()
-  "Custom CUDA mode."
-  ;; (trivialfis/cc-base)
-  (c-add-style "google-c-style" google-c-style)
-  (c-set-style "google-c-style")
-  (setq c-auto-newline nil)
-
-  (eval-and-compile
-    (require 'company-irony-c-headers))
-
+(defun trivialfis/clang-wrapper ()
+  "Use a clang wrapper which redirects clang output to Emacs."
   (setq
    flycheck-clang-language-standard "c++14"
-   irony-additional-clang-options '("-std=c++14")
-   flycheck-clang-include-path (list "/usr/local/cuda/include")
-   company-irony-c-headers--modes (cons 'cuda-mode
-					company-irony-c-headers--modes))
+   flycheck-clang-include-path (list "/usr/local/cuda/include"))
 
   (defvar cuda-path "/usr/local/cuda-9.2")
 
@@ -133,14 +107,32 @@
 	(flycheck-fold-include-levels errors "In file included from")))
     :modes (cuda-mode)
     :predicate flycheck-buffer-saved-p
-    :next-checkers ((warning . c/c++-cppcheck)))
+    :next-checkers ((warning . c/c++-cppcheck))))
 
+
+(defun trivialfis/cuda-base ()
+  "Base configuration for customized cuda mode."
+  (trivialfis/clang-wrapper)
   (flycheck-select-checker 'clang-wrapper)
+  (c-add-style "google-c-style" google-c-style)
+  (c-set-style "google-c-style")
+  (eval-and-compile
+    (require 'company-irony-c-headers))
+  (setq c-auto-newline nil
+	irony-additional-clang-options '("-std=c++14")
+	company-irony-c-headers--modes (cons 'cuda-mode
+					     company-irony-c-headers--modes))
   ;; (add-to-list 'company-backends 'clang-wrapper-backend)
   (trivialfis/company-clang)
-  (trivialfis/rtags)
+  (trivialfis/use-rtags)
   ;; (trivialfis/irony)
   (flycheck-mode 1))
+
+
+(defun trivialfis/cuda ()
+  "Custom CUDA mode."
+  ;; (trivialfis/cuda-base)
+  (trivialfis/c++))
 
 (provide 'cuda-trivailfis)
 ;;; cuda-trivialfis.el ends here
