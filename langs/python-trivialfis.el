@@ -36,7 +36,7 @@
       (if (search-forward "#!" (line-end-position) t 1)
 	  (progn
 	    (goto-char (point-min))
-	    (search-forward "python[2|3]" (line-end-position) t 1))
+	    (search-forward-regexp "python[2|3]" (line-end-position) t 1))
 	'nil))))
 
 (defun trivialfis/python-from-shebang ()
