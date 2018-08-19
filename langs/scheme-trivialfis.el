@@ -30,9 +30,9 @@
   :commands (trivialfis/comint-send-input))
 
 
-(cl-defun trivialfis/scheme (&optional (impl 'chicken))
+(cl-defun trivialfis/scheme (&optional (impl 'guile))
   "Run Geiser."
-  (setq geiser-active-implementations '(chez chicken racket))
+  (setq geiser-active-implementations '(guile chez chicken racket))
   (setq geiser-repl-query-on-kill-p nil)
 
   (define-key geiser-mode-map (kbd "C-c C-a")
