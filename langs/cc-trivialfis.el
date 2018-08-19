@@ -167,7 +167,7 @@ project to the new project."
 
 (defun trivialfis/cquery ()
   "Cquery configuration."
-  (setq cquery-executable (expand-file-name "~/.local/bin/cquery")
+  (setq cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
 	company-transformers nil
 	company-lsp-async t
 	company-lsp-cache-candidates nil
