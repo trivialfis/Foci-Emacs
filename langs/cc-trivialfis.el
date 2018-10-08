@@ -47,6 +47,7 @@
 (use-package company-c-headers)
 
 (use-package company-clang
+  :defer t
   :commands company-clang
   :config (message "company-clang loaded"))
 
@@ -72,7 +73,8 @@
 
 (use-package helm-gtags
   :commands (helm-gtags-dwim
-	     helm-gtags-find-rtag))
+	     helm-gtags-find-rtag)
+  :config (message "helm-gtags loaded"))
 
 (defvar-local cc-current-backend 'nil
   "Current backend for C++")
@@ -167,20 +169,42 @@ project to the new project."
 
 (defun trivialfis/cquery ()
   "Cquery configuration."
-  (setq cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
-	company-transformers nil
-	company-lsp-async t
-	company-lsp-cache-candidates nil
-	cquery-extra-init-params '(:completion (:detailedLabel t))
-	cquery-sem-highlight-method 'font-lock
-	;; cquery-sem-highlight-method 'overlay
-	)
+  (setq
+   cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
+   company-transformers nil
+   company-lsp-async t
+   company-lsp-cache-candidates nil
+   cquery-extra-init-params '(:completion (:detailedLabel t))
+   cquery-sem-highlight-method 'font-lock
+   ;; cquery-sem-highlight-method 'overlay
+   )
   (set-buffer-multibyte nil)
   (add-to-list 'company-backends 'company-lsp)
 
   (setq cc-current-backend 'cquery)
   ;; (cquery-use-default-rainbow-sem-highlight)
   (lsp-cquery-enable)
+  (lsp-ui-mode)
+  (flycheck-mode 1))
+
+
+(use-package ccls
+  :defer t
+  :commands lsp-ccls-enable
+  :config (message "ccls loaded"))
+
+(defun trivialfis/ccl ()
+  "Ccl configuration."
+  (setq
+   company-transformers nil
+   company-lsp-async t
+   company-lsp-cache-candidates nil
+   ccls-extra-init-params '(:completion (:detailedLabel t))
+   ccls-extra-args '("--log-file=/tmp/cq.log")
+   ccls-executable "/home/fis/.local/bin/ccls")
+  (defvar ccls-project-root-matchers '("compile_commands.json"))
+  (setq cc-current-backend 'ccl)
+  (lsp-ccls-enable)
   (lsp-ui-mode)
   (flycheck-mode 1))
 
@@ -192,13 +216,12 @@ project to the new project."
   (add-to-list 'company-backends 'company-keywords)
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
-    (if (or cdb-file buffer-read-only)
+    (if (or cdb-file buffer-read-only (equal cc-current-backend 'ccls))
 	(trivialfis/cquery)
+      ;; (trivialfis/ccl)
       (progn
 	(trivialfis/use-irony)
-	(trivialfis/use-rtags))))
-
-  ;; (trivialfis/company-clang)
+	(trivialfis/company-clang))))
 
   (defconst trivialfis/cc-style
     '("gnu"

@@ -26,6 +26,7 @@
 (require 'cl-seq)
 (require 'google-c-style)
 (require 'cuda-mode)
+(require 'json)
 
 (defun clang-wrapper--get-pos ()
   "Get current position."
@@ -132,7 +133,9 @@
 (defun trivialfis/cuda ()
   "Custom CUDA mode."
   ;; (trivialfis/cuda-base)
-  (trivialfis/c++))
+  ;; (trivialfis/use-irony)
+  (trivialfis/c++)
+  )
 
 (provide 'cuda-trivailfis)
 ;;; cuda-trivialfis.el ends here
