@@ -26,65 +26,51 @@
 (require 'cl-seq)
 (require 'google-c-style)
 (require 'cuda-mode)
+(require 'json)
 
-(defun clang-wrapper--get-pos ()
-  "Get current position."
-  (save-excursion
-    (format "%d %d"
-	    (line-number-at-pos)
-	    (1+ (length
-		 (encode-coding-region
-		  (line-beginning-position)
-		  (point)
-		  'utf-8
-		  t))))))
+(require 'irony-cdb-json)
 
-(defun execute-complete (args)
-  "Execute clang-complete, ARGS."
-  (let* ((complete-str (string-join (list "complete" (buffer-file-name)
-					  (clang-wrapper--get-pos)) " " ))
-	 (cmd (string-join (list "~/Workspace/clang-wrapper/clang-complete" complete-str) " "))
-	 (raw-str (shell-command-to-string cmd))
-	 (candidates-raw (split-string raw-str))
-	 (candidates (remove-if-not
-		      (lambda (c)
-			(and (stringp c)
-			     (not (string-prefix-p "[" c))
-			     (not (string-prefix-p ":" c))
-			     (not (string-prefix-p "COMPLETION" c))))
-		      candidates-raw)))
-    candidates))
-
-(defun clang-wrapper--get-candidates ()
-  (let* ((args (list "complete" (buffer-file-name)
-		     (clang-wrapper--get-pos)))
-	 (candidates
-	  (execute-complete args)))
-    candidates))
-
-(defun clang-wrapper-backend (command &optional arg &rest ignored)
-  "A simple company backend."
-  (interactive (list 'interactive))
-  (cl-case command
-    (interactive (company-begin-backend 'clang-wrapper-backend))
-    (init)
-    (prefix (and (eq major-mode 'cuda-mode)
-		 (company-grab-symbol)))
-    (candidates (clang-wrapper--get-candidates))))
-
-(defun trivialfis/clang-wrapper ()
-  "Use a clang wrapper which redirects clang output to Emacs."
-  (setq
-   flycheck-clang-language-standard "c++14"
-   flycheck-clang-include-path (list "/usr/local/cuda/include"))
-
-  (defvar cuda-path "/usr/local/cuda-9.2")
-
-  (flycheck-define-checker clang-wrapper
+(defun trivialfis/cuda-flycheck ()
+  "Define cuda clang checker."
+  (defvar cuda-flags)
+  (let* ((cdb-file
+	  (string-join
+	   `(,(locate-dominating-file "." "compile_commands.json")
+	     "compile_commands.json")))
+	 (cdb (json-read-file cdb-file))
+	 (irony-json-commands (mapcar
+			       #'irony-cdb-json--transform-compile-command
+			       cdb))
+	 (file-flags (car (cdar irony-json-commands))))
+    (setq cuda-flags (cons "--cuda-gpu-arch=sm_50" file-flags))
+    ;; (setq cuda-flags (string-join `(,cuda-flags "--cuda-gpu-arch=sm_70") " "))
+    (print cuda-flags))
+  (flycheck-define-checker cuda-clang
     "A C/C++ syntax checker using Clang."
-    :command ("~/Workspace/clang-wrapper/clang-check"
-	      (eval (buffer-file-name)))
-    :standard-input nil
+    :command ("~/.guix-profile/bin/clang++"
+	      "-fsyntax-only"
+	      "-fno-color-diagnostics"    ; Do not include color codes in output
+	      "-fno-caret-diagnostics"    ; Do not visually indicate the source
+                                        ; location
+	      "-fno-diagnostics-show-option" ; Do not show the corresponding
+                                        ; warning group
+	      "-iquote" (eval (flycheck-c/c++-quoted-include-directory))
+	      ;; (option "-std=" flycheck-clang-language-standard concat)
+	      (option-flag "-pedantic" flycheck-clang-pedantic)
+	      (option-flag "-pedantic-errors" flycheck-clang-pedantic-errors)
+	      ;; (option "-stdlib=" flycheck-clang-standard-library concat)
+	      (option-flag "-fno-exceptions" flycheck-clang-no-exceptions)
+	      (option-flag "-fno-rtti" flycheck-clang-no-rtti)
+	      (option-flag "-fblocks" flycheck-clang-blocks)
+	      (option-list "-include" flycheck-clang-includes)
+	      (option-list "-I" flycheck-clang-include-path)
+	      (eval cuda-flags)
+	      "-x" (eval
+                    (pcase major-mode
+		      (`cuda-mode "cuda")))
+	      ;; Read from standard input
+	      "-")
+    :standard-input t
     :error-patterns
     ((error line-start
             (message "In file included from") " " (or "<stdin>" (file-name))
@@ -92,7 +78,7 @@
      (info line-start (or "<stdin>" (file-name)) ":" line ":" column
            ": note: " (optional (message)) line-end)
      (warning line-start (or "<stdin>" (file-name)) ":" line ":" column
-              ": warning: " (optional (message)) line-end)
+	      ": warning: " (optional (message)) line-end)
      (error line-start (or "<stdin>" (file-name)) ":" line ":" column
             ": " (or "fatal error" "error") ": " (optional (message)) line-end))
     :error-filter
@@ -106,33 +92,49 @@
 		(or (flycheck-error-message err) "no message")))
 	(flycheck-fold-include-levels errors "In file included from")))
     :modes (cuda-mode)
-    :predicate flycheck-buffer-saved-p
     :next-checkers ((warning . c/c++-cppcheck))))
 
+(use-package cquery
+  :defer t
+  :commands lsp-cquery-enable)
 
-(defun trivialfis/cuda-base ()
-  "Base configuration for customized cuda mode."
-  (trivialfis/clang-wrapper)
-  (flycheck-select-checker 'clang-wrapper)
-  (c-add-style "google-c-style" google-c-style)
-  (c-set-style "google-c-style")
-  (eval-and-compile
-    (require 'company-irony-c-headers))
-  (setq c-auto-newline nil
-	irony-additional-clang-options '("-std=c++14")
-	company-irony-c-headers--modes (cons 'cuda-mode
-					     company-irony-c-headers--modes))
-  ;; (add-to-list 'company-backends 'clang-wrapper-backend)
-  (trivialfis/company-clang)
-  (trivialfis/use-rtags)
-  ;; (trivialfis/irony)
-  (flycheck-mode 1))
+(defun trivialfis/cquery-noui ()
+  "Cquery configuration without lsp-ui."
+  (setq
+   ;; cquery-executable (expand-file-name "~/.local/bin/cquery")
+   cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
+   company-transformers nil
+   company-lsp-async t
+   company-lsp-cache-candidates nil
+   cquery-extra-init-params '(:completion (:detailedLabel t))
+   cquery-sem-highlight-method 'font-lock
+   ;; cquery-sem-highlight-method 'overlay
+   )
+  (set-buffer-multibyte nil)
+  (add-to-list 'company-backends 'company-lsp)
 
+  (setq cc-current-backend 'cquery)
+  (lsp-cquery-enable))
 
 (defun trivialfis/cuda ()
   "Custom CUDA mode."
+  (defconst trivialfis/cc-style
+    '("gnu"
+      (c-offsets-alist . ((innamespace . [0])))))
+  (setq c-auto-newline nil)
+
+  (c-add-style "trivialfis/cc-style" trivialfis/cc-style)
+  (c-add-style "google-c-style" google-c-style)
+
+  (c-set-style "google-c-style")
+  (trivialfis/cquery-noui)
+
+  (trivialfis/cuda-flycheck)
+  (setq flycheck-checker 'cuda-clang)
+  (flycheck-mode 1)
   ;; (trivialfis/cuda-base)
-  (trivialfis/c++))
+  ;; (trivialfis/c++)
+  )
 
 (provide 'cuda-trivailfis)
 ;;; cuda-trivialfis.el ends here
