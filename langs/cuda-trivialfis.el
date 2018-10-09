@@ -131,10 +131,7 @@
 
   (trivialfis/cuda-flycheck)
   (setq flycheck-checker 'cuda-clang)
-  (flycheck-mode 1)
-  ;; (trivialfis/cuda-base)
-  ;; (trivialfis/c++)
-  )
+  (flycheck-mode 1))
 
 (provide 'cuda-trivailfis)
 ;;; cuda-trivialfis.el ends here
