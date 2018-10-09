@@ -22,8 +22,6 @@
 
 (require 'flycheck)
 (require 'cc-trivialfis)
-(require 'cl-lib)
-(require 'cl-seq)
 (require 'google-c-style)
 (require 'cuda-mode)
 (require 'json)
@@ -42,9 +40,7 @@
 			       #'irony-cdb-json--transform-compile-command
 			       cdb))
 	 (file-flags (car (cdar irony-json-commands))))
-    (setq cuda-flags (cons "--cuda-gpu-arch=sm_50" file-flags))
-    ;; (setq cuda-flags (string-join `(,cuda-flags "--cuda-gpu-arch=sm_70") " "))
-    (print cuda-flags))
+    (setq cuda-flags (cons "--cuda-gpu-arch=sm_50" file-flags)))
   (flycheck-define-checker cuda-clang
     "A C/C++ syntax checker using Clang."
     :command ("~/.guix-profile/bin/clang++"
@@ -101,7 +97,6 @@
 (defun trivialfis/cquery-noui ()
   "Cquery configuration without lsp-ui."
   (setq
-   ;; cquery-executable (expand-file-name "~/.local/bin/cquery")
    cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
    company-transformers nil
    company-lsp-async t
