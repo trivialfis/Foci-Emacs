@@ -34,6 +34,7 @@
 
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
+(put 'narrow-to-region 'disabled nil)
 (if (> emacs-major-version 25)
     (global-display-line-numbers-mode t)
   (global-linum-mode t))
