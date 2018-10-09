@@ -20,16 +20,18 @@
 ;;;
 ;;; Code:
 
-;; Global settings---------------------------------------------------------------------------------
+;; Global settings------------------------------------------------------------
 (setq initial-major-mode 'fundamental-mode  ; Prevents loading emacs lisp mode automatically
       inhibit-startup-screen t
-      frame-title-format '((:eval (if (buffer-file-name) ; Set the frame title to display file path and name
+      ;; Set the frame title to display file path and name
+      frame-title-format '((:eval (if (buffer-file-name)
 				      (abbreviate-file-name
 				       (buffer-file-name))
 				    "%b")))
       package-enable-at-startup nil
       visible-bell t			; Remove the beep
       )
+
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (if (> emacs-major-version 25)
