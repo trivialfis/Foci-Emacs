@@ -54,10 +54,11 @@
 (defun trivialfis/company-clang ()
   "Company clang configuration."
   (setq company-backends (delete 'company-semantic company-backends))
-  (setq company-clang-arguments '("-std=c++14"
-				  "-I/usr/local/cuda/include"))
+  (if (equal major-mode 'c-mode)
+      (setq company-clang-arguments '("-std=c++14"))
+    (setq company-clang-arguments '("-std=gnu11")))
+
   (require 'company-c-headers)
-  ;; (add-to-list 'company-c-headers-path-system "/usr/include/c++/6.3.1/")  ; Add c++ headers to company
   (add-to-list 'company-backends 'company-c-headers)
   (add-to-list 'company-backends 'company-clang))
 
