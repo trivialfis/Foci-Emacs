@@ -220,7 +220,7 @@ project to the new project."
 	(trivialfis/cquery)
       ;; (trivialfis/ccl)
       (progn
-	(trivialfis/use-irony)
+	;; (trivialfis/use-irony)
 	(trivialfis/company-clang))))
 
   (defconst trivialfis/cc-style
