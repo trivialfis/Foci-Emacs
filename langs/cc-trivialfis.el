@@ -62,10 +62,6 @@
   (add-to-list 'company-backends 'company-c-headers)
   (add-to-list 'company-backends 'company-clang))
 
-(use-package cc-pkg-trivialfis
-  :commands mumbo-find-library
-  :config (message "cc-pkg loaded"))
-
 (use-package rtags
   :commands rtags-start-process-unless-running
   :config (progn
