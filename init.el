@@ -209,6 +209,12 @@ KEY-COMMANDS: A list containing one or more (key command)"
    ("C-c i"        .                        fci-mode)
    ("C-c g"        .             trivialfis/goto-pos)
    ("C-c o"        .      previous-multiframe-window)
+   ("C-d"          .      (lambda ()
+			    (interactive)
+			    (if (region-active-p)
+				(delete-region (region-beginning)
+					       (region-end))
+			      (delete-char 1))))
    ("C-x C-g"      .        (lambda ()(interactive))) ; regret
    ("C-c C-g"      .        (lambda ()(interactive))) ; regret
 
