@@ -159,7 +159,7 @@
 
 ;; highlight current line
 (global-hl-line-mode 1)
-(set-face-foreground 'highlight nil) ; keep the syntex highlighting
+(set-face-foreground 'highlight nil) ; keep the syntax highlighting
 
 
 ;; Highlight symbol at point
