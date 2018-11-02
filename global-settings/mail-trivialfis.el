@@ -1,4 +1,4 @@
-;;; mail-trivialfis.el --- Summary
+;;; mail-trivialfis.el --- Summary -*- lexical-binding: t -*-
 ;;;
 ;;; Commentary:
 ;;;
@@ -37,57 +37,107 @@
 (add-to-list 'load-path "~/.guix-profile/share/emacs/site-lisp")
 (require 'mu4e)
 
-(defun trivialfis/smtp ()
-  "Configuration for sending mails."
-  (setq	message-send-mail-function 'async-smtpmail-send-it
-	send-mail-function 'async-smtpmail-send-it
-	smtpmail-smtp-server "smtp-mail.outlook.com"
-	smtpmail-default-smtp-server "smtp-mail.outlook.com"
-	smtpmail-smtp-service 587
-	smtpmail-stream-type 'starttls
-	smtpmail-debug-info 't)
-  (setq mu4e-sent-messages-behavior 'delete)) ; handled by outlook or gmail.
+(defconst mu4e-default-bookmarks mu4e-bookmarks)
 
-(defun trivialfis/mail-general ()
-  "Set general info about mail account, read from .offlineimaprc."
-  (save-window-excursion
-    (with-temp-buffer
-      (insert-file-contents-literally "~/.offlineimaprc")
-      (save-match-data
-	(let* ((offlineimap-rc (buffer-string))
-	       (_ (string-match "remoteuser ?= ?\\([0-9A-Za-z\\\.]*@[a-z]*\\\.com\\)"
-				offlineimap-rc))
-	       (address (substring offlineimap-rc (match-beginning 1)
-				   (match-end 1)))
-	       (_ (string-match "accounts ?= ?\\([a-zA-Z0-9]*\\)" offlineimap-rc))
-	       (user (substring
-		      offlineimap-rc (match-beginning 1) (match-end 1))))
-	  (message (format "Address: %s\nUser: %s" address user))
-	  (setq user-mail-address address
-		user-full-name user))))))
+(defun trivialfis/use-param (default optional)
+  "Return OPTIONAL if it isn't nil, otherwise return DEFAULT."
+  (if optional
+      optional
+    default))
+
+(defun trivialfis/mu4e-context (name address fullname
+				     &optional
+				     signature server sent
+				     draft trash refile)
+  "Create a single mu4e context.
+NAME: Account name.
+ADDRESS: Account address.
+FULLNAME: The one that displayed on title,
+SIGNATURE: Mail Signature.
+
+&optional parameters:
+SERVER: Remote server address;
+SENT:   Directory storing sent mails;
+DRAFT:  ~ storing draft mails;
+TRASH:  ~ storing deleted mails;
+REFILE: ~ storing archived mails."
+  (make-mu4e-context
+   :name name
+   :enter-func
+   (lambda ()
+     (mu4e-message (concat "Entering " name " context"))
+     (add-to-list
+      'mu4e-bookmarks
+      `(,(concat "(to:" address
+		 " or cc:" address
+		 ") and not flag:trashed")
+	"@me" ?a))
+     (add-to-list
+      'mu4e-bookmarks
+      `(,(concat "to:" address
+		 " and not flag:trashed")
+	"2me" ?m)))
+   :leave-func
+   (lambda ()
+     (mu4e-message "Leaving " name " context")
+     (setq mu4e-bookmarks mu4e-default-bookmarks))
+   ;; we match based on the contact-fields of the message
+   :match-func (lambda (msg)
+                 (when msg
+                   (string-match-p (concat "~/" name) (mu4e-message-field msg :maildir))))
+   :vars `( ( user-mail-address      . ,address  )
+            ( user-full-name         . ,fullname )
+            ( mu4e-compose-signature . ,(trivialfis/use-param
+					 "" signature))
+
+	    ( message-send-mail-function . async-smtpmail-send-it )
+	    ( send-mail-function . async-smtpmail-send-it )
+	    ( smtpmail-smtp-server .         ,(trivialfis/use-param
+					       "smtp-mail.outlook.com" server) )
+	    ( smtpmail-default-smtp-server . ,(trivialfis/use-param
+					       "smtp-mail.outlook.com" server) )
+	    ( smtpmail-smtp-service . 587 )
+	    ( smtpmail-stream-type . starttls )
+	    ( smtpmail-debug-info . 't )
+
+	    ( mu4e-maildir       . ,(concat "~/.Mail/" name) )
+	    ( mu4e-sent-folder   . ,(trivialfis/use-param "/Sent"    sent)  )
+	    ( mu4e-drafts-folder . ,(trivialfis/use-param "/Drafts"  draft) )
+	    ( mu4e-trash-folder  . ,(trivialfis/use-param "/Deleted" trash) )
+	    ( mu4e-refile-folder . ,(trivialfis/use-param "/Archive" refile))
+
+	    ( mu4e-headers-auto-update     . 't )
+	    ( mu4e-headers-skip-duplicates . 't )
+	    ( mu4e-use-fancy-chars         . 't )
+	    ( mu4e-completing-read-function . completing-read )
+	    ( message-kill-buffer-on-exit  . 't )
+	    ( mu4e-headers-include-related . 't )
+
+	    (mu4e-get-mail-command . ,(concat "offlineimap -a " name)))))
+
+(defun trivialfis/mu4e-contexts ()
+  "Configuration for contexts."
+  (let* ((account-file "~/.emacs.d/misc/mail-accounts.el")
+	 (account-string (if (file-exists-p account-file)
+			     (with-temp-buffer
+			       (insert-file-contents account-file)
+			       (buffer-string))
+			   (prog2
+			       (message "Failed to find the account file.")
+			       nil)))
+	 (evaluated (if account-string
+			(eval (car (read-from-string account-string)))
+		      nil))
+	 (contexts
+	  (cl-mapcar #'(lambda (lst)
+			 (apply 'trivialfis/mu4e-context lst))
+		     evaluated)))
+    (setq mu4e-contexts contexts)))
 
 (defun trivialfis/mu4e-config ()
   "Mu4e mail configuration."
-  (trivialfis/mail-general)
-  (setq mu4e-maildir "~/.Mail"
-	mu4e-sent-folder "/Sent"
-	mu4e-drafts-folder "/Drafts"
-	mu4e-trash-folder "/Deleted"
-	mu4e-refile-folder "/Archive")
 
-  (setq mu4e-get-mail-command "offlineimap"
-	mu4e-headers-auto-update 't
-	;; mu4e-headers-full-search 't
-	mu4e-headers-skip-duplicates 't
-	mu4e-headers-include-related 't) ; toggle via W
-
-  (add-to-list 'mu4e-bookmarks
-	       `(,(concat "to:" user-mail-address " and not flag:trashed")
-		 "To me" ?m))
-
-  (setq mu4e-completing-read-function 'completing-read
-	mu4e-use-fancy-chars 't
-	message-kill-buffer-on-exit 't)
+  (trivialfis/mu4e-contexts)
 
   (let ((dir "~/Downloads/"))
     (when (file-directory-p dir)
@@ -102,14 +152,24 @@
   (setq mu4e-view-show-images t)
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
-  (add-hook 'mu4e-compose-mode-hook 'trivialfis/_text)
-  (trivialfis/smtp))
+  (add-hook 'mu4e-compose-mode-hook 'trivialfis/_text))
 
 (defun trivialfis/mu4e ()
   "Call mu4e."
   (interactive)
   (trivialfis/mu4e-config)
   (mu4e))
+
+(defun trivialfis/smtp ()
+  "Configuration for sending mails."
+  (setq	message-send-mail-function 'async-smtpmail-send-it
+	send-mail-function 'async-smtpmail-send-it
+	smtpmail-smtp-server "smtp-mail.outlook.com"
+	smtpmail-default-smtp-server "smtp-mail.outlook.com"
+	smtpmail-smtp-service 587
+	smtpmail-stream-type 'starttls
+	smtpmail-debug-info 't)
+  (setq mu4e-sent-messages-behavior 'delete)) ; handled by outlook or gmail.
 
 (defun trivialfis/gnus ()
   "Gnus news reader configuration."
