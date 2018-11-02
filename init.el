@@ -320,6 +320,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 
 (autoload 'trivialfis/gnus "mail-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mail-trivialfis" :interactive t)
+;; TODO(trivialfis): Make mu4e the default.
 
 ;; End language settings------------------------------------------------------------------------
 

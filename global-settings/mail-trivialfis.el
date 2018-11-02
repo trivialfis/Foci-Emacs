@@ -79,7 +79,7 @@ REFILE: ~ storing archived mails."
 	"2me" ?m)))
    :leave-func
    (lambda ()
-     (mu4e-message "Leaving " name " context")
+     (mu4e-message (concat "Leaving " name " context"))
      (setq mu4e-bookmarks mu4e-default-bookmarks))
    ;; we match based on the contact-fields of the message
    :match-func (lambda (msg)
@@ -97,8 +97,8 @@ REFILE: ~ storing archived mails."
 	    ( smtpmail-default-smtp-server . ,(trivialfis/use-param
 					       "smtp-mail.outlook.com" server) )
 	    ( smtpmail-smtp-service . 587 )
-	    ( smtpmail-stream-type . starttls )
-	    ( smtpmail-debug-info . 't )
+	    ( smtpmail-stream-type  . starttls )
+	    ( smtpmail-debug-info   . t )
 
 	    ( mu4e-maildir       . ,(concat "~/.Mail/" name) )
 	    ( mu4e-sent-folder   . ,(trivialfis/use-param "/Sent"    sent)  )
@@ -106,17 +106,16 @@ REFILE: ~ storing archived mails."
 	    ( mu4e-trash-folder  . ,(trivialfis/use-param "/Deleted" trash) )
 	    ( mu4e-refile-folder . ,(trivialfis/use-param "/Archive" refile))
 
-	    ( mu4e-headers-auto-update     . 't )
-	    ( mu4e-headers-skip-duplicates . 't )
-	    ( mu4e-use-fancy-chars         . 't )
-	    ( mu4e-completing-read-function . completing-read )
-	    ( message-kill-buffer-on-exit  . 't )
-	    ( mu4e-headers-include-related . 't )
-
 	    (mu4e-get-mail-command . ,(concat "offlineimap -a " name)))))
 
 (defun trivialfis/mu4e-contexts ()
-  "Configuration for contexts."
+  "Configuration for contexts.
+This function tries to read a file with content like this:
+
+'((name-0 address-0 fullname-0)
+  (name-1 address-1 fullname-1 signature-1) ...)
+
+Where each sublist contains the arguments for `trivialfis/mu4e-context'."
   (let* ((account-file "~/.emacs.d/misc/mail-accounts.el")
 	 (account-string (if (file-exists-p account-file)
 			     (with-temp-buffer
@@ -148,8 +147,15 @@ REFILE: ~ storing archived mails."
 			      (:mailing-list . 10)
 			      (:from . 22)
 			      (:message-id . 30)
-			      (:subject . nil)))
-  (setq mu4e-view-show-images t)
+			      (:subject . nil))
+	mu4e-headers-auto-update      t
+	mu4e-headers-skip-duplicates  t
+	mu4e-use-fancy-chars          t
+	mu4e-completing-read-function 'completing-read
+	mu4e-headers-include-related  t
+	message-kill-buffer-on-exit   t
+	mu4e-view-show-images         t)
+
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
   (add-hook 'mu4e-compose-mode-hook 'trivialfis/_text))
@@ -160,7 +166,7 @@ REFILE: ~ storing archived mails."
   (trivialfis/mu4e-config)
   (mu4e))
 
-(defun trivialfis/smtp ()
+(defun trivialfis/smtp4gnus ()
   "Configuration for sending mails."
   (setq	message-send-mail-function 'async-smtpmail-send-it
 	send-mail-function 'async-smtpmail-send-it
@@ -226,7 +232,7 @@ REFILE: ~ storing archived mails."
    smiley-style 'medium
    gnus-keep-backlog '0)
 
-  (trivialfis/smtp)
+  (trivialfis/smtp4gnus)
 
   (gnus)
   (highlight-symbol-mode 0)
