@@ -37,7 +37,6 @@
   :defer t
   :commands purpose-mode
   :config (progn
-	    (setq purpose-preferred-prompt 'helm)
 	    (define-key purpose-mode-map (kbd "C-x b") nil)
 	    (define-key purpose-mode-map (kbd "C-x C-f") nil)
 	    (add-to-list 'purpose-user-regexp-purposes '("\\*Man.*" . Man-page))
@@ -50,6 +49,10 @@
   :defer t
   :commands company-clang
   :config (message "company-clang loaded"))
+
+(use-package flycheck
+  :defer t
+  :commands flycheck-mode)
 
 (defun trivialfis/company-clang ()
   "Company clang configuration."
@@ -120,16 +123,6 @@ Used only for nevigation."
   (setq cc-current-backend 'irony)
   (message "Use irony mode as backend."))
 
-(defun trivialfis/cc-semantic ()
-  "Use semantic mode as cc backend."
-  (trivialfis/semantic 'c++-mode)
-  (setq cc-current-backend 'cc-semantic))
-
-(defun trivialfis/c-semantic ()
-  "Use semantic mode as c backend."
-  (trivialfis/semantic 'c-mode)
-  (setq cc-current-backend 'c-semantic))
-
 (defun trivialfis/cc-base-srefactor ()
   "Configuration for refactor."
   (trivialfis/local-set-keys
@@ -141,6 +134,20 @@ Used only for nevigation."
      ("C-,"     .  semantic-mrub-switch-tags)))
   (eval-after-load 'helm-trivialfis
     (local-set-key (kbd "C-h ,") 'helm-semantic-or-imenu)))
+
+(defun trivialfis/cc-semantic ()
+  "Use semantic mode as cc backend."
+  (trivialfis/semantic 'c++-mode)
+  (trivialfis/cc-base-srefactor)
+  (setq cc-current-backend 'cc-semantic)
+  (message "Use semantic mode as backend."))
+
+(defun trivialfis/c-semantic ()
+  "Use semantic mode as c backend."
+  (trivialfis/semantic 'c-mode)
+  (trivialfis/cc-base-srefactor)
+  (setq cc-current-backend 'c-semantic)
+  (message "Use semantic mode as backend."))
 
 (defvar original-project nil
   "A global variable to keep the directory for the CMake project before file jump.")

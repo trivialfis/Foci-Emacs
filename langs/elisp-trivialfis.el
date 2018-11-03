@@ -73,7 +73,6 @@
 
 (defun trivialfis/purpose ()
   "Common window-purpose configuration."
-  (setq purpose-preferred-prompt 'helm)
   (define-key purpose-mode-map (kbd "C-x b") nil)
   (define-key purpose-mode-map (kbd "C-x C-f") nil)
   (add-to-list 'purpose-user-name-purposes '("*Flycheck errors*" . general-info))
@@ -83,6 +82,7 @@
   (purpose-mode 1))
 
 (defun trivialfis/elisp()
+  "Emacs Lisp configuration."
   (flycheck-mode 1)
   (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
