@@ -16,7 +16,7 @@ def mailpasswd(address):
 
     try:
         all_accounts = check_output(
-            "gpg2 -dq ~/.authinfo.gpg", shell=True).strip("\n").split('\n')[-1]
+            "gpg2 -dq ~/.authinfo.gpg", shell=True).strip("\n").split('\n')
         password = get_account_pass(all_accounts)
         return password
     except CalledProcessError:
