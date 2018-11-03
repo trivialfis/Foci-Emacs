@@ -154,7 +154,8 @@ Where each sublist contains the arguments for `trivialfis/mu4e-context'."
 	mu4e-completing-read-function 'completing-read
 	mu4e-headers-include-related  t
 	message-kill-buffer-on-exit   t
-	mu4e-view-show-images         t)
+	mu4e-view-show-images         t
+	mu4e-sent-messages-behavior   'delete) ; handled by outlook or gmail.
 
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
@@ -174,8 +175,7 @@ Where each sublist contains the arguments for `trivialfis/mu4e-context'."
 	smtpmail-default-smtp-server "smtp-mail.outlook.com"
 	smtpmail-smtp-service 587
 	smtpmail-stream-type 'starttls
-	smtpmail-debug-info 't)
-  (setq mu4e-sent-messages-behavior 'delete)) ; handled by outlook or gmail.
+	smtpmail-debug-info 't))
 
 (defun trivialfis/gnus ()
   "Gnus news reader configuration."
