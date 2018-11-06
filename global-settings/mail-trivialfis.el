@@ -165,7 +165,8 @@ Where each sublist contains the arguments for `trivialfis/mu4e-context'."
   "Call mu4e."
   (interactive)
   (trivialfis/mu4e-config)
-  (mu4e))
+  (mu4e)
+  (run-with-timer 1 300 'mu4e-update-mail-and-index t))
 
 (defun trivialfis/smtp4gnus ()
   "Configuration for sending mails."
