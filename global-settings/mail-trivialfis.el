@@ -70,12 +70,12 @@ REFILE: ~ storing archived mails."
       'mu4e-bookmarks
       `(,(concat "(to:" address
 		 " or cc:" address
-		 ") and not flag:trashed")
+		 ") and not (flag:trashed)")
 	"@me" ?a))
      (add-to-list
       'mu4e-bookmarks
-      `(,(concat "to:" address
-		 " and not flag:trashed")
+      `(,(concat "(to:" address
+		 ") and (not flag:trashed)")
 	"2me" ?m)))
    :leave-func
    (lambda ()
@@ -169,7 +169,9 @@ Where each sublist contains the arguments for `trivialfis/mu4e-context'."
   (mu4e-alert-enable-notifications)
   (mu4e-alert-enable-mode-line-display)
   (mu4e-alert-set-default-style 'libnotify)
-  (run-with-timer 1 300 'mu4e-update-mail-and-index t))
+  (run-with-timer 1 300 #'(lambda ()
+			    (unless (equal major-mode 'mu4e-compose-mode)
+			      (mu4e-update-mail-and-index t)))))
 
 (defun trivialfis/smtp4gnus ()
   "Configuration for sending mails."
