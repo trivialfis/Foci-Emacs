@@ -45,6 +45,20 @@
       optional
     default))
 
+(defun trivialfis/configure-smtp-server (address &optional server)
+  "Try to deduce smtp server address from ADDRESS unless SERVER is not nil."
+  (if server
+      server
+    (cond
+     ((string-match-p "outlook.com" address)
+      "smtp.office365.com")
+     ((string-match-p "hotmail.com" address)
+      "smtp-mail.outlook.com")
+     ((string-match-p "gmail.com" address)
+      "smtp.gmail.com")
+     (t nil))))
+
+
 (defun trivialfis/mu4e-context (name address fullname
 				     &optional
 				     signature server sent
@@ -92,10 +106,10 @@ REFILE: ~ storing archived mails."
 
 	    ( message-send-mail-function . async-smtpmail-send-it )
 	    ( send-mail-function . async-smtpmail-send-it )
-	    ( smtpmail-smtp-server .         ,(trivialfis/use-param
-					       "smtp-mail.outlook.com" server) )
-	    ( smtpmail-default-smtp-server . ,(trivialfis/use-param
-					       "smtp-mail.outlook.com" server) )
+	    ( smtpmail-smtp-server
+	      . ,(trivialfis/configure-smtp-server address server))
+	    ( smtpmail-default-smtp-server
+	      . ,(trivialfis/configure-smtp-server address server) )
 	    ( smtpmail-smtp-service . 587 )
 	    ( smtpmail-stream-type  . starttls )
 	    ( smtpmail-debug-info   . t )
