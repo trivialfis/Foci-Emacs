@@ -23,11 +23,6 @@
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'google-c-style)
-(require 'company-lsp)
-
-(use-package cquery
-  :defer t
-  :commands lsp-cquery-enable)
 
 (use-package cmake-ide
   :defer t
@@ -52,7 +47,11 @@
 
 (use-package flycheck
   :defer t
-  :commands flycheck-mode)
+  :commands flycheck-mode flycheck-select-checker)
+
+(use-package lsp
+  :defer t
+  :commands lsp)
 
 (defun trivialfis/company-clang ()
   "Company clang configuration."
@@ -171,8 +170,14 @@ project to the new project."
     (trivialfis/use-rtags)
     (cmake-ide-setup)))
 
+
 (defun trivialfis/cquery ()
   "Cquery configuration."
+  (require 'cquery)
+  (require 'company-lsp)
+  (eval-when-compile
+    (require 'cquery)
+    (require 'company-lsp))
   (setq
    cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
    company-transformers nil
@@ -182,12 +187,16 @@ project to the new project."
    cquery-sem-highlight-method 'font-lock
    ;; cquery-sem-highlight-method 'overlay
    )
+  ;; Hack around to avoid storing indexes in sub-directories
+  (setf cquery-cache-dir-function
+	#'(lambda (proj-dir)
+	    (expand-file-name (cquery--get-root))))
   (set-buffer-multibyte nil)
   (add-to-list 'company-backends 'company-lsp)
 
   (setq cc-current-backend 'cquery)
   ;; (cquery-use-default-rainbow-sem-highlight)
-  (lsp-cquery-enable)
+  (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
 
