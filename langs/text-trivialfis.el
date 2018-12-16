@@ -33,7 +33,7 @@
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-at-point)
   (add-to-list 'company-backends 'company-ispell)
   (setq langtool-language-tool-jar
-	"~/.emacs.d/LanguageTool-4.2/languagetool-commandline.jar"
+	"~/.emacs.d/LanguageTool-4.3/languagetool-commandline.jar"
 	langtool-default-language "en-US")
   (add-hook 'after-save-hook '(lambda ()
 				(when (memq major-mode accepted-mode-list)
