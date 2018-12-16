@@ -1,6 +1,6 @@
-;;; cc-trivialfis --- Summary
+;; cc-trivialfis --- Summary
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2016-2018 Fis Trivial <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -168,6 +168,8 @@ project to the new project."
     (when current-project
       (setq cmake-ide-build-dir (concat current-project "build")))
     (trivialfis/use-rtags)
+    (trivialfis/local-set-keys
+     '(("C-c C-a" .  cmake-ide-compile)))
     (cmake-ide-setup)))
 
 
@@ -198,27 +200,24 @@ project to the new project."
   ;; (cquery-use-default-rainbow-sem-highlight)
   (lsp)
   (lsp-ui-mode)
-  (flycheck-mode 1))
+  (flycheck-mode 1)
+  (flymake-mode 0))
 
-
-(use-package ccls
-  :defer t
-  :commands lsp-ccls-enable
-  :config (message "ccls loaded"))
-
-(defun trivialfis/ccl ()
-  "Ccl configuration."
+(defun trivialfis/ccls ()
+  "Ccls configuration."
+  (require 'ccls)
+  (eval-when-compile
+    (require 'ccls))
   (setq
    company-transformers nil
    company-lsp-async t
    company-lsp-cache-candidates nil
-   ccls-extra-init-params '(:completion (:detailedLabel t))
-   ccls-extra-args '("--log-file=/tmp/cq.log")
-   ccls-executable "/home/fis/.local/bin/ccls")
+   ccls-executable "~/.guix-profile/bin/ccls")
   (defvar ccls-project-root-matchers '("compile_commands.json"))
   (setq cc-current-backend 'ccl)
-  (lsp-ccls-enable)
+  (lsp)
   (lsp-ui-mode)
+  (flymake-mode 0)
   (flycheck-mode 1))
 
 (defun trivialfis/cc-base ()
@@ -230,8 +229,8 @@ project to the new project."
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
     (if (or cdb-file buffer-read-only (equal cc-current-backend 'ccls))
-	(trivialfis/cquery)
-      ;; (trivialfis/ccl)
+	;; (trivialfis/cquery)
+	(trivialfis/ccls)
       (progn
 	;; (trivialfis/use-irony)
 	(trivialfis/company-clang))))
@@ -254,8 +253,6 @@ project to the new project."
      ("C-c f b" . clang-format-buffer)
      ("C-c f r" . clang-format-region)
      ("C-c C-f" . find-file-in-project)
-
-     ("C-c C-a" .  cmake-ide-compile)
      )
    ))
 
