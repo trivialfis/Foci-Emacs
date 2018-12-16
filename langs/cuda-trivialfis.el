@@ -1,7 +1,7 @@
 ;;; cuda-trivialfis.el --- Summary
 ;;; Commentary:
 ;;;
-;;; Copyright © 2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2018 Fis Trivial <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -90,12 +90,13 @@
     :modes (cuda-mode)
     :next-checkers ((warning . c/c++-cppcheck))))
 
-(use-package cquery
-  :defer t
-  :commands lsp-cquery-enable)
-
 (defun trivialfis/cquery-noui ()
   "Cquery configuration without lsp-ui."
+  (require 'cquery)
+  (require 'company-lsp)
+  (eval-when-compile
+    (require 'cquery)
+    (require 'company-lsp))
   (setq
    cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
    company-transformers nil
@@ -109,7 +110,7 @@
   (add-to-list 'company-backends 'company-lsp)
 
   (setq cc-current-backend 'cquery)
-  (lsp-cquery-enable))
+  (lsp))
 
 (defun trivialfis/cuda ()
   "Custom CUDA mode."
@@ -122,7 +123,8 @@
   (c-add-style "google-c-style" google-c-style)
 
   (c-set-style "google-c-style")
-  (trivialfis/cquery-noui)
+  ;; (trivialfis/cquery-noui)
+  (trivialfis/ccls)
 
   (trivialfis/cuda-flycheck)
   (setq flycheck-checker 'cuda-clang)
