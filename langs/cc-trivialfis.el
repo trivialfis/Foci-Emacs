@@ -184,6 +184,7 @@ project to the new project."
    cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
    company-transformers nil
    company-lsp-async t
+   lsp-prefer-flymake 'nil
    company-lsp-cache-candidates nil
    cquery-extra-init-params '(:completion (:detailedLabel t))
    cquery-sem-highlight-method 'font-lock
@@ -200,8 +201,7 @@ project to the new project."
   ;; (cquery-use-default-rainbow-sem-highlight)
   (lsp)
   (lsp-ui-mode)
-  (flycheck-mode 1)
-  (flymake-mode 0))
+  (flycheck-mode 1))
 
 (defun trivialfis/ccls ()
   "Ccls configuration."
@@ -211,6 +211,7 @@ project to the new project."
   (setq
    company-transformers nil
    company-lsp-async t
+   lsp-prefer-flymake 'nil
    company-lsp-cache-candidates nil
    ccls-executable "~/.guix-profile/bin/ccls")
   (defvar ccls-project-root-matchers '("compile_commands.json"))
@@ -229,8 +230,8 @@ project to the new project."
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
     (if (or cdb-file buffer-read-only (equal cc-current-backend 'ccls))
-	;; (trivialfis/cquery)
-	(trivialfis/ccls)
+	(trivialfis/cquery)
+      ;; (trivialfis/ccls)
       (progn
 	;; (trivialfis/use-irony)
 	(trivialfis/company-clang))))

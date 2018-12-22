@@ -101,6 +101,7 @@
    cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
    company-transformers nil
    company-lsp-async t
+   lsp-prefer-flymake 'nil
    company-lsp-cache-candidates nil
    cquery-extra-init-params '(:completion (:detailedLabel t))
    cquery-sem-highlight-method 'font-lock
