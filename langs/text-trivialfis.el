@@ -1,6 +1,6 @@
 ;;; text-trivialfis --- Configuration for normal text file -*- lexical-binding: t -*-
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2016-2018 Fis Trivial <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -27,6 +27,14 @@
 
 (defvar accepted-mode-list '(text-mode org-mode markdown-mode mu4e-compose-mode))
 
+(defun trivialfis/check-buffer-on-save ()
+  "Use language tool to check text mode buffer on save."
+  (interactive)
+  (add-hook 'after-save-hook '(lambda ()
+  				(when (memq major-mode accepted-mode-list)
+  				  (unless langtool-buffer-process
+  				    (langtool-check-buffer))))))
+
 (defun trivialfis/_text ()
   "Configuration for normal text."
   (flyspell-mode 1)
@@ -35,10 +43,7 @@
   (setq langtool-language-tool-jar
 	"~/.emacs.d/LanguageTool-4.3/languagetool-commandline.jar"
 	langtool-default-language "en-US")
-  (add-hook 'after-save-hook '(lambda ()
-				(when (memq major-mode accepted-mode-list)
-				  (unless langtool-buffer-process
-				    (langtool-check-buffer)))))
+  (setq require-final-newline 'nil)
   (set-fill-column 79))
 
 (defun trivialfis/text ()
