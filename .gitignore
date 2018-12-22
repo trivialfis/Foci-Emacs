@@ -32,7 +32,7 @@ eclipse.jdt.ls
 workspace
 
 # langtool
-LanguageTool-4.2
+LanguageTool-*
 
 # MISC
 misc
