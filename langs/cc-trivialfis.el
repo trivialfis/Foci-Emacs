@@ -1,4 +1,4 @@
-;; cc-trivialfis --- Summary
+;; cc-trivialfis --- Summary -*- lexical-binding: t -*-
 ;;;
 ;;; Copyright © 2016-2018 Fis Trivial <jm.yuan@outlook.com>
 ;;;
@@ -49,9 +49,7 @@
   :defer t
   :commands flycheck-mode flycheck-select-checker)
 
-(use-package lsp
-  :defer t
-  :commands lsp)
+(use-package lsp-trivialfis)
 
 (defun trivialfis/company-clang ()
   "Company clang configuration."
@@ -175,21 +173,13 @@ project to the new project."
 
 (defun trivialfis/cquery ()
   "Cquery configuration."
-  (require 'cquery)
-  (require 'company-lsp)
-  (eval-when-compile
-    (require 'cquery)
-    (require 'company-lsp))
+  (use-package cquery)
+  (trivialfis/lsp)
   (setq
    cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
-   company-transformers nil
-   company-lsp-async t
-   lsp-prefer-flymake 'nil
-   company-lsp-cache-candidates nil
    cquery-extra-init-params '(:completion (:detailedLabel t))
    cquery-sem-highlight-method 'font-lock
-   ;; cquery-sem-highlight-method 'overlay
-   )
+   cquery-sem-highlight-method 'overlay)
   ;; Hack around to avoid storing indexes in sub-directories
   (setf cquery-cache-dir-function
 	#'(lambda (proj-dir)
@@ -205,20 +195,13 @@ project to the new project."
 
 (defun trivialfis/ccls ()
   "Ccls configuration."
-  (require 'ccls)
-  (eval-when-compile
-    (require 'ccls))
-  (setq
-   company-transformers nil
-   company-lsp-async t
-   lsp-prefer-flymake 'nil
-   company-lsp-cache-candidates nil
-   ccls-executable "~/.guix-profile/bin/ccls")
+  (use-package ccls)
+  (trivialfis/lsp)
+  (setq ccls-executable "~/.guix-profile/bin/ccls")
   (defvar ccls-project-root-matchers '("compile_commands.json"))
   (setq cc-current-backend 'ccl)
   (lsp)
   (lsp-ui-mode)
-  (flymake-mode 0)
   (flycheck-mode 1))
 
 (defun trivialfis/cc-base ()

@@ -28,6 +28,8 @@
 
 (require 'irony-cdb-json)
 
+(use-package lsp-trivialfis)
+
 (defun trivialfis/cuda-flycheck ()
   "Define cuda clang checker."
   (defvar cuda-flags)
@@ -92,21 +94,11 @@
 
 (defun trivialfis/cquery-noui ()
   "Cquery configuration without lsp-ui."
-  (require 'cquery)
-  (require 'company-lsp)
-  (eval-when-compile
-    (require 'cquery)
-    (require 'company-lsp))
+  (use-package cquery)
+  (trivialfis/lsp)
   (setq
    cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
-   company-transformers nil
-   company-lsp-async t
-   lsp-prefer-flymake 'nil
-   company-lsp-cache-candidates nil
-   cquery-extra-init-params '(:completion (:detailedLabel t))
-   cquery-sem-highlight-method 'font-lock
-   ;; cquery-sem-highlight-method 'overlay
-   )
+   cquery-extra-init-params '(:completion (:detailedLabel t)))
   (set-buffer-multibyte nil)
   (add-to-list 'company-backends 'company-lsp)
 
@@ -124,6 +116,7 @@
   (c-add-style "google-c-style" google-c-style)
 
   (c-set-style "google-c-style")
+  ;; cquery doesn't handle cuda-mode.
   ;; (trivialfis/cquery-noui)
   (trivialfis/ccls)
 
