@@ -1,26 +1,27 @@
 ;;; java-trivialfis.el --- Summary
 ;;; Commentary:
 ;;; Code:
-;; (require 'lsp-java)
-(require 'lsp-mode)
-;; (require 'company-lsp)
-(require 'lsp-ui)
+
+(require 'company-lsp)
 (require 'programming-trivialfis)
+
+(use-package lsp-trivialfis)
+(use-package lsp-java)
+(require 'lsp-ui)
 
 (defun trivialfis/java ()
   "Java configuration."
   ;; Don't know why prog mode isn't loaded.
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   (c-set-style "gnu")
   (setq lsp-before-save-edits nil)
-  ;; (setq lsp-java--workspace-folders (list "/home/fis/Workspace/bitwar"))
   (trivialfis/programming-init)
   (flycheck-mode 1)
   ;; (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
   ;; (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  ;; (push 'company-lsp company-backends)
-  ;; (lsp-java-enable)
-  )
+  (push 'company-lsp company-backends)
+  (trivialfis/lsp)
+  (lsp)
+  (lsp-ui-mode))
 
 (provide 'java-trivialfis)
 ;;; java-trivialfis.el ends here
