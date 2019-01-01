@@ -140,13 +140,14 @@ Where each sublist contains the arguments for `trivialfis/mu4e-context'."
 	  (cl-mapcar #'(lambda (lst)
 			 (apply 'trivialfis/mu4e-context lst))
 		     evaluated)))
-    (setq mu4e-contexts contexts)))
+    (setq mu4e-contexts contexts)
+    (setq mu4e-context-policy 'pick-first
+	  mu4e-compose-context-policy 'pick-first)))
 
 (defun trivialfis/mu4e-config ()
   "Mu4e mail configuration."
 
   (trivialfis/mu4e-contexts)
-
   (let ((dir "~/Downloads/"))
     (when (file-directory-p dir)
       (setq mu4e-attachment-dir dir)))
