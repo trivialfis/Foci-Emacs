@@ -213,8 +213,8 @@ project to the new project."
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
     (if (or cdb-file buffer-read-only (equal cc-current-backend 'ccls))
-	(trivialfis/cquery)
-      ;; (trivialfis/ccls)
+	;; (trivialfis/cquery)
+	(trivialfis/ccls)
       (progn
 	;; (trivialfis/use-irony)
 	(trivialfis/company-clang))))

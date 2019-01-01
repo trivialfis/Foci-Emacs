@@ -1,7 +1,7 @@
 ;;; package --- Summary  -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;;
-;;; Copyright © 2015-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2015-2019 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -51,7 +51,7 @@
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (lsp-java lsp-mode cython-mode mu4e-alert ess ccls xterm-color yaml-mode cquery groovy-mode markdown-toc racket-mode ninja-mode cuda-mode helm-rtags flycheck-rtags company-rtags rtags lsp-ui matlab-mode paredit company-lsp lsp-python foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell lsp-go sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm toc-org vala-mode flycheck-irony toml-mode rust-mode font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent disaster paradox org markdown-mode vline cmake-mode go-mode all-the-icons-dired company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company)))
+    (bbdb lsp-java lsp-mode cython-mode mu4e-alert ess ccls xterm-color yaml-mode cquery groovy-mode markdown-toc racket-mode ninja-mode cuda-mode helm-rtags flycheck-rtags company-rtags rtags lsp-ui matlab-mode paredit company-lsp lsp-python foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell lsp-go sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm toc-org vala-mode flycheck-irony toml-mode rust-mode font-lock-studio langtool org-bullets company-irony company-irony-c-headers irony irony-eldoc projectile clang-format aggressive-indent disaster paradox org markdown-mode vline cmake-mode go-mode all-the-icons-dired company-math font-lock+ col-highlight winum powerline spacemacs-theme atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company)))
  '(paradox-automatically-star t)
  '(paradox-github-token t)
  '(safe-local-variable-values
@@ -318,8 +318,8 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/makefile "makefile-trivialfis")
 (add-hook 'makefile-gmake-mode-hook 'trivialfis/makefile)
 
-(autoload 'trivialfis/gnus "mail-trivialfis" :interactive t)
-(autoload 'trivialfis/mu4e "mail-trivialfis" :interactive t)
+(autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
+(autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 ;; TODO(trivialfis): Make mu4e the default.
 
 ;; End language settings------------------------------------------------------------------------
