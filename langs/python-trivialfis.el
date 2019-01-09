@@ -24,6 +24,7 @@
 (require 'company)
 (require 'helm-xref)
 (require 'f)
+(require 'python)
 
 (use-package repl-trivialfis
   :commands (trivialfis/comint-send-input))
@@ -164,7 +165,8 @@ This can make use of __name__ == '__main__'."
   "Python configuration."
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
-  ;; (local-set-key (kbd "C-c k") 'trivialfis/restart-python)
+  (setq python-shell-completion-native-disabled-interpreters
+	(cons "python3" python-shell-completion-native-disabled-interpreters))
   (trivialfis/elpy-setup)
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
