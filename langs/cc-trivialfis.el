@@ -54,7 +54,7 @@
 (defun trivialfis/company-clang ()
   "Company clang configuration."
   (setq company-backends (delete 'company-semantic company-backends))
-  (if (equal major-mode 'c-mode)
+  (if (equal major-mode 'c++-mode)
       (setq company-clang-arguments '("-std=c++14"))
     (setq company-clang-arguments '("-std=gnu11")))
 
@@ -213,8 +213,8 @@ project to the new project."
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
     (if (or cdb-file buffer-read-only (equal cc-current-backend 'ccls))
-	;; (trivialfis/cquery)
-	(trivialfis/ccls)
+	(trivialfis/cquery)
+      ;; (trivialfis/ccls)
       (progn
 	;; (trivialfis/use-irony)
 	(trivialfis/company-clang))))
