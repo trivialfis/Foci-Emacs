@@ -178,7 +178,7 @@ Where each sublist contains the arguments for `trivialfis/mu4e-context'."
   (mu4e)
   (mu4e-alert-enable-notifications)
   (mu4e-alert-enable-mode-line-display)
-  (mu4e-alert-set-default-style 'libnotify)
+  (mu4e-alert-set-default-style 'notifications)
   (run-with-timer 1 300 #'(lambda ()
 			    (unless (equal major-mode 'mu4e-compose-mode)
 			      (mu4e-update-mail-and-index t)))))
