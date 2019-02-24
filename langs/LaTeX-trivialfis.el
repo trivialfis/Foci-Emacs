@@ -1,4 +1,4 @@
-;;; latex-trivialfis --- Summary
+;;; latex-trivialfis --- Configuration for LaTeX -*- lexical-binding: t -*-
 ;;;
 ;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
@@ -24,10 +24,41 @@
 (require 'latex)
 (require 'company)
 (require 'text-trivialfis)
+(require 'f)
+(require 'subr-x)			; string-join
+
+(defun trivialfis/f--loop-files (files target-file)
+  "Check each file in FILES for TARGET-FILE."
+  (let ((home-dir (f-full "~")))
+    (catch 'found
+      (if files
+	  (dolist (fpath files)
+	    (let ((fname (downcase (f-filename fpath))))
+	      (if (string-equal fname target-file)
+		  (throw 'found 't))
+	      (if (string-equal fpath home-dir)
+		  (throw 'found 'f))))
+	'f))))
+
+(defun trivialfis/find-makefile()
+  "Find make file."
+  (let* ((makefile "makefile")
+	 (found-path
+	  (f-traverse-upwards
+	   #'(lambda (path)
+	       (let ((dir (if (f-directory? path)
+			      path
+			    (f-dirname path))))
+		 (let ((files (if dir (f-files dir) 'nil)))
+		   (trivialfis/f--loop-files files makefile))))
+	   (f-dirname (buffer-file-name)))))
+    (if found-path
+	(f-join found-path "makefile")
+      'nil)))
 
 (defun trivialfis/LaTeX()
-  "Somehow the company-latex-commands conflicts with the other two latex backends."
-  ;; (auto-make-header)
+  "Configure LaTeX mode."
+  (toggle-debug-on-error)
   (LaTeX-math-mode)
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -35,6 +66,33 @@
   (add-to-list 'company-backends 'company-math-symbols-latex)
   (add-to-list 'company-backends 'company-math-symbols-unicode)
   (add-to-list 'company-backends 'company-latex-commands)
+  (let* ((makefile (trivialfis/find-makefile))
+	 (filename (buffer-file-name))
+	 (makefile-dir (f-dirname makefile)))
+    (if (and makefile
+	     (s-ends-with? ".tex" filename))
+	(progn
+	  (message (string-join `("Found makefile: " ,makefile)))
+	  (message "Use C-c C-a to call make.")
+	  (local-set-key
+	   (kbd "C-c C-a")
+	   #'(lambda ()
+	       (interactive)
+	       (async-start
+		#'(lambda ()
+		    (let ((command (if makefile-dir
+				       (string-join `("make -C " ,makefile-dir))
+				     "make")))
+		      (concat
+		       (shell-command-to-string command)
+		       "\n\n")))
+		#'(lambda (result)
+		    (let ((compile-buf
+			   (get-buffer-create "*Compile log*")))
+		      (set-buffer compile-buf)
+		      (goto-char (point-max))
+		      (insert result)
+		      (display-buffer compile-buf)))))))))
   (flycheck-mode 1)
   (trivialfis/_text))
 
