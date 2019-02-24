@@ -1,6 +1,6 @@
 ;;; latex-trivialfis --- Configuration for LaTeX -*- lexical-binding: t -*-
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2016-2019 Fis Trivial <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -23,6 +23,7 @@
 (require 'tex)
 (require 'latex)
 (require 'company)
+(require 'company-posframe)
 (require 'text-trivialfis)
 (require 'f)
 (require 'subr-x)			; string-join
@@ -58,7 +59,6 @@
 
 (defun trivialfis/LaTeX()
   "Configure LaTeX mode."
-  (toggle-debug-on-error)
   (LaTeX-math-mode)
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
@@ -94,7 +94,8 @@
 		      (insert result)
 		      (display-buffer compile-buf)))))))))
   (flycheck-mode 1)
-  (trivialfis/_text))
+  (trivialfis/_text)
+  (company-posframe-mode))
 
 (provide 'latex-trivialfis)
 ;;; latex-trivialfis ends here
