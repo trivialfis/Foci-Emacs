@@ -66,9 +66,18 @@
   (add-to-list 'company-backends 'company-math-symbols-latex)
   (add-to-list 'company-backends 'company-math-symbols-unicode)
   (add-to-list 'company-backends 'company-latex-commands)
+  (add-to-list 'display-buffer-alist
+	       `(,(rx bos "*Compile log*" eos)
+		 (display-buffer-reuse-window
+		  display-buffer-in-side-window)
+		 (side            . bottom)
+		 (reusable-frames . visible)
+		 (window-height   . 0.23)))
+
   (let* ((makefile (trivialfis/find-makefile))
 	 (filename (buffer-file-name))
 	 (makefile-dir (f-dirname makefile)))
+
     (if (and makefile
 	     (s-ends-with? ".tex" filename))
 	(progn
