@@ -117,13 +117,8 @@
   (dolist (x packages-autoload)
     (autoload x "paradox-trivialfis" :interactive t)))
 
-;; Spaceline theme
-(require 'spaceline-config)
-(setq powerline-height 25
-      ;; powerline-default-separator 'wave
-      spaceline-window-numbers-unicode t)
-(spaceline-helm-mode)
-(spaceline-emacs-theme)
+(require 'powerline)
+(powerline-center-theme)
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
 (require 'winum)

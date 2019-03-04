@@ -25,7 +25,6 @@
 (require 'helm-files)
 (require 'helm-config)
 (require 'helm-net)
-(require 'spaceline-segments)
 (require 'bind-key)
 
 (defun trivialfis/helm ()
@@ -46,7 +45,7 @@
 
   (when (executable-find "curl")
     (setq helm-net-prefer-curl t))
-  (setq helm-split-window-inside-p           t ; open helm buffer inside current window, not occupy whole other window
+  (setq helm-split-window-inside-p            t ; open helm buffer inside current window, not occupy whole other window
 	helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
 	helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
 	helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
@@ -58,11 +57,6 @@
   ;; helm-recentf-fuzzy-match              t)
 
   (helm-autoresize-mode 1)
-
-  (spaceline-toggle-helm-buffer-id-on)
-  (spaceline-toggle-helm-number-on)
-  (spaceline-toggle-helm-help-on)
-
   (helm-mode 1))
 
 (defun trivialfis/replace-completing-read (prompt collection
