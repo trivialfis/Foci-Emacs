@@ -38,3 +38,4 @@ LanguageTool-*
 # MISC
 misc
 forge-database.sqlite
+transient
