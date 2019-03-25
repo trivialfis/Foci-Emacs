@@ -19,7 +19,6 @@
 ;;;
 ;;; Commentary:
 ;;; Code:
-
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'google-c-style)
@@ -174,6 +173,7 @@ project to the new project."
 (defun trivialfis/cquery ()
   "Cquery configuration."
   (use-package cquery)
+  (setq lsp-json-use-lists t)
   (trivialfis/lsp)
   (setq
    cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")

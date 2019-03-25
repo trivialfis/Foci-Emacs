@@ -23,6 +23,9 @@
 (use-package lsp-mode
   :defer t
   :commands lsp)
+(use-package lsp-ui
+  :defer t
+  :commands lsp-ui-mode)
 (use-package company-lsp)
 (use-package programming-trivialfis)
 
