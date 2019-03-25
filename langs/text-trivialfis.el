@@ -46,6 +46,13 @@
   (setq require-final-newline 'nil)
   (set-fill-column 79))
 
+(defun trivialfis/cjk ()
+  (interactive)
+  (require 'pyim)
+  (pyim-basedict-enable)   ; 拼音词库，五笔用户 *不需要* 此行设置
+  (setq default-input-method "pyim")
+  (flyspell-mode 'f))
+
 (defun trivialfis/text ()
   "Guard for trivialfis/_text."
   (interactive)
