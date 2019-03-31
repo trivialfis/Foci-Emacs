@@ -87,8 +87,8 @@
 	 (has-python3-p (foundp which-python3))
 	 (has-python2-p (foundp which-python2)))
     (cond
-     (has-python-p (car (reverse (split-string which))))
      (has-python3-p (car (reverse (split-string which-python3))))
+     (has-python-p (car (reverse (split-string which))))
      (has-python2-p (car (reverse (split-string which-python2))))
      (t "python"))))
 
