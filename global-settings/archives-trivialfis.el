@@ -20,8 +20,8 @@
 ;;;
 ;;; Code:
 
-;; "https://elpa.emacs-china.org/melpa/"
 (defvar melpa-repo-url "https://melpa.org/packages/")
+;; (defvar melpa-repo-url "https://elpa.emacs-china.org/melpa/")
 
 (setq package-archives `(
 			 ;; tsinghua's mirror
