@@ -1,14 +1,16 @@
 #+TITLE: Emacs configuration.
 
 * Introduction
-It's just my Emacs configuration abstracted as a usable distribution.
+It's just my Emacs configuration abstracted as an usable distribution.
 
 Emacs 25+ are supported.
 
-All packages are listed in *selected-packages.el*. Use `package-install-selected-packages' to install them all at once.
+All packages are listed in *selected-packages.el*. Use
+`package-install-selected-packages' to install them all at once. **Note**: Due
+to the fact that I dumped _dash_ as part of Emacs build, others need to install
+it manually.
 
 * To-do
-+ Add better helm setup.
 + Add better Ecb faces.
 + Better langtool support.
 + Add some useful macros.

@@ -1,7 +1,7 @@
-;;; archives-trivialfis.el --- Record package archives URL
+;;; archives-trivialfis.el --- Record package archives URLs
 ;;; Commentary:
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2016-2019 Fis Trivial <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -20,22 +20,25 @@
 ;;;
 ;;; Code:
 
-(defvar melpa-repo-url "https://melpa.org/packages/")
-;; (defvar melpa-repo-url "https://elpa.emacs-china.org/melpa/")
-
-(setq package-archives `(
-			 ;; tsinghua's mirror
-			 ;; ("melpa"     .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-			 ;; ("org"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-			 ;; ("marmalade" .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/marmalade/")
-			 ;; ("gnu"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-
-			 ;; Emacs China's mirror
-			 ("melpa"     . ,melpa-repo-url)
-			 ("org"       . "https://elpa.emacs-china.org/org/")
-			 ("gnu"       . "https://elpa.emacs-china.org/gnu/")
-			 ("marmalade" . "https://elpa.emacs-china.org/marmalade/")
-			 ))
+(defvar elpa-official
+  '(
+    ("melpa"     . "https://melpa.org/packages/")
+    ("org"       . "https://orgmode.org/elpa/")
+    ("gnu"       . "https://elpa.gnu.org/packages/")
+    ))
+(defvar elpa-china
+  '(
+    ("melpa"     . "https://elpa.emacs-china.org/melpa/")
+    ("org"       . "https://elpa.emacs-china.org/org/")
+    ("gnu"       . "https://elpa.emacs-china.org/org/")
+    ))
+(defvar elpa-tuna
+  '(
+    ("melpa"     .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+    ("org"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+    ("gnu"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+    ))
+(setq-default package-archives elpa-official)
 
 (provide 'archives-trivialfis)
 ;;; archives-trivialfis.el ends here
