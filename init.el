@@ -357,4 +357,3 @@ KEY-COMMANDS: A list containing one or more (key command)"
 
 (provide 'init.el)
 ;;; init.el ends here
-(put 'narrow-to-region 'disabled nil)
