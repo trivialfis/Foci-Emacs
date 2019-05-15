@@ -35,7 +35,8 @@
    lsp-prefer-flymake 'nil
    company-transformers nil
    company-lsp-async t
-   company-lsp-cache-candidates nil))
+   company-lsp-cache-candidates nil
+   lsp-enable-snippet 'nil))
 
 (provide 'lsp-trivialfis)
 ;;; lsp-trivialfis.el ends here
