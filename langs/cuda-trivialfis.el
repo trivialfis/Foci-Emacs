@@ -25,10 +25,18 @@
 (require 'google-c-style)
 (require 'cuda-mode)
 (require 'json)
+(require 'cl-lib)
 
-(require 'irony-cdb-json)
+(require 'irony-cdb-utils)
 
-(use-package lsp-trivialfis)
+(defun locate-file-command (file-path cdb)
+  "Find compile command given FILE-PATH in CDB."
+  (let* ((current-fc (car cdb))
+	 (fname (car current-fc))
+	 (command (car (cdr current-fc))))
+    (if (string-equal fname file-path)
+	command
+      (locate-file-command file-path (cdr cdb)))))
 
 (defun trivialfis/cuda-flycheck ()
   "Define cuda clang checker."
@@ -41,8 +49,9 @@
 	 (irony-json-commands (mapcar
 			       #'irony-cdb-json--transform-compile-command
 			       cdb))
+	 (fname (buffer-file-name))
 	 (file-flags (car (cdar irony-json-commands))))
-    (setq cuda-flags (cons "--cuda-gpu-arch=sm_50" file-flags)))
+    (setq cuda-flags (locate-file-command fname irony-json-commands)))
   (flycheck-define-checker cuda-clang
     "A C/C++ syntax checker using Clang."
     :command ("~/.guix-profile/bin/clang++"
@@ -53,10 +62,8 @@
 	      "-fno-diagnostics-show-option" ; Do not show the corresponding
                                         ; warning group
 	      "-iquote" (eval (flycheck-c/c++-quoted-include-directory))
-	      ;; (option "-std=" flycheck-clang-language-standard concat)
 	      (option-flag "-pedantic" flycheck-clang-pedantic)
 	      (option-flag "-pedantic-errors" flycheck-clang-pedantic-errors)
-	      ;; (option "-stdlib=" flycheck-clang-standard-library concat)
 	      (option-flag "-fno-exceptions" flycheck-clang-no-exceptions)
 	      (option-flag "-fno-rtti" flycheck-clang-no-rtti)
 	      (option-flag "-fblocks" flycheck-clang-blocks)
@@ -92,19 +99,6 @@
     :modes (cuda-mode)
     :next-checkers ((warning . c/c++-cppcheck))))
 
-(defun trivialfis/cquery-noui ()
-  "Cquery configuration without lsp-ui."
-  (use-package cquery)
-  (trivialfis/lsp)
-  (setq
-   cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
-   cquery-extra-init-params '(:completion (:detailedLabel t)))
-  (set-buffer-multibyte nil)
-  (add-to-list 'company-backends 'company-lsp)
-
-  (setq cc-current-backend 'cquery)
-  (lsp))
-
 (defun trivialfis/cuda ()
   "Custom CUDA mode."
   (defconst trivialfis/cc-style
@@ -116,9 +110,6 @@
   (c-add-style "google-c-style" google-c-style)
 
   (c-set-style "google-c-style")
-  ;; cquery doesn't handle cuda-mode.
-  ;; (trivialfis/cquery-noui)
-  (trivialfis/ccls)
 
   (trivialfis/cuda-flycheck)
   (setq flycheck-checker 'cuda-clang)
