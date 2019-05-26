@@ -102,23 +102,6 @@ Used only for nevigation."
      )
    ))
 
-(defun trivialfis/use-irony ()
-  "Irony mode configuration."
-  (add-hook 'irony-mode-hook 'irony-eldoc)
-  (add-to-list 'company-backends 'company-irony)
-  (add-to-list 'company-backends 'company-irony-c-headers)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  (add-hook 'flycheck-mode-hook #'(lambda ()
-				    (flycheck-irony-setup)
-				    (flycheck-select-checker 'irony)))
-  (when (or (eq major-mode 'c-mode)	; Prevent from being loaded by c derived mode
-  	    (eq major-mode 'c++-mode)
-	    (eq major-mode 'cuda-mode))
-    (ignore-errors
-      (irony-mode 1)))
-  (setq cc-current-backend 'irony)
-  (message "Use irony mode as backend."))
-
 (defun trivialfis/cc-base-srefactor ()
   "Configuration for refactor."
   (trivialfis/local-set-keys
@@ -216,7 +199,6 @@ project to the new project."
 	(trivialfis/cquery)
       ;; (trivialfis/ccls)
       (progn
-	;; (trivialfis/use-irony)
 	(trivialfis/company-clang))))
 
   (defconst trivialfis/cc-style
@@ -242,22 +224,11 @@ project to the new project."
 
 (defun trivialfis/c++ ()
   "Custom C++ mode."
-  (trivialfis/cc-base)
-  (if (equal cc-current-backend 'irony)
-      (progn
-	(setq flycheck-clang-language-standard "gnu++14"
-  	      flycheck-gcc-language-standard "gnu++14"
-  	      irony-additional-clang-options '("-std=c++14"))
-	(flycheck-mode 1))))
+  (trivialfis/cc-base))
 
 (defun trivialfis/c ()
   "Custom c mode."
-  (trivialfis/cc-base)
-  (if (equal cc-current-backend 'irony)
-      (progn
-	(setq flycheck-clang-language-standard "-std=gnu11"
-	      flycheck-gcc-language-standard "-std=gnu11")
-	(flycheck-mode 1))))
+  (trivialfis/cc-base))
 
 (provide 'cc-trivialfis)
 ;;; cc-trivialfis.el ends here
