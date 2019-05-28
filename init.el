@@ -309,6 +309,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/java "java-trivialfis")
 (add-hook 'java-mode-hook 'trivialfis/java)
 
+(autoload 'trivialfis/julia "julia-trivialfis")
+(add-hook 'julia-mode-hook 'trivialfis/julia)
+
 ;; makefile mode
 (autoload 'trivialfis/makefile "makefile-trivialfis")
 (add-hook 'makefile-gmake-mode-hook 'trivialfis/makefile)
