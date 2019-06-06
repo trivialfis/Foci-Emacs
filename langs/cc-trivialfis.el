@@ -169,6 +169,8 @@ project to the new project."
 	    (expand-file-name (cquery--get-root))))
   (set-buffer-multibyte nil)
   (add-to-list 'company-backends 'company-lsp)
+  ;; An ugly hack to bring back auto re-indexing.
+  (add-to-list 'after-save-hook 'cquery-freshen-index)
 
   (setq cc-current-backend 'cquery)
   ;; (cquery-use-default-rainbow-sem-highlight)
@@ -187,6 +189,12 @@ project to the new project."
   (lsp-ui-mode)
   (flycheck-mode 1))
 
+(defun trivialfis/clangd ()
+  (trivialfis/lsp)
+  (lsp)
+  (lsp-ui-mode)
+  (flycheck-mode 1))
+
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
@@ -198,6 +206,7 @@ project to the new project."
     (if (or cdb-file buffer-read-only (equal cc-current-backend 'ccls))
 	(trivialfis/cquery)
       ;; (trivialfis/ccls)
+      ;; (trivialfis/clangd)
       (progn
 	(trivialfis/company-clang))))
 
