@@ -22,6 +22,8 @@
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'google-c-style)
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 (use-package cmake-ide
   :defer t
@@ -170,7 +172,10 @@ project to the new project."
   (set-buffer-multibyte nil)
   (add-to-list 'company-backends 'company-lsp)
   ;; An ugly hack to bring back auto re-indexing.
-  (add-to-list 'after-save-hook 'cquery-freshen-index)
+  (add-hook 'after-save-hook #'(lambda ()
+				 (if (equal major-mode 'c++-mode)
+				     (cquery-freshen-index))
+				 ))
 
   (setq cc-current-backend 'cquery)
   ;; (cquery-use-default-rainbow-sem-highlight)
