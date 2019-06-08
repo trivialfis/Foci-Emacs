@@ -20,8 +20,9 @@
   ;; (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
   (push 'company-lsp company-backends)
   (trivialfis/lsp)
-  (lsp)
-  (lsp-ui-mode))
+  ;; (lsp)
+  ;; (lsp-ui-mode)
+  )
 
 (provide 'java-trivialfis)
 ;;; java-trivialfis.el ends here
