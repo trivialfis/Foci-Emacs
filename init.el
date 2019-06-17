@@ -122,6 +122,9 @@
 
 (require 'winum)
 (setq winum-auto-setup-mode-line nil)
+(define-key winum-keymap (kbd "M-1") 'winum-select-window-1)
+(define-key winum-keymap (kbd "M-2") 'winum-select-window-2)
+(define-key winum-keymap (kbd "M-3") 'winum-select-window-3)
 (set-face-attribute 'winum-face nil :weight 'bold)
 (winum-mode)
 

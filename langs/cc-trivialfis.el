@@ -175,7 +175,8 @@ project to the new project."
   (add-to-list 'company-backends 'company-lsp)
   ;; An ugly hack to bring back auto re-indexing.
   (add-hook 'after-save-hook #'(lambda ()
-				 (if (equal major-mode 'c++-mode)
+				 (if (or (equal major-mode 'c++-mode)
+					 (equal major-mode 'cuda-mode))
 				     (cquery-freshen-index))
 				 ))
 
