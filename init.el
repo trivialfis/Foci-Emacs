@@ -39,7 +39,6 @@
     (global-display-line-numbers-mode t)
   (global-linum-mode t))
 ;; (modify-all-frames-parameters '((scroll-bar-width . 8)))
-;; (toggle-debug-on-error)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
