@@ -22,8 +22,8 @@
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'google-c-style)
-(use-package company-box
-  :hook (company-mode . company-box-mode))
+;; (use-package company-box
+;;   :hook (company-mode . company-box-mode))
 
 (use-package cmake-ide
   :defer t
@@ -161,10 +161,12 @@ project to the new project."
   (setq lsp-json-use-lists t)
   (trivialfis/lsp)
   (setq
-   cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
+   ;; cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
+   cquery-executable (expand-file-name "~/Workspace/CQuery/cquery/build/cquery")
    cquery-extra-init-params '(:completion (:detailedLabel t))
-   cquery-sem-highlight-method 'font-lock
-   cquery-sem-highlight-method 'overlay)
+   ;; cquery-sem-highlight-method 'font-lock
+   cquery-sem-highlight-method 'overlay
+   )
   ;; Hack around to avoid storing indexes in sub-directories
   (setf cquery-cache-dir-function
 	#'(lambda (proj-dir)
