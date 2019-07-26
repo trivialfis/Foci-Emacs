@@ -82,7 +82,9 @@
 (let ((packages-autoload '(trivialfis/pop-frame
 			   trivialfis/close-frame
 			   trivialfis/goto-pos
-			   trivialfis/local-set-keys)))
+			   trivialfis/local-set-keys
+			   trivialfis/nav-indent-shift-right
+			   trivialfis/nav-indent-shift-left)))
   (dolist (x packages-autoload)
     (autoload x "misc-trivialfis" :interactive t)))
 
@@ -214,6 +216,8 @@ KEY-COMMANDS: A list containing one or more (key command)"
 			      (delete-char 1))))
    ("C-x C-g"      .        (lambda ()(interactive))) ; regret
    ("C-c C-g"      .        (lambda ()(interactive))) ; regret
+   ("M-<left>"   .  trivialfis/nav-indent-shift-left)
+   ("M-<right>"  . trivialfis/nav-indent-shift-right)
 
    ;; Paradox
    ("C-c p l"      .           paradox-list-packages)
