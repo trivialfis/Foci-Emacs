@@ -162,7 +162,7 @@ project to the new project."
   (trivialfis/lsp)
   (setq
    ;; cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
-   cquery-executable (expand-file-name "~/Workspace/CQuery/cquery/build/cquery")
+   cquery-executable (expand-file-name "~/Workspace/CQuery/build/cquery")
    cquery-extra-init-params '(:completion (:detailedLabel t))
    ;; cquery-sem-highlight-method 'font-lock
    cquery-sem-highlight-method 'overlay
@@ -182,6 +182,7 @@ project to the new project."
 
   (setq cc-current-backend 'cquery)
   ;; (cquery-use-default-rainbow-sem-highlight)
+  (push '(cuda-mode . "cu") lsp-language-id-configuration)
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
