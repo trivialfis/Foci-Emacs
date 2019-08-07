@@ -329,7 +329,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
-;; TODO(trivialfis): Make mu4e the default.
+
+(add-hook 'magit-diff-mode-hook
+	  #'(lambda () (setq magit-diff-refine-hunk 'all
+			     magit-diff-refine-ignore-whitespace'nil)))
 
 ;; End language settings------------------------------------------------------------------------
 
