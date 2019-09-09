@@ -69,17 +69,12 @@ MODE: the major programming mode"
     (setq semantic-default-submodes (append semantic-default-submodes semantic-submodes)
 	  semantic-idle-scheduler-idle-time 1)
     (semanticdb-enable-gnu-global-databases 'MODE)
-    ;; (eval-after-load 'helm
-    ;;   (local-set-key (kbd "C-.") 'helm-semantic-or-imenu))
     (semantic-mode 1)))
 
 (defun trivialfis/programming-init ()
   "Added before any programming mode configuration."
   (add-hook 'eldoc-mode-hook #'(lambda ()
 				 (setf eldoc-idle-delay 0.5)))
-  (col-highlight-set-interval 2)
-  (setq col-highlight-overlay-priority 0)
-  ;; (toggle-highlight-column-when-idle 1)
   (trivialfis/flycheck)
   (hs-minor-mode 1)
 
