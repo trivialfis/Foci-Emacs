@@ -21,11 +21,10 @@
 ;;; Code:
 
 (require 'lsp-mode)
-(require 'lsp-go)
 
 (defun trivialfis/go ()
   "Go configuration."
-  (lsp-go-enable))
+  (lsp))
 
 (provide 'go-trivialfis)
 ;;; go-trivialfis.el ends here
