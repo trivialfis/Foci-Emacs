@@ -61,6 +61,7 @@
                                         ; location
 	      "-fno-diagnostics-show-option" ; Do not show the corresponding
                                         ; warning group
+	      "-nocudalib"
 	      "-iquote" (eval (flycheck-c/c++-quoted-include-directory))
 	      (option-flag "-pedantic" flycheck-clang-pedantic)
 	      (option-flag "-pedantic-errors" flycheck-clang-pedantic-errors)
