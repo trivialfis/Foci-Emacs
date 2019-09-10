@@ -31,7 +31,7 @@
       package-enable-at-startup nil
       visible-bell t			; Remove the beep
       )
-(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :height 90)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (put 'narrow-to-region 'disabled nil)
