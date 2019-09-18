@@ -199,6 +199,7 @@ project to the new project."
   (flycheck-mode 1))
 
 (defun trivialfis/clangd ()
+  "Clangd configuration."
   (trivialfis/lsp)
   (lsp)
   (lsp-ui-mode)
