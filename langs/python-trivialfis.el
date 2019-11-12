@@ -130,6 +130,7 @@
   (with-eval-after-load 'elpy
     (let ((command (trivialfis/determine-python)))
       (message (format "Python command: %s" command))
+      (setq elpy-rpc-virtualenv-path 'current)
       (setq elpy-rpc-python-command command
 	    python-shell-interpreter command))
     ;; ipython makes use of xterm ansi code.
