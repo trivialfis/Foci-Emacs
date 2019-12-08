@@ -319,6 +319,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/julia "julia-trivialfis")
 (add-hook 'julia-mode-hook 'trivialfis/julia)
 
+(autoload 'trivialfis/R "R-trivialfis")
+(add-hook 'ess-r-mode-hook 'trivialfis/R)
+
 ;; scala mode
 (autoload 'trivialfis/scala "scala-trivialfis")
 (add-hook 'scala-mode-hook 'trivialfis/scala)
@@ -327,6 +330,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/makefile "makefile-trivialfis")
 (add-hook 'makefile-gmake-mode-hook 'trivialfis/makefile)
 
+;; groovy mode
 (autoload 'trivialfis/groovy "groovy-trivialfis")
 (add-hook 'groovy-mode-hook 'trivialfis/groovy)
 
