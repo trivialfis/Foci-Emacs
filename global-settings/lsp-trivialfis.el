@@ -35,6 +35,7 @@
    lsp-prefer-flymake 'nil
    company-transformers nil
    company-lsp-async t
+   lsp-enable-on-type-formatting 'nil
    company-lsp-cache-candidates nil
    lsp-enable-snippet 'nil))
 
