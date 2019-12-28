@@ -218,6 +218,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
    ("C-c C-g"      .        (lambda ()(interactive))) ; regret
    ("M-<left>"   .  trivialfis/nav-indent-shift-left)
    ("M-<right>"  . trivialfis/nav-indent-shift-right)
+   ("C-x g"        .                    magit-status)
 
    ;; Paradox
    ("C-c p l"      .           paradox-list-packages)
