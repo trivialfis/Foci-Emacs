@@ -154,39 +154,6 @@ project to the new project."
      '(("C-c C-a" .  cmake-ide-compile)))
     (cmake-ide-setup)))
 
-
-(defun trivialfis/cquery ()
-  "Cquery configuration."
-  (use-package cquery)
-  (setq lsp-json-use-lists t)
-  (trivialfis/lsp)
-  (setq
-   ;; cquery-executable (expand-file-name "~/.guix-profile/bin/cquery")
-   cquery-executable (expand-file-name "~/Workspace/CQuery/build/cquery")
-   cquery-extra-init-params '(:completion (:detailedLabel t))
-   ;; cquery-sem-highlight-method 'font-lock
-   cquery-sem-highlight-method 'overlay
-   )
-  ;; Hack around to avoid storing indexes in sub-directories
-  (setf cquery-cache-dir-function
-	#'(lambda (proj-dir)
-	    (expand-file-name (cquery--get-root))))
-  (set-buffer-multibyte nil)
-  (add-to-list 'company-backends 'company-lsp)
-  ;; An ugly hack to bring back auto re-indexing.
-  (add-hook 'after-save-hook #'(lambda ()
-				 (if (and (lsp-workspaces)
-					  (or (equal major-mode 'c++-mode)
-					      (equal major-mode 'cuda-mode)))
-				     (cquery-freshen-index))))
-
-  (setq cc-current-backend 'cquery)
-  ;; (cquery-use-default-rainbow-sem-highlight)
-  (push '(cuda-mode . "cu") lsp-language-id-configuration)
-  (lsp)
-  (lsp-ui-mode)
-  (flycheck-mode 1))
-
 (defun trivialfis/ccls ()
   "Ccls configuration."
   (use-package ccls)
@@ -201,6 +168,7 @@ project to the new project."
 (defun trivialfis/clangd ()
   "Clangd configuration."
   (trivialfis/lsp)
+  (setq lsp-clients-clangd-executable "/usr/bin/clangd-9")
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
@@ -214,9 +182,8 @@ project to the new project."
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
     (if (or cdb-file buffer-read-only (equal cc-current-backend 'ccls))
-	(trivialfis/cquery)
-      ;; (trivialfis/ccls)
-      ;; (trivialfis/clangd)
+	;; (trivialfis/ccls)
+	(trivialfis/clangd)
       (progn
 	(trivialfis/company-clang))))
 

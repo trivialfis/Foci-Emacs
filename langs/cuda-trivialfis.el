@@ -106,7 +106,6 @@
     '("gnu"
       (c-offsets-alist . ((innamespace . [0])))))
   (setq c-auto-newline nil)
-  (trivialfis/cquery)
 
   (c-add-style "trivialfis/cc-style" trivialfis/cc-style)
   (c-add-style "google-c-style" google-c-style)
