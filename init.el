@@ -335,6 +335,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/groovy "groovy-trivialfis")
 (add-hook 'groovy-mode-hook 'trivialfis/groovy)
 
+;; prolog mode
+(autoload 'trivialfis/prolog "prolog-trivialfis")
+(add-hook 'prolog-mode-hook 'trivialfis/prolog)
+
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 
