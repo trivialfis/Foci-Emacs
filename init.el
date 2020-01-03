@@ -339,6 +339,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/prolog "prolog-trivialfis")
 (add-hook 'prolog-mode-hook 'trivialfis/prolog)
 
+;; cmake mode
+(autoload 'trivialfis/cmake "cmake-trivialfis")
+(add-hook 'cmake-mode-hook 'trivialfis/cmake)
+
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 
