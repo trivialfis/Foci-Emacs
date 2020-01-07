@@ -19,8 +19,8 @@
 (defun trivialfis/cmake ()
   "CMake configuration."
   (trivialfis/lsp)
-  ;; (lsp)
-  ;; (lsp-ui-mode)
+  (lsp)
+  (lsp-ui-mode)
   )
 
 (provide 'cmake-trivialfis)
