@@ -35,7 +35,9 @@
 
 (defun trivialfis/package ()
   "Configuration for packages using paradox."
-  (setq paradox-github-token (trivialfis/get-token))
+  (setq  paradox-automatically-star t
+	 paradox-github-token t
+	 paradox-github-token (trivialfis/get-token))
   (package-initialize))
 (trivialfis/package)
 
