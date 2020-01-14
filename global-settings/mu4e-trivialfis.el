@@ -75,6 +75,12 @@ REFILE: ~ storing archived mails."
    :enter-func
    (lambda ()
      (mu4e-message (concat "Entering " name " context"))
+     (setq mu4e-bookmarks (cdr mu4e-bookmarks))
+     (add-to-list
+      'mu4e-bookmarks
+      '("(flag:unread AND NOT flag:trashed) maildir:/INBOX"
+	"Unread messages"
+	?u))
      (add-to-list
       'mu4e-bookmarks
       `(,(concat "(to:" address
@@ -84,7 +90,7 @@ REFILE: ~ storing archived mails."
      (add-to-list
       'mu4e-bookmarks
       `(,(concat "(to:" address
-		 ") and (not flag:trashed)")
+		 ") and (not flag:trashed) maildir:/INBOX")
 	"2me" ?m)))
    :leave-func
    (lambda ()
