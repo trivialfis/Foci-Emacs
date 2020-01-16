@@ -26,7 +26,7 @@
 
 (defun trivialfis/get-token ()
   "Get token from file."
-  (let ((token-path "~/.emacs.d/global-settings/github-token"))
+  (let ((token-path "~/.emacs.d/misc/github-token"))
     (if (file-exists-p token-path)
 	(with-temp-buffer
 	  (insert-file-contents token-path)
@@ -35,9 +35,10 @@
 
 (defun trivialfis/package ()
   "Configuration for packages using paradox."
-  (setq  paradox-automatically-star t
-	 paradox-github-token t
-	 paradox-github-token (trivialfis/get-token))
+  (if (trivialfis/get-token)
+      (setq  paradox-automatically-star t
+	     paradox-github-token t
+	     paradox-github-token (trivialfis/get-token)))
   (package-initialize))
 (trivialfis/package)
 
