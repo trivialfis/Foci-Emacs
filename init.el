@@ -1,7 +1,7 @@
 ;;; package --- Summary  -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;;
-;;; Copyright © 2015-2019 Fis Trivial <jm.yuan@outlook.com>
+;;; Copyright © 2015-2020 Fis Trivial <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -354,7 +354,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (add-hook 'magit-diff-mode-hook
 	  #'(lambda ()
 	      (setq magit-diff-refine-hunk 'all
-		    magit-diff-refine-ignore-whitespace'nil)))
+		    magit-diff-refine-ignore-whitespace 'nil)))
 
 ;; End language settings------------------------------------------------------------------------
 

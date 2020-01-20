@@ -70,7 +70,6 @@
   "Run before org mode initialization."
   (setf org-startup-truncated nil
 	org-startup-folded nil)
-  (setf org-agenda-files '("~/Workspace/note/reading_list/reading-progress.org"))
 
   ;; fontify code in code blocks
   (setq org-src-fontify-natively t)
