@@ -341,6 +341,13 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/cmake "cmake-trivialfis")
 (add-hook 'cmake-mode-hook 'trivialfis/cmake)
 
+;; xml-mode
+(add-hook 'nxml-mode-hook
+	  #'(lambda ()
+	      (message "Loading")
+	      (autoload 'trivialfis/xml-format-region "xml-trivialfis"
+		:interactive t)))
+
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 
