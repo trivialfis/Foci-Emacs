@@ -47,10 +47,12 @@
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(auth-source-save-behavior nil)
+ '(ediff-split-window-function (quote split-window-sensibly))
  '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
     (realgud pyim github-review json-mode let-alist company-box lsp-origami winum scribble-mode guix company-posframe scala-mode forge bbdb lsp-java lsp-mode cython-mode mu4e-alert ess ccls xterm-color yaml-mode groovy-mode markdown-toc racket-mode ninja-mode cuda-mode helm-rtags flycheck-rtags company-rtags rtags lsp-ui matlab-mode paredit company-lsp foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm racer flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser flyspell-correct-helm toc-org vala-mode toml-mode rust-mode font-lock-studio langtool org-bullets projectile clang-format aggressive-indent disaster paradox org markdown-mode vline cmake-mode go-mode all-the-icons-dired company-math font-lock+ powerline atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company)))
+ '(paradox-github-token t)
  '(safe-local-variable-values
    (quote
     ((eval modify-syntax-entry 43 "'")
@@ -148,7 +150,6 @@
 	      #'trivialfis/replace-read-file)
 (add-function :override completion-in-region-function
 	      #'trivialfis/replace-completion-region)
-
 
 ;; Fill indicator mode
 (autoload 'fci-mode "fill-col")
