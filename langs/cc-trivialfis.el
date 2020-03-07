@@ -168,7 +168,8 @@ project to the new project."
 (defun trivialfis/clangd ()
   "Clangd configuration."
   (trivialfis/lsp)
-  (setq lsp-clients-clangd-executable "/usr/bin/clangd-9")
+  (setq-default lsp-clients-clangd-executable "/usr/bin/clangd-10"
+		lsp-clients-clangd-args '("--header-insertion=never"))
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
