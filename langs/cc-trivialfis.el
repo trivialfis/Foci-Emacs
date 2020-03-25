@@ -154,17 +154,6 @@ project to the new project."
      '(("C-c C-a" .  cmake-ide-compile)))
     (cmake-ide-setup)))
 
-(defun trivialfis/ccls ()
-  "Ccls configuration."
-  (use-package ccls)
-  (trivialfis/lsp)
-  (setq ccls-executable "~/.guix-profile/bin/ccls")
-  (defvar ccls-project-root-matchers '("compile_commands.json"))
-  (setq cc-current-backend 'ccl)
-  (lsp)
-  (lsp-ui-mode)
-  (flycheck-mode 1))
-
 (defun trivialfis/clangd ()
   "Clangd configuration."
   (trivialfis/lsp)
@@ -182,8 +171,7 @@ project to the new project."
   (add-to-list 'company-backends 'company-keywords)
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
-    (if (or cdb-file buffer-read-only (equal cc-current-backend 'ccls))
-	;; (trivialfis/ccls)
+    (if (or cdb-file buffer-read-only)
 	(trivialfis/clangd)
       (progn
 	(trivialfis/company-clang))))
