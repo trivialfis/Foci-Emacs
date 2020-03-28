@@ -25,6 +25,7 @@
 (require 'helm-xref)
 (require 'f)
 (require 'python)
+(require 'flycheck)
 
 (use-package repl-trivialfis
   :commands (trivialfis/comint-send-input))
@@ -123,7 +124,7 @@
 
 (defun trivialfis/elpy-setup()
   "Elpy configuration."
-  (setq ffip-prefer-ido-mode t)
+  (setq flycheck-disabled-checkers '(python-pylint))
   (flycheck-mode 1)
   ;; Replace flymake with flycheck
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
