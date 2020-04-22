@@ -27,6 +27,9 @@
 (require 'python)
 (require 'flycheck)
 
+(use-package lsp-trivialfis)
+(use-package lsp)
+
 (use-package repl-trivialfis
   :commands (trivialfis/comint-send-input))
 
@@ -140,6 +143,15 @@
     (add-to-list 'company-backends 'elpy-company-backend)
     (elpy-mode 1)))
 
+(defun trivialfis/python-lsp-setup()
+  "Setup for Python lsp mode."
+  (trivialfis/lsp)
+  (let ((command (trivialfis/determine-python)))
+    (setq lsp-pyls-server-command (file-name-nondirectory command)))
+
+  (lsp)
+  (lsp-ui-mode))
+
 (defun trivialfis/clear-python ()
   "Clear the python environment."
   (interactive)
@@ -170,6 +182,7 @@ This can make use of __name__ == '__main__'."
   (setq python-shell-completion-native-disabled-interpreters
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
   (trivialfis/elpy-setup)
+
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
 		(local-set-key (kbd "C-c k") 'trivialfis/clear-python)
