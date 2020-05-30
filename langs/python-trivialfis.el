@@ -148,9 +148,11 @@
 (defun trivialfis/python-lsp-setup()
   "Setup for Python lsp mode."
   (trivialfis/lsp)
-  (let ((command (trivialfis/determine-python)))
+  (let* ((_ (trivialfis/determine-python)) ; activate env if presented
+	 (python-which (shell-command-to-string "which python"))
+	 (python-bin (f-dirname python-which)))
     (setq lsp-pyls-server-command
-	  (f-join (file-name-nondirectory command) "pyls")))
+	  (f-join python-bin "pyls")))
 
   (lsp)
   (lsp-ui-mode))
@@ -183,8 +185,8 @@ This can make use of __name__ == '__main__'."
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
   (setq python-shell-completion-native-disabled-interpreters
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
-  (trivialfis/elpy-setup)
-  ;; (trivialfis/python-lsp-setup)
+  ;; (trivialfis/elpy-setup)
+  (trivialfis/python-lsp-setup)
 
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
