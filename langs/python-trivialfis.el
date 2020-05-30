@@ -127,6 +127,7 @@
 
 (defun trivialfis/elpy-setup()
   "Elpy configuration."
+  (define-key elpy-mode-map (kbd "<C-return>") 'nil)
   (setq flycheck-disabled-checkers '(python-pylint))
   (flycheck-mode 1)
   ;; Replace flymake with flycheck
@@ -141,13 +142,15 @@
     ;; (elpy-use-ipython)
     (setq elpy-rpc-timeout 3)
     (add-to-list 'company-backends 'elpy-company-backend)
+    (elpy-enable)
     (elpy-mode 1)))
 
 (defun trivialfis/python-lsp-setup()
   "Setup for Python lsp mode."
   (trivialfis/lsp)
   (let ((command (trivialfis/determine-python)))
-    (setq lsp-pyls-server-command (file-name-nondirectory command)))
+    (setq lsp-pyls-server-command
+	  (f-join (file-name-nondirectory command) "pyls")))
 
   (lsp)
   (lsp-ui-mode))
@@ -178,10 +181,10 @@ This can make use of __name__ == '__main__'."
 (defun trivialfis/python()
   "Python configuration."
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
-  (define-key elpy-mode-map (kbd "<C-return>") 'nil)
   (setq python-shell-completion-native-disabled-interpreters
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
   (trivialfis/elpy-setup)
+  ;; (trivialfis/python-lsp-setup)
 
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
