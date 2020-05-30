@@ -26,6 +26,7 @@
 (require 'cuda-mode)
 (require 'json)
 (require 'cl-lib)
+(require 'lsp-trivialfis)
 
 (require 'irony-cdb-utils)
 
@@ -100,8 +101,8 @@
     :modes (cuda-mode)
     :next-checkers ((warning . c/c++-cppcheck))))
 
-(defun trivialfis/cuda ()
-  "Custom CUDA mode."
+(defun trivialfis/cu-plain ()
+  "Use a customized flycheck."
   (defconst trivialfis/cc-style
     '("gnu"
       (c-offsets-alist . ((innamespace . [0])))))
@@ -115,6 +116,16 @@
   (trivialfis/cuda-flycheck)
   (setq flycheck-checker 'cuda-clang)
   (flycheck-mode 1))
+
+(defun trivialfis/cu-lsp ()
+  "Use lsp-mode."
+  (setq lsp-language-id-configuration
+	(cons '(cuda-mode . "cuda") lsp-language-id-configuration))
+  (trivialfis/cc-base))
+
+(defun trivialfis/cuda ()
+  "Custom CUDA mode."
+  (trivialfis/cu-lsp))
 
 (provide 'cuda-trivailfis)
 ;;; cuda-trivialfis.el ends here
