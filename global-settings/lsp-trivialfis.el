@@ -38,8 +38,7 @@
    lsp-enable-on-type-formatting 'nil
    company-lsp-cache-candidates nil
    lsp-enable-snippet 'nil
-   lsp-enable-semantic-highlighting t
-   lsp-semantic-highlighting :deferred))
+   lsp-enable-semantic-highlighting t))
 
 (provide 'lsp-trivialfis)
 ;;; lsp-trivialfis.el ends here

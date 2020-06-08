@@ -185,8 +185,8 @@ This can make use of __name__ == '__main__'."
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
   (setq python-shell-completion-native-disabled-interpreters
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
-  ;; (trivialfis/elpy-setup)
-  (trivialfis/python-lsp-setup)
+  (trivialfis/elpy-setup)
+  ;; (trivialfis/python-lsp-setup)
 
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
