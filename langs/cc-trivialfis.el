@@ -39,6 +39,14 @@
 	    (purpose-compile-user-configuration)
 	    (message "Purpose loaded.")))
 
+(use-package dap-mode
+  :defer t
+  :commands dap-mode
+  :config (progn
+	    (setq dap-auto-configure-features '(sessions locals controls tooltip))
+	    (dap-ui-mode)
+	    (use-package dap-lldb)))
+
 (use-package company-c-headers)
 
 (use-package company-clang
