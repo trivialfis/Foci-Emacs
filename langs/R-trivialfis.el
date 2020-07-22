@@ -5,6 +5,7 @@
 (require 'ess)
 (require 'lsp-trivialfis)
 (use-package lsp)
+(use-package ess-site)
 
 ;; Not quite usable yet.
 (lsp-register-client
@@ -16,8 +17,9 @@
 
 (defun trivialfis/R ()
   "R configuration."
-  (set-default ess-indent-offset 2)
-  (toggle-debug-on-error)
+  (setq-default ess-indent-offset 2)
+  (flymake-mode 0)
+  (flycheck-mode 1)
   ;; (lsp)
   ;; (lsp-ui-mode)
   )
