@@ -124,10 +124,12 @@
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
 (require 'winum)
-(setq winum-auto-setup-mode-line nil)
+(setq winum-auto-setup-mode-line nil
+      winum-scope 'frame-local)
 (define-key winum-keymap (kbd "M-1") 'winum-select-window-1)
 (define-key winum-keymap (kbd "M-2") 'winum-select-window-2)
 (define-key winum-keymap (kbd "M-3") 'winum-select-window-3)
+(define-key winum-keymap (kbd "M-4") 'winum-select-window-4)
 (set-face-attribute 'winum-face nil :weight 'bold)
 (winum-mode)
 
