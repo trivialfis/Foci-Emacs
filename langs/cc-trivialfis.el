@@ -171,6 +171,12 @@ project to the new project."
   (lsp-ui-mode)
   (flycheck-mode 1))
 
+(defun trivialfis/cclsp ()
+  (trivialfis/lsp)
+  (lsp)
+  (lsp-ui-mode)
+  (flycheck-mode 1))
+
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
@@ -181,6 +187,7 @@ project to the new project."
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
     (if (or cdb-file buffer-read-only)
 	(trivialfis/clangd)
+      ;; (trivialfis/cclsp)
       (progn
 	(trivialfis/company-clang))))
 
