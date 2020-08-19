@@ -25,7 +25,12 @@
   :commands lsp)
 (use-package lsp-ui
   :defer t
-  :commands lsp-ui-mode)
+  :commands lsp-ui-mode
+  :config '(trivialfis/global-set-keys
+	    '(
+	      ("M-n"          .           highlight-symbol-next)
+	      ("M-p"          .           highlight-symbol-prev)
+	      )))
 (use-package company-lsp)
 (use-package programming-trivialfis)
 
