@@ -146,5 +146,16 @@ If region is active, normalize the region and shift."
         (python-indent-shift-left (region-beginning) (region-end) current-prefix-arg))
     (python-indent-shift-left (line-beginning-position) (line-end-position) current-prefix-arg)))
 
+(defun trivialfis/screenshot ()
+  "Save a screenshot of the current frame as an SVG image.
+Saves to a temp file and puts the filename in the kill ring."
+  (interactive)
+  (let ((filename (make-temp-file "Emacs-screenshot-" nil ".svg"))
+        (data (x-export-frames nil 'svg)))
+    (with-temp-file filename
+      (insert data))
+    (kill-new filename)
+    (message filename)))
+
 (provide 'misc-trivialfis)
 ;;; misc-trivialfis.el ends here
