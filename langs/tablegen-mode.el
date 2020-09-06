@@ -73,19 +73,10 @@
 
 ;; --------------------- Abbrev table -----------------------------
 
-(defvar tablegen-mode-abbrev-table nil
+(defvar tablegen-mode-abbrev-table (make-abbrev-table)
   "Abbrev table used while in TableGen mode.")
-(define-abbrev-table 'tablegen-mode-abbrev-table ())
-
 (defvar tablegen-mode-hook nil)
-;; (defvar tablegen-mode-map nil)   ; Create a mode-specific keymap.
 
-;; (if (not tablegen-mode-map)
-;;     ()  ; Do not change the keymap if it is already set up.
-;;   (setq tablegen-mode-map (make-sparse-keymap))
-;;   (define-key tablegen-mode-map "\t"  'tab-to-tab-stop)
-;;   (define-key tablegen-mode-map "\es" 'center-line)
-;;   (define-key tablegen-mode-map "\eS" 'center-paragraph))
 (toggle-debug-on-error)
 
 (defun tablegen-variables ()
@@ -98,7 +89,6 @@
   (setq major-mode 'tablegen-mode        ; This is how describe-mode
 					;   finds the doc string to print.
 	mode-name             "TableGen" ; This name goes into the modeline.
-        local-abbrev-table    tablegen-mode-abbrev-table
 	font-lock-defaults    `(tablegen-font-lock-keywords)
 	require-final-newline t
         )
@@ -115,6 +105,14 @@
   "Major mode for editing TableGen description files.
 \\{tablegen-mode-map}
   Runs `tablegen-mode-hook' on startup."
+  :group 'tablegen-mode
+  :syntax-table tablegen-mode-syntax-table
+  :abbrev-table tablegen-mode-abbrev-table
+
+  (setq-local indent-tabs-mode nil)
+  (setq-local tab-width 2)
+  (setq-local electric-indent-chars '(?\n ?{ ?} ?\[ ?\] ?\( ?\)))
+
   (tablegen-variables))
 
 
