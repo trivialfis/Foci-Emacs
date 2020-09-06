@@ -44,7 +44,7 @@
    company-lsp-cache-candidates nil
    lsp-enable-snippet 'nil
    lsp-enable-semantic-highlighting t
-   lsp-semantic-highlighting :deferred
+   ;; lsp-semantic-highlighting :deferred
    ))
 
 (provide 'lsp-trivialfis)
