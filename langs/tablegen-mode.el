@@ -7,6 +7,7 @@
 
 (require 'comint)
 (require 'custom)
+(require 'prog-mode)
 (require 'ansi-color)
 
 ;; Create mode-specific tables.
@@ -67,10 +68,10 @@
   (modify-syntax-entry ?*   ". 23"   tablegen-mode-syntax-table)
   (modify-syntax-entry ?\n  "> b"    tablegen-mode-syntax-table)
   ;; open paren (`(')
-  (modify-syntax-entry ?\(  "("      tablegen-mode-syntax-table)
-  (modify-syntax-entry ?\[  "("      tablegen-mode-syntax-table)
-  (modify-syntax-entry ?\{  "("      tablegen-mode-syntax-table)
-  (modify-syntax-entry ?\<  "("      tablegen-mode-syntax-table)
+  ;; (modify-syntax-entry ?\(  "("      tablegen-mode-syntax-table)
+  ;; (modify-syntax-entry ?\[  "("      tablegen-mode-syntax-table)
+  ;; (modify-syntax-entry ?\{  "("      tablegen-mode-syntax-table)
+  ;; (modify-syntax-entry ?\<  "("      tablegen-mode-syntax-table)
   ;; close paren (`)')
   (modify-syntax-entry ?\)  ")"      tablegen-mode-syntax-table)
   (modify-syntax-entry ?\]  ")"      tablegen-mode-syntax-table)
@@ -87,26 +88,25 @@
 (define-abbrev-table 'tablegen-mode-abbrev-table ())
 
 (defvar tablegen-mode-hook nil)
-(defvar tablegen-mode-map nil)   ; Create a mode-specific keymap.
+;; (defvar tablegen-mode-map nil)   ; Create a mode-specific keymap.
 
-(if (not tablegen-mode-map)
-    ()  ; Do not change the keymap if it is already set up.
-  (setq tablegen-mode-map (make-sparse-keymap))
-  (define-key tablegen-mode-map "\t"  'tab-to-tab-stop)
-  (define-key tablegen-mode-map "\es" 'center-line)
-  (define-key tablegen-mode-map "\eS" 'center-paragraph))
+;; (if (not tablegen-mode-map)
+;;     ()  ; Do not change the keymap if it is already set up.
+;;   (setq tablegen-mode-map (make-sparse-keymap))
+;;   (define-key tablegen-mode-map "\t"  'tab-to-tab-stop)
+;;   (define-key tablegen-mode-map "\es" 'center-line)
+;;   (define-key tablegen-mode-map "\eS" 'center-paragraph))
+(toggle-debug-on-error)
 
-;;;###autoload
-(defun tablegen-mode ()
+(defun tablegen-variables ()
   "Major mode for editing TableGen description files.
 \\{tablegen-mode-map}
   Runs `tablegen-mode-hook' on startup."
-  (interactive)
-  (kill-all-local-variables)
-  (use-local-map tablegen-mode-map)      ; Provides the local keymap.
+  ;; (kill-all-local-variables)
+  ;; (use-local-map tablegen-mode-map)      ; Provides the local keymap.
   (make-local-variable 'font-lock-defaults)
   (setq major-mode 'tablegen-mode        ; This is how describe-mode
-                                         ;   finds the doc string to print.
+					;   finds the doc string to print.
 	mode-name             "TableGen" ; This name goes into the modeline.
         local-abbrev-table    tablegen-mode-abbrev-table
 	font-lock-defaults    `(tablegen-font-lock-keywords)
@@ -118,7 +118,15 @@
   (setq comment-start "//")
   (setq indent-tabs-mode nil)
   (run-hooks 'tablegen-mode-hook))       ; Finally, this permits the user to
-                                         ;   customize the mode with a hook.
+					;   customize the mode with a hook.
+
+;;;###autoload
+(define-derived-mode tablegen-mode prog-mode "TableGen"
+  "Major mode for editing TableGen description files.
+\\{tablegen-mode-map}
+  Runs `tablegen-mode-hook' on startup."
+  (tablegen-variables))
+
 
 ;; Associate .td files with tablegen-mode
 ;;;###autoload
