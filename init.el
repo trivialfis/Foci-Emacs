@@ -353,6 +353,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 	      (autoload 'trivialfis/xml-format-region "xml-trivialfis"
 		:interactive t)))
 
+(autoload 'mlir-mode "mlir-mode")
+(add-to-list 'auto-mode-alist '("\\.mlir\\'" . mlir-mode))
+
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 
