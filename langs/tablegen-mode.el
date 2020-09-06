@@ -67,17 +67,7 @@
   (modify-syntax-entry ?/   ". 124b" tablegen-mode-syntax-table)
   (modify-syntax-entry ?*   ". 23"   tablegen-mode-syntax-table)
   (modify-syntax-entry ?\n  "> b"    tablegen-mode-syntax-table)
-  ;; open paren (`(')
-  ;; (modify-syntax-entry ?\(  "("      tablegen-mode-syntax-table)
-  ;; (modify-syntax-entry ?\[  "("      tablegen-mode-syntax-table)
-  ;; (modify-syntax-entry ?\{  "("      tablegen-mode-syntax-table)
-  ;; (modify-syntax-entry ?\<  "("      tablegen-mode-syntax-table)
-  ;; close paren (`)')
-  (modify-syntax-entry ?\)  ")"      tablegen-mode-syntax-table)
-  (modify-syntax-entry ?\]  ")"      tablegen-mode-syntax-table)
-  (modify-syntax-entry ?\}  ")"      tablegen-mode-syntax-table)
-  (modify-syntax-entry ?\>  ")"      tablegen-mode-syntax-table)
-  ;; string quote ('"')
+
   (modify-syntax-entry ?\"  "\""     tablegen-mode-syntax-table)
   )
 
