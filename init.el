@@ -356,6 +356,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'mlir-mode "mlir-mode")
 (add-to-list 'auto-mode-alist '("\\.mlir\\'" . mlir-mode))
 
+(autoload 'tablegen-mode "tablegen-mode")
+(add-to-list 'auto-mode-alist '("\\.td\\'" . tablegen-mode))
+
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 
