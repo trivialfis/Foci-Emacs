@@ -192,8 +192,7 @@ This can make use of __name__ == '__main__'."
 	    #'(lambda ()
 		(local-set-key (kbd "C-c k") 'trivialfis/clear-python)
 		(fset 'comint-send-input 'trivialfis/comint-send-input)
-		))
-  (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
+		)))
 
 (provide 'python-trivialfis)
 ;;; python-trivialfis.el ends here

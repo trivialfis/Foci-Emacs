@@ -78,8 +78,6 @@ MODE: the major programming mode"
   (trivialfis/flycheck)
   (hs-minor-mode 1)
 
-  (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
-
   (local-set-key (kbd "TAB") 'company-indent-or-complete-common)
   ;; Quickhelp
   (autoload 'trivialfis/company-quickhelp "quickhelp-trivialfis")

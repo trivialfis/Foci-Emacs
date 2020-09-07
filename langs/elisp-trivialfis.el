@@ -84,7 +84,6 @@
 (defun trivialfis/elisp()
   "Emacs Lisp configuration."
   (flycheck-mode 1)
-  (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
   (when (eq (buffer-size) 0)
     (insert ";;; " (buffer-name) " --- Summary\n"
