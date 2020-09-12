@@ -77,8 +77,6 @@
   "Abbrev table used while in TableGen mode.")
 (defvar tablegen-mode-hook nil)
 
-(toggle-debug-on-error)
-
 (defun tablegen-variables ()
   "Major mode for editing TableGen description files.
 \\{tablegen-mode-map}
@@ -110,6 +108,9 @@
   :abbrev-table tablegen-mode-abbrev-table
 
   (setq-local indent-tabs-mode nil)
+  (setq-local indent-line-function
+	      (lambda ()
+		(indent-relative)))
   (setq-local tab-width 2)
   (setq-local electric-indent-chars '(?\n ?{ ?} ?\[ ?\] ?\( ?\)))
 
