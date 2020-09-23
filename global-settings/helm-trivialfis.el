@@ -56,7 +56,6 @@
 	helm-buffers-fuzzy-matching           t
 	helm-always-two-windows               t
 	helm-default-display-buffer-functions '(display-buffer-in-side-window))
-  ;; helm-recentf-fuzzy-match              t)
 
   (helm-autoresize-mode 1)
   (helm-mode 1))
