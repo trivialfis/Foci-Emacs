@@ -18,9 +18,7 @@
 
 (defun trivialfis/cmake ()
   "CMake configuration."
-  (trivialfis/lsp)
-  (lsp)
-  (lsp-ui-mode)
+  ;; ctags -e -R --languages=CMake
   )
 
 (provide 'cmake-trivialfis)
