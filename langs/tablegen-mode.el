@@ -77,11 +77,15 @@
   "Abbrev table used while in TableGen mode.")
 (defvar tablegen-mode-hook nil)
 
+(defun tablegen-indent-line ()
+  "Indent."
+  (indent-relative t))
+
 (defun tablegen-variables ()
   "Major mode for editing TableGen description files.
 \\{tablegen-mode-map}
   Runs `tablegen-mode-hook' on startup."
-  ;; (kill-all-local-variables)
+  (kill-all-local-variables)
   ;; (use-local-map tablegen-mode-map)      ; Provides the local keymap.
   (make-local-variable 'font-lock-defaults)
   (setq major-mode 'tablegen-mode        ; This is how describe-mode
@@ -92,8 +96,8 @@
         )
 
   (set-syntax-table tablegen-mode-syntax-table)
-  (make-local-variable 'comment-start)
-  (setq comment-start "//")
+  (setq-local comment-start "// ")
+  (setq-local comment-start-skip "//+\\s-*")
   (setq indent-tabs-mode nil)
   (run-hooks 'tablegen-mode-hook))       ; Finally, this permits the user to
 					;   customize the mode with a hook.
@@ -108,9 +112,7 @@
   :abbrev-table tablegen-mode-abbrev-table
 
   (setq-local indent-tabs-mode nil)
-  (setq-local indent-line-function
-	      (lambda ()
-		(indent-relative)))
+  (setq-local indent-line-function 'tablegen-indent-line)
   (setq-local tab-width 2)
   (setq-local electric-indent-chars '(?\n ?{ ?} ?\[ ?\] ?\( ?\)))
 
