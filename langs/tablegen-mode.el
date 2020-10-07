@@ -17,17 +17,22 @@
   "Face method decorators.")
 (make-face 'td-decorators-face)
 
+(defconst raw-string (rx (and "\*" (*? anything) "*/")))
+(eval-when-compile
+  (defconst raw-string (rx (and "\*" (*? anything) "*/")))
+  (print raw-string))
+
 (defvar tablegen-font-lock-keywords
   (let ((kw (regexp-opt '("class" "defm" "def" "field" "include" "in"
-                         "let" "multiclass" "foreach" "if" "then" "else"
-                         "defvar" "defset")
+                          "let" "multiclass" "foreach" "if" "then" "else"
+                          "defvar" "defset")
                         'words))
         (type-kw (regexp-opt '("bit" "bits" "code" "dag" "int" "list" "string")
                              'words))
         )
     (list
      ;; Comments
-;;     '("\/\/" . font-lock-comment-face)
+     ;; '("\/\/" . font-lock-comment-face)
      ;; Strings
      '("\"[^\"]+\"" . font-lock-string-face)
      ;; Hex constants
@@ -38,7 +43,7 @@
      '("\\<[-]?[0-9]+\\>" . font-lock-preprocessor-face)
      ;; Floating point constants
      '("\\<[-+]?[0-9]+\.[0-9]*\([eE][-+]?[0-9]+\)?\\>" . font-lock-preprocessor-face)
-
+     ;; '("[#.*$]" . font-lock-preprocessor-face)
      '("^[ \t]*\\(@.+\\)" 1 'td-decorators-face)
      ;; Keywords
      kw
@@ -79,28 +84,18 @@
 
 (defun tablegen-indent-line ()
   "Indent."
-  (indent-relative t))
+  (if (not (bobp))
+      (indent-relative t)
+    'nodent))
 
 (defun tablegen-variables ()
   "Major mode for editing TableGen description files.
 \\{tablegen-mode-map}
   Runs `tablegen-mode-hook' on startup."
-  (kill-all-local-variables)
   ;; (use-local-map tablegen-mode-map)      ; Provides the local keymap.
   (make-local-variable 'font-lock-defaults)
-  (setq major-mode 'tablegen-mode        ; This is how describe-mode
-					;   finds the doc string to print.
-	mode-name             "TableGen" ; This name goes into the modeline.
-	font-lock-defaults    `(tablegen-font-lock-keywords)
-	require-final-newline t
-        )
-
-  (set-syntax-table tablegen-mode-syntax-table)
-  (setq-local comment-start "// ")
-  (setq-local comment-start-skip "//+\\s-*")
-  (setq indent-tabs-mode nil)
-  (run-hooks 'tablegen-mode-hook))       ; Finally, this permits the user to
-					;   customize the mode with a hook.
+  (setq font-lock-defaults    `(tablegen-font-lock-keywords))
+  (run-hooks 'tablegen-mode-hook)) ; Finally, this permits the user to customize the mode with a hook.
 
 ;;;###autoload
 (define-derived-mode tablegen-mode prog-mode "TableGen"
@@ -111,10 +106,15 @@
   :syntax-table tablegen-mode-syntax-table
   :abbrev-table tablegen-mode-abbrev-table
 
+  (kill-all-local-variables)
   (setq-local indent-tabs-mode nil)
   (setq-local indent-line-function 'tablegen-indent-line)
   (setq-local tab-width 2)
   (setq-local electric-indent-chars '(?\n ?{ ?} ?\[ ?\] ?\( ?\)))
+  (setq-local comment-start "// ")
+  (setq-local comment-start-skip "//+\\s-*")
+  (setq-local indent-tabs-mode nil)
+  (setq-local require-final-newline t)
 
   (tablegen-variables))
 
