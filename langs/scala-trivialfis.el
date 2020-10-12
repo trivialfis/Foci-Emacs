@@ -5,6 +5,7 @@
 (use-package programming-trivialfis)
 (use-package lsp-trivialfis)
 (use-package company-lsp)
+(require 'scala-mode)
 
 ;; Super slow at initialization.
 (defun trivialfis/scala ()
