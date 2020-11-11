@@ -171,7 +171,8 @@ project to the new project."
   (lsp-ui-mode)
   (flycheck-mode 1))
 
-(defun trivialfis/cclsp ()
+(defun trivialfis/ccls ()
+  "Configuration for ccls."
   (trivialfis/lsp)
   (lsp)
   (lsp-ui-mode)
@@ -180,14 +181,15 @@ project to the new project."
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
-  (setf company-backends '())
+  (setq-local company-backends '())
   (setq-default indent-tabs-mode 'nil)
   (add-to-list 'company-backends 'company-keywords)
+  (add-to-list 'company-backends 'company-capf)
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
     (if (or cdb-file buffer-read-only)
 	(trivialfis/clangd)
-      ;; (trivialfis/cclsp)
+      ;; (trivialfis/ccls)
       (progn
 	(trivialfis/company-clang))))
 
