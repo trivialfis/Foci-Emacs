@@ -398,7 +398,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 ;;;
 
 (load-file \"~/.emacs.d/global-settings/archives-trivialfis.el\")
-(setq package-selected-package
+(setq package-selected-packages
       '%s)
 (package-install-selected-packages)
 
