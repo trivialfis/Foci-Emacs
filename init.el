@@ -83,7 +83,9 @@
 			   trivialfis/goto-pos
 			   trivialfis/local-set-keys
 			   trivialfis/nav-indent-shift-right
-			   trivialfis/nav-indent-shift-left)))
+			   trivialfis/nav-indent-shift-left
+			   trivialfis/screenshot
+			   trivialfis/vterm)))
   (dolist (x packages-autoload)
     (autoload x "misc-trivialfis" :interactive t)))
 

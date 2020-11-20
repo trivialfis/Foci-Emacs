@@ -157,5 +157,17 @@ Saves to a temp file and puts the filename in the kill ring."
     (kill-new filename)
     (message filename)))
 
+(defun trivialfis/vterm ()
+  "Open vterm."
+  (interactive)
+  (require 'nix-elpa)
+  (load-nix-elpa-packages)
+  (require 'vterm)
+  (setq vterm-kill-buffer-on-exit t)
+  (define-key vterm-mode-map (kbd "M-p") 'vterm-send-C-p)
+  (define-key vterm-mode-map (kbd "M-n") 'vterm-send-C-n)
+  (set-face-foreground 'vterm-color-blue "#CCFFCC")
+  (vterm))
+
 (provide 'misc-trivialfis)
 ;;; misc-trivialfis.el ends here
