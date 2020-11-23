@@ -51,7 +51,7 @@
  '(ecb-options-version "2.50")
  '(ediff-split-window-function 'split-window-sensibly)
  '(package-selected-packages
-   '(lsp-mode cask company-math flyspell-correct-helm paradox paredit scala-mode winum racer sml-mode dockerfile-mode powershell lsp-ui-sideline dap-mode lua-mode realgud pyim github-review json-mode let-alist company-box lsp-origami guix company-posframe forge bbdb lsp-java cython-mode mu4e-alert ess xterm-color yaml-mode groovy-mode markdown-toc racket-mode ninja-mode cuda-mode rtags lsp-ui company-lsp foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser toc-org vala-mode toml-mode rust-mode font-lock-studio langtool org-bullets projectile aggressive-indent disaster org markdown-mode vline cmake-mode go-mode all-the-icons-dired font-lock+ powerline atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company))
+   '(polymode lsp-mode cask company-math flyspell-correct-helm paradox paredit scala-mode winum racer sml-mode dockerfile-mode powershell lsp-ui-sideline dap-mode lua-mode realgud pyim github-review json-mode let-alist company-box lsp-origami guix company-posframe forge bbdb lsp-java cython-mode mu4e-alert ess xterm-color yaml-mode groovy-mode markdown-toc racket-mode ninja-mode cuda-mode rtags lsp-ui company-lsp foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm flycheck-rust cmake-ide rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser toc-org vala-mode toml-mode rust-mode font-lock-studio langtool org-bullets projectile aggressive-indent disaster org markdown-mode vline cmake-mode go-mode all-the-icons-dired font-lock+ powerline atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex company-c-headers srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company))
  '(paradox-github-token t)
  '(safe-local-variable-values
    '((eval modify-syntax-entry 43 "'")
@@ -357,8 +357,8 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'mlir-mode "mlir-mode")
 (add-to-list 'auto-mode-alist '("\\.mlir\\'" . mlir-mode))
 
-(autoload 'tla-mode "tla-mode")
-(add-to-list 'auto-mode-alist '("\\.tla\\'" . tla-mode))
+(autoload 'tla-pcal-mode "tla-pcal-mode")
+(add-to-list 'auto-mode-alist '("\\.tla\\'" . tla-pcal-mode))
 
 (autoload 'tablegen-mode "tablegen-mode")
 (add-to-list 'auto-mode-alist '("\\.td\\'" . tablegen-mode))
