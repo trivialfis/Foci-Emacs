@@ -157,6 +157,10 @@ Saves to a temp file and puts the filename in the kill ring."
     (kill-new filename)
     (message filename)))
 
+(defun vterm-send-M-\\ ()
+  (interactive)
+  (vterm-send-key "\\" nil t nil))
+
 (defun trivialfis/vterm ()
   "Open vterm."
   (interactive)
@@ -166,6 +170,7 @@ Saves to a temp file and puts the filename in the kill ring."
   (setq vterm-kill-buffer-on-exit t)
   (define-key vterm-mode-map (kbd "M-p") 'vterm-send-C-p)
   (define-key vterm-mode-map (kbd "M-n") 'vterm-send-C-n)
+  (define-key vterm-mode-map (kbd "M-\\") 'vterm-send-M-\\)
   (set-face-foreground 'vterm-color-blue "#CCFFCC")
   (vterm))
 
