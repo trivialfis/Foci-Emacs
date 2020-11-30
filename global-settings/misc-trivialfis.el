@@ -172,6 +172,7 @@ Saves to a temp file and puts the filename in the kill ring."
   (define-key vterm-mode-map (kbd "M-n") 'vterm-send-C-n)
   (define-key vterm-mode-map (kbd "M-\\") 'vterm-send-M-\\)
   (set-face-foreground 'vterm-color-blue "#CCFFCC")
+  (set-face-foreground 'vterm-color-magenta "#cc99ff")
   (vterm))
 
 (provide 'misc-trivialfis)
