@@ -190,7 +190,9 @@ Saves to a temp file and puts the filename in the kill ring."
   (vterm)
   (define-key vterm-mode-map (kbd "C-S-n") 'trivialfis/new-term)
   ;; Don't ask on exist
-  (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil))
+  (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)
+  ;; FIXME: Enable per-buffer highlight
+  (global-hl-line-mode -1))
 
 (provide 'misc-trivialfis)
 ;;; misc-trivialfis.el ends here
