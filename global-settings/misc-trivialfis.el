@@ -161,6 +161,20 @@ Saves to a temp file and puts the filename in the kill ring."
   (interactive)
   (vterm-send-key "\\" nil t nil))
 
+
+(defun trivialfis/new-term (&optional window)
+  "Split window and open a new term, optional WINDOW."
+  (interactive)
+  (let ((window (or (selected-window) window))
+	(split-wh-threshold 4))
+    (if (< (* (window-height) split-wh-threshold) (window-width))
+	(with-selected-window window
+	  (split-window-horizontally))
+      (with-selected-window window
+	(split-window-vertically))))
+  (select-window (next-window))
+  (trivialfis/vterm))
+
 (defun trivialfis/vterm ()
   "Open vterm."
   (interactive)
@@ -173,7 +187,10 @@ Saves to a temp file and puts the filename in the kill ring."
   (define-key vterm-mode-map (kbd "M-\\") 'vterm-send-M-\\)
   (set-face-foreground 'vterm-color-blue "#CCFFCC")
   (set-face-foreground 'vterm-color-magenta "#cc99ff")
-  (vterm))
+  (vterm)
+  (define-key vterm-mode-map (kbd "C-S-n") 'trivialfis/new-term)
+  ;; Don't ask on exist
+  (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil))
 
 (provide 'misc-trivialfis)
 ;;; misc-trivialfis.el ends here
