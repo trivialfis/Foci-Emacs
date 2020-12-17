@@ -187,7 +187,7 @@ This can make use of __name__ == '__main__'."
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
   (trivialfis/elpy-setup)
   ;; (trivialfis/python-lsp-setup)
-
+  (setq python-indent-def-block-scale 1)
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
 		(local-set-key (kbd "C-c k") 'trivialfis/clear-python)
