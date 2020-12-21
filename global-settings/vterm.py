@@ -8,7 +8,7 @@ and install `python3-nautilus` on Ubuntu.  Restart nautilus service if necessary
 
 import os
 import subprocess
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 
 from gi.repository import Nautilus, GObject
 
@@ -18,7 +18,8 @@ class ColumnExtension(GObject.GObject, Nautilus.MenuProvider):
 
     def menu_activate_cb(self, menu, f):
         parsed = urlparse(f.get_uri())
-        cmd = f'emacs --chdir="{parsed.path}" --eval="(trivialfis/vterm)"'
+        path = unquote(parsed.path)
+        cmd = f'emacs --chdir="{path}" --eval="(trivialfis/vterm)"'
         if f.is_directory():
             subprocess.Popen(cmd, shell=True)
 
