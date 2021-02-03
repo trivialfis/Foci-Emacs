@@ -140,7 +140,8 @@
 	    python-shell-interpreter command))
     ;; ipython makes use of xterm ansi code.
     ;; (elpy-use-ipython)
-    (setq elpy-rpc-timeout 3)
+    (setq elpy-rpc-timeout 3
+	  elpy-rpc-ignored-buffer-size (* 102400 10))
     (add-to-list 'company-backends 'elpy-company-backend)
     (elpy-enable)
     (elpy-mode 1)))
