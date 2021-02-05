@@ -72,7 +72,8 @@
 	org-startup-folded nil)
 
   ;; fontify code in code blocks
-  (setq org-src-fontify-natively t)
+  (setq org-src-fontify-natively t
+	org-log-done 'time)
 
   ;; Set the header appearence
   (let ((level 1.3)
