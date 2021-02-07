@@ -96,6 +96,31 @@
      (has-python2-p (car (reverse (split-string which-python2))))
      (t "python"))))
 
+(require 'conda)
+
+(defvar conda-env-name 'nil)
+
+(defun trivialfis/activate-conda-env ()
+  "Activate conda env if there's any."
+  (setq-default conda-env-home-directory "~/.anaconda/"
+		conda-anaconda-home "~/.anaconda/")
+  ;; FIXME: How to use local variables without being asked for safety for each opened
+  ;; buffer?
+
+  ;; (hack-dir-local-variables)
+  ;; (print dir-local-variables-alist)
+  (let ((env-path (f-traverse-upwards
+		   (lambda (path)
+		     (or (equal path (f-expand "~"))
+			 (f-exists? (f-join path "environment.el")))))))
+    (if (and env-path
+	     (not (equal env-path (f-expand "~"))))
+	(progn
+	  (load-file (f-join env-path "environment.el"))
+	  (conda-env-activate env-name)
+	  't)
+      'nil)))
+
 (defun trivialfis/activate-virtualenv ()
   "Find and activate virtualenv."
   (let ((env-path (f-traverse-upwards
@@ -120,10 +145,12 @@
 
 (defun trivialfis/determine-python ()
   "Get python path."
-  (cond ((trivialfis/activate-virtualenv) (trivialfis/get-command-from-shell))
-	((trivialfis/shebang-p) (trivialfis/python-from-shebang))
-	((trivialfis/filename-python-p) (trivialfis/python-from-filename))
-	(t (trivialfis/python-from-which))))
+  (cond
+   ((trivialfis/activate-conda-env) (trivialfis/python-from-which))
+   ((trivialfis/activate-virtualenv) (trivialfis/get-command-from-shell))
+   ((trivialfis/shebang-p) (trivialfis/python-from-shebang))
+   ((trivialfis/filename-python-p) (trivialfis/python-from-filename))
+   (t (trivialfis/python-from-which))))
 
 (defun trivialfis/elpy-setup()
   "Elpy configuration."
@@ -188,6 +215,7 @@ This can make use of __name__ == '__main__'."
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
   (trivialfis/elpy-setup)
   ;; (trivialfis/python-lsp-setup)
+  ;; (trivialfis/python-conda-setup)
   (setq python-indent-def-block-scale 1)
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
