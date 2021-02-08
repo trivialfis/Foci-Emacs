@@ -178,6 +178,7 @@ Saves to a temp file and puts the filename in the kill ring."
 (defun trivialfis/vterm ()
   "Open vterm."
   (interactive)
+  ;; Add this to gnome shortcut key `'emacs --eval "(trivialfis/vterm)"'
   (require 'nix-elpa)
   (load-nix-elpa-packages)
   (require 'vterm)
