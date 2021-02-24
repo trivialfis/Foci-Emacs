@@ -1,6 +1,6 @@
 ;;; misc-trivialfis.el --- Misc functions.
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2016-2021 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -182,7 +182,8 @@ Saves to a temp file and puts the filename in the kill ring."
   (require 'nix-elpa)
   (load-nix-elpa-packages)
   (require 'vterm)
-  (setq vterm-kill-buffer-on-exit t)
+  (setq vterm-kill-buffer-on-exit t
+	vterm-max-scrollback 10000)
   (define-key vterm-mode-map (kbd "M-p") 'vterm-send-C-p)
   (define-key vterm-mode-map (kbd "M-n") 'vterm-send-C-n)
   (define-key vterm-mode-map (kbd "M-\\") 'vterm-send-M-\\)
