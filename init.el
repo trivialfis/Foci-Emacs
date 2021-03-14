@@ -65,6 +65,23 @@
  ;; If there is more than one, they won't work right.
  )
 
+
+;; set font for emoji
+(set-fontset-font
+ t
+ '(#x1f300 . #x1fad0)
+ (cond
+  ((member "Noto Color Emoji" (font-family-list)) "Noto Color Emoji")
+  ((member "Noto Emoji" (font-family-list)) "Noto Emoji")
+  ((member "Segoe UI Emoji" (font-family-list)) "Segoe UI Emoji")
+  ((member "Symbola" (font-family-list)) "Symbola")
+  ((member "Apple Color Emoji" (font-family-list)) "Apple Color Emoji"))
+ ;; Apple Color Emoji should be before Symbola, but Richard Stallman disabled it.
+ ;; GNU Emacs Removes Color Emoji Support on the Mac
+ ;; http://ergoemacs.org/misc/emacs_macos_emoji.html
+ ;;
+ )
+
 ;; (toggle-debug-on-error)
 
 (add-to-list 'load-path "~/.emacs.d/global-settings/")
