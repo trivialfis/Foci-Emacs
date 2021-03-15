@@ -390,6 +390,11 @@ KEY-COMMANDS: A list containing one or more (key command)"
 	  #'(lambda ()
 	      (setq magit-diff-refine-hunk 'all
 		    magit-diff-refine-ignore-whitespace 'nil)))
+(add-hook 'magit-status-mode-hook
+	  #'(lambda ()
+	      (transient-append-suffix 'magit-log "-A"
+		'("-m" "No merges" "--no-merges"))))
+
 
 ;; End language settings------------------------------------------------------------------------
 
