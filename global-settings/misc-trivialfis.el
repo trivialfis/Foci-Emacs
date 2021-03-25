@@ -183,7 +183,7 @@ Saves to a temp file and puts the filename in the kill ring."
   (load-nix-elpa-packages)
   (require 'vterm)
   (setq vterm-kill-buffer-on-exit t
-	vterm-max-scrollback 10000)
+	vterm-max-scrollback 100000)
   (define-key vterm-mode-map (kbd "M-p") 'vterm-send-C-p)
   (define-key vterm-mode-map (kbd "M-n") 'vterm-send-C-n)
   (define-key vterm-mode-map (kbd "M-\\") 'vterm-send-M-\\)
