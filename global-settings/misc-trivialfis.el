@@ -196,5 +196,8 @@ Saves to a temp file and puts the filename in the kill ring."
   ;; FIXME: Enable per-buffer highlight
   (global-hl-line-mode -1))
 
+;; Other functions that might be useful
+;; set-buffer-file-coding-system utf-8-unix
+
 (provide 'misc-trivialfis)
 ;;; misc-trivialfis.el ends here
