@@ -83,7 +83,8 @@
   		     )))
     (dolist (face org-level)
       (set-face-attribute face nil :weight 'semi-bold :height level)
-      (setf level (- level 0.1)))))
+      (setf level (- level 0.1))))
+  (company-posframe-mode 1))
 
 (defun trivialfis/org-post()
   "Run after org mode initialization."
