@@ -122,6 +122,7 @@
       kept-new-versions 5		;How many of the newest versions to keep
       kept-old-versions 1		;How many of the old versions to keep
       )
+(setq-default fill-column 90)	 ;can be modified by `set-fill-column'
 
 (show-paren-mode 1)			;Show matching paras
 (electric-pair-mode 1)

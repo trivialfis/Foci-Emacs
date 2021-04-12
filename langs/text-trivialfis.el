@@ -43,8 +43,7 @@
   (setq langtool-language-tool-jar
 	"~/.emacs.d/LanguageTool-4.3/languagetool-commandline.jar"
 	langtool-default-language "en-US")
-  (setq require-final-newline 'nil)
-  (set-fill-column 79))
+  (setq require-final-newline 'nil))
 
 (defun trivialfis/cjk ()
   (interactive)
