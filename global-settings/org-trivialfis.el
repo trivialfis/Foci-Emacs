@@ -84,7 +84,21 @@
     (dolist (face org-level)
       (set-face-attribute face nil :weight 'semi-bold :height level)
       (setf level (- level 0.1))))
-  (company-posframe-mode 1))
+  (company-posframe-mode 1)
+
+  (let* ((agenda-file "~/.emacs.d/misc/org-agenda.el")
+	 (account-string (if (file-exists-p agenda-file)
+			     (with-temp-buffer
+			       (insert-file-contents agenda-file)
+			       (buffer-string))
+			   (prog2
+			       (message "Failed to find the agenda file.")
+			       nil)))
+	 (evaluated (if account-string
+			(eval (car (read-from-string account-string)))
+		      nil)))
+    (setq org-agenda-files evaluated))
+  )
 
 (defun trivialfis/org-post()
   "Run after org mode initialization."
