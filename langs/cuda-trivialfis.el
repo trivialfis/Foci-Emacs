@@ -125,7 +125,7 @@
 
 (defun trivialfis/cuda ()
   "Custom CUDA mode."
-  (trivialfis/cu-lsp))
+  (c++-mode))
 
 (provide 'cuda-trivailfis)
 ;;; cuda-trivialfis.el ends here
