@@ -66,6 +66,12 @@
     (insert "\n#+BEGIN_EXAMPLE \n"))
   (backward-char))
 
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  (let (org-log-done org-log-states)   ; turn off logging
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+
 (defun trivialfis/org-init()
   "Run before org mode initialization."
   (setf org-startup-truncated nil
@@ -98,7 +104,8 @@
 			(eval (car (read-from-string account-string)))
 		      nil)))
     (setq org-agenda-files evaluated))
-  )
+
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo))
 
 (defun trivialfis/org-post()
   "Run after org mode initialization."
