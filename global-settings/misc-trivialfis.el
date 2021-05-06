@@ -200,6 +200,44 @@ Saves to a temp file and puts the filename in the kill ring."
   (interactive)
   (flush-lines "^$"))
 
+(require 'windmove)
+
+;; Utilities from https://www.emacswiki.org/emacs/buffer-move.el
+(defun buf-move-left ()
+  "Swap the current buffer and the buffer on the left of the split.
+If there is no split, ie now window on the left of the current
+one, an error is signaled."
+  (let* ((other-win (windmove-find-other-window 'left))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No left split")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+(defun buf-move-right ()
+  "Swap the current buffer and the buffer on the right of the split.
+If there is no split, ie now window on the right of the current
+one, an error is signaled."
+  (let* ((other-win (windmove-find-other-window 'right))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No right split")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+(defun trivialfis/swap-windows-horizontal()
+  "Swap windows."
+  (interactive)
+  (if (null (windmove-find-other-window 'right))
+      (buf-move-left)
+    (buf-move-right)))
+
 ;; Other functions that might be useful
 ;; set-buffer-file-coding-system utf-8-unix
 

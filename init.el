@@ -100,7 +100,8 @@
 			   trivialfis/nav-indent-shift-left
 			   trivialfis/screenshot
 			   trivialfis/vterm
-			   trivialfis/remove-blank-lines)))
+			   trivialfis/remove-blank-lines
+			   trivialfis/swap-windows-horizontal)))
   (dolist (x packages-autoload)
     (autoload x "misc-trivialfis" :interactive t)))
 
