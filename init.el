@@ -383,6 +383,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/sml "sml-trivialfis")
 (add-hook 'sml-mode 'trivialfis/sml)
 
+(autoload 'trivialfis/haskell "haskell-trivialfis")
+(add-hook 'haskell-mode-hook 'trivialfis/haskell)
+
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 
