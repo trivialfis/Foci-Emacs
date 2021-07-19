@@ -17,7 +17,8 @@
 
 (defun trivialfis/R ()
   "R configuration."
-  (setq-default ess-indent-offset 2)
+  (setq ess-indent-offset 2
+	ess-indent-level 2)
   (flymake-mode 0)
   (flycheck-mode 1)
   ;; (lsp)
