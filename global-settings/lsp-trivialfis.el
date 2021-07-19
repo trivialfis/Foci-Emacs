@@ -38,14 +38,15 @@
   "Configure lsp-mode."
   (setq-default
    lsp-prefer-flymake 'nil
-   company-transformers nil
+   company-transformers 'nil
    company-lsp-async t
    lsp-enable-on-type-formatting 'nil
-   company-lsp-cache-candidates nil
+   company-lsp-cache-candidates 'nil
    lsp-enable-snippet 'nil
    lsp-enable-semantic-highlighting t
    ;; lsp-semantic-highlighting :deferred
-   ))
+   )
+  )
 
 (provide 'lsp-trivialfis)
 ;;; lsp-trivialfis.el ends here
