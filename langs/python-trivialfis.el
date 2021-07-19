@@ -184,7 +184,8 @@
     (setq lsp-pyls-server-command (f-join python-bin "pyls")))
 
   (lsp)
-  (lsp-ui-mode))
+  (lsp-ui-mode)
+  (setq forward-sexp-function 'nil))
 
 (defun trivialfis/clear-python ()
   "Clear the python environment."
