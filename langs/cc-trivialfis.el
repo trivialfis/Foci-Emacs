@@ -162,10 +162,16 @@ project to the new project."
      '(("C-c C-a" .  cmake-ide-compile)))
     (cmake-ide-setup)))
 
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-tramp-connection "clangd")
+                  :major-modes '(c++-mode)
+                  :remote? t
+                  :server-id 'clangd-remote))
+
 (defun trivialfis/clangd ()
   "Clangd configuration."
   (trivialfis/lsp)
-  (setq-default lsp-clients-clangd-executable "/usr/bin/clangd"
+  (setq-default lsp-clients-clangd-executable "clangd"
 		lsp-clients-clangd-args '("--header-insertion=never"))
   (lsp)
   (lsp-ui-mode)
