@@ -79,6 +79,9 @@
  ;; http://ergoemacs.org/misc/emacs_macos_emoji.html
  )
 
+(add-to-list 'backup-directory-alist (cons tramp-file-name-regexp nil))
+(if (file-remote-p default-directory)
+    (setq vc-handled-backends 'nil))
 ;; (toggle-debug-on-error)
 ;; (toggle-debug-on-quit)
 
