@@ -111,16 +111,15 @@
 
   ;; (hack-dir-local-variables)
   ;; (print dir-local-variables-alist)
-  (let ((env-path (f-traverse-upwards
-		   (lambda (path)
-		     (or (equal path (f-expand "~"))
-			 (f-exists? (f-join path "environment.el")))))))
-    (if (and env-path
-	     (not (equal env-path (f-expand "~"))))
-	(progn
-	  (load-file (f-join env-path "environment.el"))
-	  (conda-env-activate env-name)
-	  't)
+  (let* ((hook ".conda-env.json")
+         (project-file (concat (locate-dominating-file "." hook) hook))
+         (json-str (if project-file (f-read-text project-file) 'nil))
+         (config (if json-str (json-parse-string json-str) 'nil))
+         (project-name (if config (gethash "project-name" config) 'nil)))
+    (if project-name
+        (prog2
+            (conda-env-activate project-name)
+            (message (format "Anaconda project name: %s\n" project-name)))
       'nil)))
 
 (defun trivialfis/activate-virtualenv ()
@@ -174,6 +173,12 @@
     (add-to-list 'company-backends 'elpy-company-backend)
     (elpy-enable)
     (elpy-mode 1)))
+
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
+                  :major-modes '(python-mode)
+                  :remote? t
+                  :server-id 'pyls-remote))
 
 (defun trivialfis/python-lsp-setup()
   "Setup for Python lsp mode."
