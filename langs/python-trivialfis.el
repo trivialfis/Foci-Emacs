@@ -100,8 +100,6 @@
 
 (require 'conda)
 
-(defvar conda-env-name 'nil)
-
 (defun trivialfis/activate-conda-env ()
   "Activate conda env if there's any."
   (setq-default conda-env-home-directory "~/.anaconda/"
@@ -112,7 +110,8 @@
   ;; (hack-dir-local-variables)
   ;; (print dir-local-variables-alist)
   (let* ((hook ".conda-env.json")
-         (project-file (concat (locate-dominating-file "." hook) hook))
+	 (path (locate-dominating-file "." hook))
+         (project-file (if path (concat path hook) 'nil))
          (json-str (if project-file (f-read-text project-file) 'nil))
          (config (if json-str (json-parse-string json-str) 'nil))
          (project-name (if config (gethash "project-name" config) 'nil)))
