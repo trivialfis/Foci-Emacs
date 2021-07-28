@@ -182,11 +182,10 @@
 (defun trivialfis/python-lsp-setup()
   "Setup for Python lsp mode."
   (trivialfis/lsp)
-  (let* ((_ (trivialfis/determine-python)) ; activate env if presented
-	 (python-which (shell-command-to-string "which python"))
-	 (python-bin (f-dirname python-which)))
-    (setq lsp-pyls-server-command (f-join python-bin "pyls")))
-
+  (let* ((command (trivialfis/determine-python)) ; activate env if presented
+	 (dir (if command (f-dirname command) 'nil)))
+    (if dir
+	(setq lsp-pyls-server-command (f-join dir "pylsp"))))
   (lsp)
   (lsp-ui-mode)
   (setq forward-sexp-function 'nil))
