@@ -21,10 +21,13 @@
 ;;; Code:
 
 (require 'lsp-mode)
+(require 'lsp-go)
 
 (defun trivialfis/go ()
   "Go configuration."
-  (lsp))
+  (lsp)
+  (setq tab-width 4)
+  (yas-minor-mode t))
 
 (provide 'go-trivialfis)
 ;;; go-trivialfis.el ends here
