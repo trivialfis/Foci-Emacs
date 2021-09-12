@@ -35,6 +35,7 @@
 (require 'racer)
 (require 'company)
 (require 'flycheck)
+(use-package lsp-trivialfis)
 
 (defun trivialfis/rust-compile ()
   "Compile rust code using cargo."
@@ -50,21 +51,25 @@
 
 (defun trivialfis/rust ()
   "Common configuration for rust mode."
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+  ;; (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
 
-  (add-hook 'racer-mode-hook 'eldoc-mode)
-  (add-hook 'racer-mode-hook 'company-mode)
+  ;; (add-hook 'racer-mode-hook 'eldoc-mode)
+  ;; (add-hook 'racer-mode-hook 'company-mode)
 
-  (setq company-backends '((company-capf
-			    company-dabbrev-code
-			    company-yasnippet
-			    company-files
-			    company-keywords)))
-  (flycheck-mode 1)
-  (racer-mode 1)
+  ;; (setq company-backends '((company-capf
+  ;; 			    company-dabbrev-code
+  ;; 			    company-yasnippet
+  ;; 			    company-files
+  ;; 			    company-keywords)))
+  ;; (flycheck-mode 1)
+  ;; (racer-mode 1)
 
-  (define-key rust-mode-map (kbd "C-c C-a") #'trivialfis/rust-compile)
-  (setq company-tooltip-align-annotations t))
+  ;; (define-key rust-mode-map (kbd "C-c C-a") #'trivialfis/rust-compile)
+  ;; (setq company-tooltip-align-annotations t)
+  (trivialfis/lsp)
+  (lsp)
+  (lsp-ui-mode)
+  )
 
 (provide 'rust-trivialfis)
 ;;; rust-trivialfis.el ends here
