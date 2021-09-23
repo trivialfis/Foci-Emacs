@@ -7,21 +7,16 @@
 (use-package lsp)
 (use-package ess-site)
 
-;; Not quite usable yet.
-(lsp-register-client
- (make-lsp-client
-  :new-connection
-  (lsp-stdio-connection '("R" "--slave" "-e" "languageserver::run()"))
-  :major-modes '(ess-r-mode inferior-ess-r-mode)
-  :server-id 'lsp-R))
+(defun trivialfis/ess ()
+  "Configuration for ess."
+  (setq ess-style 'RStudio)
+  (flymake-mode 0)
+  (flycheck-mode 1))
 
 (defun trivialfis/R ()
   "R configuration."
-  (setq ess-style 'RStudio)
-  (flymake-mode 0)
-  (flycheck-mode 1)
-  ;; (lsp)
-  ;; (lsp-ui-mode)
-  )
+  ;; https://github.com/REditorSupport/languageserver
+  (trivialfis/lsp)
+  (lsp))
 (provide 'R-trivialfis)
 ;;; R-trivialfis.el ends here
