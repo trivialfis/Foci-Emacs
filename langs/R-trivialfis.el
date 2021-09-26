@@ -17,6 +17,8 @@
   "R configuration."
   ;; https://github.com/REditorSupport/languageserver
   (trivialfis/lsp)
+  (setq ess-style 'RStudio)
+  (setq ess-indent-offset 2)
   (lsp))
 (provide 'R-trivialfis)
 ;;; R-trivialfis.el ends here
