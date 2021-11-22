@@ -239,7 +239,12 @@ one, an error is signaled."
     (buf-move-right)))
 
 ;; Other functions that might be useful
-;; set-buffer-file-coding-system utf-8-unix
+;; Set the coding system for a specific file
+;;   set-buffer-file-coding-system utf-8-unix
+;;
+;; Display the carriage return.
+;;   C-x C-m r utf-8-unix
+;;   revert-buffer-with-coding-system utf-8-unix
 
 (provide 'misc-trivialfis)
 ;;; misc-trivialfis.el ends here
