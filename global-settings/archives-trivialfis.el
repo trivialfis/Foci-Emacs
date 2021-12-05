@@ -23,19 +23,16 @@
 (defvar elpa-official
   '(
     ("melpa"     . "https://melpa.org/packages/")
-    ("org"       . "https://orgmode.org/elpa/")
     ("gnu"       . "https://elpa.gnu.org/packages/")
     ))
 (defvar elpa-china
   '(
     ("melpa"     . "https://elpa.emacs-china.org/melpa/")
-    ("org"       . "https://elpa.emacs-china.org/org/")
     ("gnu"       . "https://elpa.emacs-china.org/org/")
     ))
 (defvar elpa-tuna
   '(
     ("melpa"     .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-    ("org"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
     ("gnu"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
     ))
 (setq-default package-archives elpa-official)
