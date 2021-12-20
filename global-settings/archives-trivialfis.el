@@ -25,16 +25,7 @@
     ("melpa"     . "https://melpa.org/packages/")
     ("gnu"       . "https://elpa.gnu.org/packages/")
     ))
-(defvar elpa-china
-  '(
-    ("melpa"     . "https://elpa.emacs-china.org/melpa/")
-    ("gnu"       . "https://elpa.emacs-china.org/org/")
-    ))
-(defvar elpa-tuna
-  '(
-    ("melpa"     .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-    ("gnu"       .   "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-    ))
+
 (setq-default package-archives elpa-official)
 
 (provide 'archives-trivialfis)
