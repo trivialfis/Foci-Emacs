@@ -155,7 +155,9 @@
 (defun trivialfis/elpy-setup()
   "Elpy configuration."
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
-  (setq flycheck-disabled-checkers '(python-pylint))
+  (setq flycheck-disabled-checkers '(python-pylint)
+	flycheck-flake8-maximum-line-length 88 ; black
+	fill-column 88)
   (flycheck-mode 1)
   ;; Replace flymake with flycheck
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
