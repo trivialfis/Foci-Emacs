@@ -393,6 +393,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 
+(autoload 'trivialfis/markdown "markdown-trivialfis")
+(add-hook 'markdown-mode-hook 'trivialfis/markdown)
+
 (add-hook 'magit-diff-mode-hook
 	  #'(lambda ()
 	      (setq magit-diff-refine-hunk 'all
