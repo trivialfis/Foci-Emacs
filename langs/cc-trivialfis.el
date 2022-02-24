@@ -173,6 +173,14 @@ project to the new project."
   (trivialfis/lsp)
   (setq-default lsp-clients-clangd-executable "clangd"
 		lsp-clients-clangd-args '("--header-insertion=never"))
+  (setq-default lsp-ui-peek-enable 't
+		)
+  (require 'lsp-ui)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references)
+  (setq-default lsp-ui-doc-position 'top
+		lsp-ui-doc-delay 1
+		lsp-ui-doc-use-webkit t
+		lsp-ui-doc-max-width 90)
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))

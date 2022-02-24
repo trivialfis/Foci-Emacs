@@ -24,10 +24,10 @@
 
 (defun trivialfis/company-quickhelp()
   "Configuration for company quickhelp."
-  (setq company-quickhelp-color-background "yellow"
-	company-quickhelp-color-foreground "black"
-	company-quickhelp-delay 1
-	company-quickhelp-max-lines nil)
+  (setq
+   company-quickhelp-color-background "#4d4d4d"
+   company-quickhelp-delay 1
+   company-quickhelp-max-lines nil)
 
   (company-quickhelp-mode 1))
 
