@@ -29,7 +29,6 @@
 
 (use-package lsp-trivialfis)
 (use-package lsp)
-(use-package lsp-pyls)
 
 
 (use-package repl-trivialfis
@@ -100,6 +99,25 @@
 
 (require 'conda)
 
+(defun trivialfis/find-conda-env ()
+  "Find conda environment based on JSON hook.
+
+File: .conda-env.json
+
+  {\"project-name\": \"rl-dev\"}
+
+rl-dev is the name of the conda environment. This function handles tramp
+connection automatically."
+  (let* ((hook ".conda-env.json")
+	 (path (locate-dominating-file "." hook))
+         (project-file (if path (concat path hook) 'nil))
+         (json-str (if project-file (f-read-text project-file) 'nil))
+         (config (if json-str (json-parse-string json-str) 'nil))
+         (project-name (if config (gethash "project-name" config) 'nil)))
+    (if project-name
+	(f-join "~/.anaconda/envs/" project-name)
+      'nil)))
+
 (defun trivialfis/activate-conda-env ()
   "Activate conda env if there's any."
   (setq-default conda-env-home-directory "~/.anaconda/"
@@ -121,6 +139,19 @@
             (message (format "Anaconda project name: %s\n" project-name)))
       'nil)))
 
+(defun trivialfis/find-venv ()
+  "Find virtualenv.  Handles tramp connection automatically."
+  (let ((path (f-traverse-upwards
+	       (lambda (path)
+		 (or (equal path (f-expand "~"))
+		     (f-exists? (f-join path "bin/activate")))))))
+    (if path
+	(if (file-remote-p path)
+	    (tramp-file-name-localname
+	     (tramp-dissect-file-name path))
+	  path)
+      'nil)))
+
 (defun trivialfis/activate-virtualenv ()
   "Find and activate virtualenv."
   (let ((env-path (f-traverse-upwards
@@ -137,11 +168,13 @@
 (defun trivialfis/get-command-from-shell ()
   "Used after activating virtualenv."
   (message "Python from shell(virtual envs).")
-  (let* ((raw-version (shell-command-to-string "python --version"))
-	 (version-index (string-match "[2|3]" raw-version))
-	 (version (substring-no-properties
-		   raw-version version-index (+ 1 version-index))))
-    (concat "python" version)))
+  (if (file-remote-p default-directory)
+      nil
+    (let* ((raw-version (shell-command-to-string "python --version"))
+	   (version-index (string-match "[2|3]" raw-version))
+	   (version (substring-no-properties
+		     raw-version version-index (+ 1 version-index))))
+      (concat "python" version))))
 
 (defun trivialfis/determine-python ()
   "Get python path."
@@ -176,7 +209,7 @@
     (elpy-mode 1)))
 
 (lsp-register-client
- (make-lsp-client :new-connection (lsp-tramp-connection "pyls")
+ (make-lsp-client :new-connection (lsp-tramp-connection "pylsp")
                   :major-modes '(python-mode)
                   :remote? t
                   :server-id 'pyls-remote))
@@ -184,10 +217,26 @@
 (defun trivialfis/python-lsp-setup()
   "Setup for Python lsp mode."
   (trivialfis/lsp)
-  (let* ((command (trivialfis/determine-python)) ; activate env if presented
-	 (dir (if command (f-dirname command) 'nil)))
-    (if dir
-	(setq lsp-pyls-server-command (f-join dir "pylsp"))))
+  (if (file-remote-p default-directory)
+      ;; Tramp, find virtualenv or conda env
+      (progn
+	(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+	(let* ((venv-path (trivialfis/find-venv))
+	       (conda-path (if venv-path venv-path (trivialfis/find-conda-env))))
+	  (cond
+	   (venv-path (progn
+			(message "Remote virtualenv path: %s" venv-path)
+			(add-to-list 'tramp-remote-path (f-join venv-path "bin"))))
+	   (conda-path (progn
+			 (message "Remote conda path: %s" conda-path)
+			 (add-to-list 'tramp-remote-path (f-join conda-path "bin")))))
+	  ))
+    ;; local file
+    (let* ((command (trivialfis/determine-python)) ; activate env if presented
+	   (dir (if command (f-dirname command) 'nil)))
+      (if dir
+	  (setq lsp-pyls-server-command (f-join dir "pylsp")))))
+
   (lsp)
   (lsp-ui-mode)
   (setq forward-sexp-function 'nil))
@@ -220,8 +269,10 @@ This can make use of __name__ == '__main__'."
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
   (setq python-shell-completion-native-disabled-interpreters
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
-  (trivialfis/elpy-setup)
-  ;; (trivialfis/python-lsp-setup)
+  ;; Use elpy on local but lsp on remote.
+  (if (file-remote-p default-directory)
+      (trivialfis/python-lsp-setup)
+    (trivialfis/elpy-setup))
   (setq python-indent-def-block-scale 1)
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
