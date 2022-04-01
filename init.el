@@ -47,7 +47,6 @@
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(auth-source-save-behavior nil)
- '(custom-enabled-themes '(misterioso))
  '(ecb-options-version "2.50")
  '(ediff-split-window-function 'split-window-sensibly)
  '(package-selected-packages
