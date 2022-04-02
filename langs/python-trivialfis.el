@@ -229,13 +229,12 @@ connection automatically."
 			(add-to-list 'tramp-remote-path (f-join venv-path "bin"))))
 	   (conda-path (progn
 			 (message "Remote conda path: %s" conda-path)
-			 (add-to-list 'tramp-remote-path (f-join conda-path "bin")))))
-	  ))
+			 (add-to-list 'tramp-remote-path (f-join conda-path "bin")))))))
     ;; local file
     (let* ((command (trivialfis/determine-python)) ; activate env if presented
 	   (dir (if command (f-dirname command) 'nil)))
       (if dir
-	  (setq lsp-pyls-server-command (f-join dir "pylsp")))))
+	  (setq lsp-pylsp-server-command (f-join dir "pylsp")))))
 
   (lsp)
   (lsp-ui-mode)
