@@ -163,7 +163,7 @@ project to the new project."
     (cmake-ide-setup)))
 
 (lsp-register-client
- (make-lsp-client :new-connection (lsp-tramp-connection "clangd")
+ (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-clients--clangd-command)
                   :major-modes '(c++-mode)
                   :remote? t
                   :server-id 'clangd-remote))
