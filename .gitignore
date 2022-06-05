@@ -31,6 +31,8 @@ elpa
 eclipse.jdt.ls
 workspace
 .lsp-session*
+.dap-breakpoints
+.cache
 
 # langtool
 LanguageTool-*
@@ -41,3 +43,4 @@ forge-database.sqlite
 transient
 pyim
 tramp
+org-roam.db
