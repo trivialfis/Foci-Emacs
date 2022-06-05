@@ -27,6 +27,9 @@
 (require 'python)
 (require 'flycheck)
 
+(use-package conda
+  :custom
+  (conda-anaconda-home  "~/.anaconda"))
 (use-package lsp-trivialfis)
 (use-package lsp)
 
@@ -96,8 +99,6 @@
      (has-python-p (car (reverse (split-string which))))
      (has-python2-p (car (reverse (split-string which-python2))))
      (t "python"))))
-
-(require 'conda)
 
 (defun trivialfis/find-conda-env ()
   "Find conda environment based on JSON hook.
