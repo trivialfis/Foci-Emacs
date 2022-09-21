@@ -33,6 +33,7 @@ workspace
 .lsp-session*
 .dap-breakpoints
 .cache
+.extension
 
 # langtool
 LanguageTool-*
@@ -44,3 +45,4 @@ transient
 pyim
 tramp
 org-roam.db
+eln-cache
