@@ -27,6 +27,10 @@
 (require 'python)
 (require 'flycheck)
 
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (require 'use-package))
+
 (use-package conda
   :custom
   (conda-anaconda-home  "~/.anaconda"))
