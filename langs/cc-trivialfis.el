@@ -22,8 +22,15 @@
 (require 'misc-trivialfis)
 (require 'cc-mode)
 (require 'google-c-style)
-;; (use-package company-box
-;;   :hook (company-mode . company-box-mode))
+
+
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (require 'use-package))
+
+(use-package company-box
+  :defer t
+  :hook (company-mode . company-box-mode))
 
 (use-package cmake-ide
   :defer t
@@ -205,6 +212,7 @@ project to the new project."
       ;; (trivialfis/ccls)
       (progn
 	(trivialfis/company-clang))))
+
 
   (defconst trivialfis/cc-style
     '("gnu"

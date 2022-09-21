@@ -2,9 +2,14 @@
 ;;; Commentary:
 ;;; Code:
 
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (require 'use-package))
+
 (use-package programming-trivialfis)
 (use-package lsp-trivialfis)
 (use-package company-lsp)
+;; Add metals backend for lsp-mode
 (require 'scala-mode)
 (use-package lsp-metals)
 (use-package sbt-mode
@@ -37,10 +42,9 @@
 ;; Super slow at initialization.
 (defun trivialfis/scala ()
   "Configuration for scala."
-  ;; (trivialfis/programming-init)
-  ;; (trivialfis/lsp)
-  ;; (lsp)
-  ;; (lsp-ui-mode)
+  (trivialfis/lsp)
+  (lsp)
+  (lsp-ui-mode)
   ;; (flycheck-mode 1)
   ;; (yas-minor-mode)
   )

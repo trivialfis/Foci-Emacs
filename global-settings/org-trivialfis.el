@@ -20,10 +20,15 @@
 ;;; Commentary:
 ;;; Code:
 
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (require 'use-package))
+
 (require 'org)
 (require 'org-faces)
 (require 'org-bullets)
 (require 'misc-trivialfis)
+
 (defun trivialfis/org-insert-src ()
   "Insert src block at point."
   (interactive)
@@ -132,13 +137,14 @@ Minor mode for using org and mu4e to manage projects (Foci playground).
 
 (setq org-directory (concat (getenv "HOME") "/Workspace/roam/"))
 
+(use-package bind-key)
 (use-package org-roam
   :after org
   :init (setq org-roam-v2-ack t) ;; Acknowledge V2 upgrade
   :custom
   (org-roam-directory (file-truename org-directory))
   :config
-  (org-roam-setup)
+  (org-roam-db-autosync-enable)
   :bind (("C-c n f" . org-roam-node-find)
          ("C-c n r" . org-roam-node-random)
          (:map org-mode-map
