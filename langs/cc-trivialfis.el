@@ -32,10 +32,6 @@
   :defer t
   :hook (company-mode . company-box-mode))
 
-(use-package cmake-ide
-  :defer t
-  :commands (cide--locate-project-dir cmake-ide-setup))
-
 (use-package window-purpose
   :defer t
   :commands purpose-mode
@@ -78,12 +74,6 @@
   (add-to-list 'company-backends 'company-c-headers)
   (add-to-list 'company-backends 'company-clang))
 
-(use-package rtags
-  :commands rtags-start-process-unless-running
-  :config (progn
-	    (message "Rtags loaded")
-	    (use-package company-rtags)))
-
 (use-package helm-gtags
   :commands (helm-gtags-dwim
 	     helm-gtags-find-rtag)
@@ -91,33 +81,6 @@
 
 (defvar-local cc-current-backend 'nil
   "Current backend for C++")
-
-(defun trivialfis/use-rtags ()
-  "Rtags configuration.
-Used only for nevigation."
-  (rtags-start-process-unless-running)
-  ;; (setq rtags-autostart-diagnostics t)
-  ;; (rtags-diagnostics)
-  ;; (add-to-list 'company-backends 'company-rtags)
-  (setq rtags-completions-enabled 1)
-  (setq rtags-display-result-backend 'helm)
-  (trivialfis/local-set-keys
-   '(
-     ("M-."     . (lambda (arg) (interactive "P")
-		    (until-success
-		     '(rtags-find-symbol-at-point
-		       rtags-find-symbol
-		       helm-gtags-dwim))))
-     ("M-?"     .  (lambda (arg) (interactive "P")
-		     (until-success
-		      '(rtags-find-references-at-point
-			rtags-find-references
-			helm-gtags-find-tag-from-here))))
-     ("M-,"     .  rtags-location-stack-back)
-     ("C-,"   .    rtags-location-stack-forward)
-     ("C-c r r" .  rtags-rename-symbolrtags-next-match)
-     )
-   ))
 
 (defun trivialfis/cc-base-srefactor ()
   "Configuration for refactor."
@@ -144,30 +107,6 @@ Used only for nevigation."
   (trivialfis/cc-base-srefactor)
   (setq cc-current-backend 'c-semantic)
   (message "Use semantic mode as backend."))
-
-(defvar original-project nil
-  "A global variable to keep the directory for the CMake project before file jump.")
-(defvar-local current-project nil
-  "A local variable to keep the directory for current CMake project.")
-
-(defun trivialfis/use-cide ()
-  "Set up rtags and CMake-ide if CMakeLists.txt is presented.
-Otherwise do nothing.
-When jumping around headers, keep the CMake project as the original one.
-If the newly opened file belongs to a new project, then change the current
-project to the new project."
-  (interactive)
-  (let ((project-dir (cide--locate-project-dir)))
-    (if project-dir
-	(setq current-project project-dir
-	      original-project project-dir)
-      (setq current-project original-project))
-    (when current-project
-      (setq cmake-ide-build-dir (concat current-project "build")))
-    (trivialfis/use-rtags)
-    (trivialfis/local-set-keys
-     '(("C-c C-a" .  cmake-ide-compile)))
-    (cmake-ide-setup)))
 
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-clients--clangd-command)
