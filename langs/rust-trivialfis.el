@@ -35,6 +35,10 @@
 (require 'racer)
 (require 'company)
 (require 'flycheck)
+
+(eval-when-compile
+  (require 'use-package))
+
 (use-package lsp-trivialfis)
 
 (defun trivialfis/rust-compile ()
