@@ -63,7 +63,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(company-tooltip ((t (:inherit default :background "#314a3c3e4963"))))
+ '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
+ '(company-tooltip-scrollbar-thumb ((t (:background "#377643c95293"))))
+ '(company-tooltip-scrollbar-track ((t (:background "#41bf505b61e3"))))
+ '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
 
 
 ;; set font for emoji
