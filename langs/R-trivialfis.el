@@ -4,6 +4,10 @@
 
 (require 'ess)
 (require 'lsp-trivialfis)
+
+(eval-when-compile
+  (require 'use-package))
+
 (use-package lsp)
 (use-package ess-site)
 
