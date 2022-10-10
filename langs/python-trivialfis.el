@@ -245,7 +245,7 @@ connection automatically."
 
   (lsp)
   (lsp-ui-mode)
-  (setq forward-sexp-function 'nil))
+  (setq-local forward-sexp-function 'nil))
 
 (defun trivialfis/clear-python ()
   "Clear the python environment."
