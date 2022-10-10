@@ -239,7 +239,9 @@ connection automatically."
     (let* ((command (trivialfis/determine-python)) ; activate env if presented
 	   (dir (if command (f-dirname command) 'nil)))
       (if dir
-	  (setq lsp-pylsp-server-command (f-join dir "pylsp")))))
+	  (setq-local lsp-pylsp-server-command (f-join dir "pylsp")
+		      lsp-pylsp-plugins-flake8-max-line-length 88
+		      fill-column 88))))
 
   (lsp)
   (lsp-ui-mode)
