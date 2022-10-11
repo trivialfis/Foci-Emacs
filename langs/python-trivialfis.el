@@ -241,11 +241,12 @@ connection automatically."
       (if dir
 	  (setq-local lsp-pylsp-server-command (f-join dir "pylsp")
 		      lsp-pylsp-plugins-flake8-max-line-length 88
-		      fill-column 88))))
+		      lsp-pylsp-plugins-pydocstyle-ignore ["D205" "D400"]))))
 
   (lsp)
   (lsp-ui-mode)
-  (setq-local forward-sexp-function 'nil))
+  (setq-local forward-sexp-function 'nil
+	      fill-column 88))
 
 (defun trivialfis/clear-python ()
   "Clear the python environment."
