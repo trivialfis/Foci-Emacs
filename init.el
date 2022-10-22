@@ -149,6 +149,7 @@
     (autoload x "paradox-trivialfis" :interactive t)))
 
 (require 'powerline)
+(setq powerline-height (+ (frame-char-height) 2))
 (powerline-center-theme)
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
