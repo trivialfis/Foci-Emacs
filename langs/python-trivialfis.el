@@ -239,11 +239,14 @@ connection automatically."
     (let* ((command (trivialfis/determine-python)) ; activate env if presented
 	   (dir (if command (f-dirname command) 'nil)))
       (if dir
-	  (setq lsp-pylsp-server-command (f-join dir "pylsp")))))
+	  (setq-local lsp-pylsp-server-command (f-join dir "pylsp")
+		      lsp-pylsp-plugins-flake8-max-line-length 88
+		      lsp-pylsp-plugins-pydocstyle-ignore ["D205" "D400"]))))
 
   (lsp)
   (lsp-ui-mode)
-  (setq forward-sexp-function 'nil))
+  (setq-local forward-sexp-function 'nil
+	      fill-column 88))
 
 (defun trivialfis/clear-python ()
   "Clear the python environment."
