@@ -28,10 +28,6 @@
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
   (require 'use-package))
 
-(use-package company-box
-  :defer t
-  :hook (company-mode . company-box-mode))
-
 (use-package window-purpose
   :defer t
   :commands purpose-mode
