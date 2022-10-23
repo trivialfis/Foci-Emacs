@@ -50,63 +50,13 @@
 	    (dap-ui-mode)
 	    (use-package dap-lldb)))
 
-(use-package company-c-headers)
-
-(use-package company-clang
-  :defer t
-  :commands company-clang
-  :config (message "company-clang loaded"))
-
 (use-package flycheck
   :defer t
   :commands flycheck-mode flycheck-select-checker)
 
 (use-package lsp-trivialfis)
-
-(defun trivialfis/company-clang ()
-  "Company clang configuration."
-  (setq company-backends (delete 'company-semantic company-backends))
-  (if (equal major-mode 'c++-mode)
-      (setq company-clang-arguments '("-std=c++14"))
-    (setq company-clang-arguments '("-std=gnu11")))
-
-  (require 'company-c-headers)
-  (add-to-list 'company-backends 'company-c-headers)
-  (add-to-list 'company-backends 'company-clang))
-
-(use-package helm-gtags
-  :commands (helm-gtags-dwim
-	     helm-gtags-find-rtag)
-  :config (message "helm-gtags loaded"))
-
-(defvar-local cc-current-backend 'nil
-  "Current backend for C++")
-
-(defun trivialfis/cc-base-srefactor ()
-  "Configuration for refactor."
-  (trivialfis/local-set-keys
-   '(
-     ("M-RET"   .  srefactor-refactor-at-point)
-     ("C-c t"   .  senator-fold-tag-toggle)
-     ("M-?"     .  semantic-symref)
-     ("M-."     .  semantic-ia-fast-jump)
-     ("C-,"     .  semantic-mrub-switch-tags)))
-  (eval-after-load 'helm-trivialfis
-    (local-set-key (kbd "C-h ,") 'helm-semantic-or-imenu)))
-
-(defun trivialfis/cc-semantic ()
-  "Use semantic mode as cc backend."
-  (trivialfis/semantic 'c++-mode)
-  (trivialfis/cc-base-srefactor)
-  (setq cc-current-backend 'cc-semantic)
-  (message "Use semantic mode as backend."))
-
-(defun trivialfis/c-semantic ()
-  "Use semantic mode as c backend."
-  (trivialfis/semantic 'c-mode)
-  (trivialfis/cc-base-srefactor)
-  (setq cc-current-backend 'c-semantic)
-  (message "Use semantic mode as backend."))
+(use-package lsp-mode)
+(use-package lsp-ui)
 
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-clients--clangd-command)
@@ -114,17 +64,21 @@
                   :remote? t
                   :server-id 'clangd-remote))
 
+
 (defun trivialfis/clangd ()
   "Clangd configuration."
   (trivialfis/lsp)
-  (require 'lsp-ui)
-  (setq-default lsp-clients-clangd-executable "clangd"
-		lsp-clients-clangd-args '("--header-insertion=never")
-		lsp-ui-peek-enable 't
-		lsp-ui-doc-position 'top
-		lsp-ui-doc-delay 1
-		lsp-ui-doc-use-webkit t
-		lsp-ui-doc-max-width 90)
+  (let ((clangd (if (string= system-type "windows-nt")
+		    "clangd"		; fixme
+		  "clangd")))
+    (setq-default lsp-clients-clangd-executable clangd
+		  lsp-clients-clangd-args '("--header-insertion=never")
+		  lsp-ui-peek-enable 't
+		  lsp-ui-doc-position 'top
+		  lsp-ui-doc-delay 1
+		  lsp-ui-doc-use-webkit t
+		  lsp-ui-doc-max-width 90))
+  
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references)
   (lsp)
   (lsp-ui-mode)
@@ -147,11 +101,7 @@
 
   (let ((cdb-file (locate-dominating-file "." "compile_commands.json")))
     (if (or cdb-file buffer-read-only)
-	(trivialfis/clangd)
-      ;; (trivialfis/ccls)
-      (progn
-	(trivialfis/company-clang))))
-
+	(trivialfis/clangd)))
 
   (defconst trivialfis/cc-style
     '("gnu"
