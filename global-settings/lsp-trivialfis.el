@@ -44,6 +44,11 @@
    lsp-enable-on-type-formatting 'nil
    lsp-enable-snippet 'nil
    lsp-enable-semantic-highlighting t
+   lsp-ui-peek-enable 't
+   lsp-ui-doc-position 'top
+   lsp-ui-doc-delay 1
+   lsp-ui-doc-use-webkit t
+   lsp-ui-doc-max-width 90
    )
   )
 

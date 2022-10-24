@@ -30,7 +30,7 @@
 
 (use-package dap-mode
   :defer t
-  :commands dap-mode
+  :commands dap-mode dap-ui-mode
   :config (progn
 	    (setq dap-auto-configure-features '(sessions locals controls tooltip))
 	    (dap-ui-mode)
@@ -38,10 +38,15 @@
 
 (use-package flycheck
   :defer t
-  :commands flycheck-mode flycheck-select-checker)
+  :commands flycheck-mode)
 
-(use-package lsp-trivialfis)
-(use-package lsp-mode)
+(use-package lsp-trivialfis
+  :defer t
+  :autoload trivialfis/lsp)
+(use-package lsp
+  :defer t
+  :commands lsp
+  :autoload lsp-find-references lsp-tramp-connection)
 (use-package lsp-ui
   :defer t
   :commands lsp-ui-mode
@@ -61,13 +66,8 @@
 		    "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clangd.exe"
 		  "clangd")))
     (setq-default lsp-clients-clangd-executable clangd
-		  lsp-clients-clangd-args '("--header-insertion=never")
-		  lsp-ui-peek-enable 't
-		  lsp-ui-doc-position 'top
-		  lsp-ui-doc-delay 1
-		  lsp-ui-doc-use-webkit t
-		  lsp-ui-doc-max-width 90))
-  
+		  lsp-clients-clangd-args '("--header-insertion=never")))
+
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
@@ -87,7 +87,7 @@
   (defconst trivialfis/cc-style
     '("gnu"
       (c-offsets-alist . ((innamespace . [0])))))
-  (setq c-auto-newline nil)
+  (setq-local c-auto-newline nil)
 
   (c-add-style "trivialfis/cc-style" trivialfis/cc-style)
   (c-add-style "google-c-style" google-c-style)
