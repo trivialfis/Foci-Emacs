@@ -41,49 +41,23 @@
 (use-package repl-trivialfis
   :commands (trivialfis/comint-send-input))
 
-(defun trivialfis/shebang-p ()
-  "Detect whether python command is declared in shebang."
-  (save-window-excursion
-    (goto-char (point-min))
-    (save-match-data
-      (if (search-forward "#!" (line-end-position) t 1)
-	  (progn
-	    (goto-char (point-min))
-	    (search-forward-regexp "python[2|3]" (line-end-position) t 1))
-	'nil))))
+(cl-defstruct
+    (python-env
+     (:constructor new-python--env))
+  path
+  from)
 
-(defun trivialfis/python-from-shebang ()
-  "Get python command."
-  (message "Python from shebang.")
-  (save-window-excursion
-    (goto-char 0)
-    (let* ((has-command-p (search-forward-regexp "python[2|3]"))
-	   (start (if has-command-p
-		      (match-beginning 0)
-		    nil))
-	   (end (if has-command-p
-		    (match-end 0)
-		  nil)))
-      (buffer-substring start end))))
-
-(defun trivialfis/filename-python-p ()
-  "Whether filename contain python version."
-  (save-match-data
-    (let ((filename (buffer-file-name)))
-      (string-match "python[2|3]" filename))))
-
-(defun trivialfis/python-from-filename ()
-  "Get python command from `w/buffer-file-name'."
-  (message "Find from filename.")
-  (save-match-data
-    (let* ((file-name (buffer-file-name))
-	   (start (string-match "python[2|3]" file-name))
-	   (end (if start
-		    (match-end 0)
-		  nil)))
-      (if end
-	  (substring file-name start end)
-	nil))))
+(defun new-python-env-rec (funcs)
+  "Find python environment. `Funcs' is a list of functions to be called."
+  (if funcs
+      (let* ((pair (car funcs))
+	     (func (car pair))
+	     (sym (cdr pair))
+	     (venv (funcall func)))
+	(if venv
+	    (cons venv sym)
+	  (new-python-env-rec (cdr funcs))))
+    (cons nil nil)))
 
 (defun foundp (str)
   "Whether STR returned by `which' contain python."
@@ -104,26 +78,21 @@
      (has-python2-p (car (reverse (split-string which-python2))))
      (t "python"))))
 
-(defun trivialfis/find-conda-env ()
-  "Find conda environment based on JSON hook.
 
-File: .conda-env.json
-
-  {\"project-name\": \"rl-dev\"}
-
-rl-dev is the name of the conda environment. This function handles tramp
-connection automatically."
-  (let* ((hook ".conda-env.json")
-	 (path (locate-dominating-file "." hook))
-         (project-file (if path (concat path hook) 'nil))
-         (json-str (if project-file (f-read-text project-file) 'nil))
-         (config (if json-str (json-parse-string json-str) 'nil))
-         (project-name (if config (gethash "project-name" config) 'nil)))
-    (if project-name
-	(f-join "~/.anaconda/envs/" project-name)
+(defun trivialfis/find-activate-virtualenv ()
+  "Find and activate virtualenv."
+  (let ((env-path (f-traverse-upwards
+		   (lambda (path)
+		     (or (equal path (f-expand "~"))
+			 (f-exists? (f-join path "bin/activate")))))))
+    (if (and env-path
+	     (not (equal env-path (f-expand "~"))))
+	(progn
+	  (pyvenv-activate env-path)
+	  (f-join env-path "bin" "python"))
       'nil)))
 
-(defun trivialfis/activate-conda-env ()
+(defun trivialfis/find-activate-conda-env ()
   "Activate conda env if there's any."
   (setq-default conda-env-home-directory "~/.anaconda/"
 		conda-anaconda-home "~/.anaconda/")
@@ -134,41 +103,67 @@ connection automatically."
   ;; (print dir-local-variables-alist)
   (let* ((hook ".conda-env.json")
 	 (path (locate-dominating-file "." hook))
-         (project-file (if path (concat path hook) 'nil))
-         (json-str (if project-file (f-read-text project-file) 'nil))
-         (config (if json-str (json-parse-string json-str) 'nil))
-         (project-name (if config (gethash "project-name" config) 'nil)))
+	 (project-file (if path (concat path hook) 'nil))
+	 (json-str (if project-file (f-read-text project-file) 'nil))
+	 (config (if json-str (json-parse-string json-str) 'nil))
+	 (project-name (if config (gethash "project-name" config) 'nil)))
     (if project-name
-        (prog2
-            (conda-env-activate project-name)
-            (message (format "Anaconda project name: %s\n" project-name)))
-      'nil)))
-
-(defun trivialfis/find-venv ()
-  "Find virtualenv.  Handles tramp connection automatically."
-  (let ((path (f-traverse-upwards
-	       (lambda (path)
-		 (or (equal path (f-expand "~"))
-		     (f-exists? (f-join path "bin/activate")))))))
-    (if path
-	(if (file-remote-p path)
-	    (tramp-file-name-localname
-	     (tramp-dissect-file-name path))
-	  path)
-      'nil)))
-
-(defun trivialfis/activate-virtualenv ()
-  "Find and activate virtualenv."
-  (let ((env-path (f-traverse-upwards
-		   (lambda (path)
-		     (or (equal path (f-expand "~"))
-			 (f-exists? (f-join path "bin/activate")))))))
-    (if (and env-path
-	     (not (equal env-path (f-expand "~"))))
 	(progn
-	  (pyvenv-activate env-path)
-	  't)
+	  (conda-env-activate project-name)
+	  (message (format "Anaconda project name: %s\n" project-name))
+	  (trivialfis/python-from-which))
       'nil)))
+
+(cl-defun new-python-env ()
+  "Create a new Python env struct."
+  (let* ((options '((trivialfis/find-activate-virtualenv . virtual-env)
+		    (trivialfis/find-activate-conda-env . conda-env)
+		    (trivialfis/filename-python-p . file-name)
+		    (trivialfis/python-from-shebang . shebang)))
+	 (env (new-python-env-rec options)))
+    (if (car env)
+	(progn
+	  (new-python--env :path (car env) :from (cdr env)))
+      (progn
+	(let ((from-which (trivialfis/python-from-which)))
+	  (new-python--env :path from-which :from 'which))))))
+
+
+(defun trivialfis/python-from-shebang ()
+  "Get python command."
+  (save-window-excursion
+    (goto-char 0)
+    (let* ((has-command-p (search-forward-regexp "python[2|3]*" 256 't))
+	   (start (if has-command-p
+		      (match-beginning 0)
+		    nil))
+	   (end (if has-command-p
+		    (match-end 0)
+		  nil)))
+      (if has-command-p
+	  (buffer-substring start end)
+	nil))))
+
+(defun trivialfis/filename-python-p ()
+  "Whether filename contain python version."
+  (save-match-data
+    (let ((filename (buffer-file-name)))
+      (if filename
+	  (string-match "python[2|3]" filename)
+	nil))))
+
+(defun trivialfis/python-from-filename ()
+  "Get python command from `w/buffer-file-name'."
+  (message "Find from filename.")
+  (save-match-data
+    (let* ((file-name (buffer-file-name))
+	   (start (string-match "python[2|3]" file-name))
+	   (end (if start
+		    (match-end 0)
+		  nil)))
+      (if end
+	  (substring file-name start end)
+	nil))))
 
 (defun trivialfis/get-command-from-shell ()
   "Used after activating virtualenv."
@@ -181,26 +176,35 @@ connection automatically."
 		     raw-version version-index (+ 1 version-index))))
       (concat "python" version))))
 
-(defun trivialfis/determine-python ()
-  "Get python path."
-  (cond
-   ((trivialfis/activate-conda-env) (trivialfis/python-from-which))
-   ((trivialfis/activate-virtualenv) (trivialfis/get-command-from-shell))
-   ((trivialfis/shebang-p) (trivialfis/python-from-shebang))
-   ((trivialfis/filename-python-p) (trivialfis/python-from-filename))
-   (t (trivialfis/python-from-which))))
 
-(defun trivialfis/elpy-setup()
+(defvar current-env 'nil)
+
+(defun trivialfis/elpy-setup(venv)
   "Elpy configuration."
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
-  (setq flycheck-disabled-checkers '(python-pylint)
-	flycheck-flake8-maximum-line-length 88 ; black
-	fill-column 88)
+  (setq-local
+   ;; flycheck-disabled-checkers '(python-pylint)
+   flycheck-flake8-maximum-line-length 88 ; black
+   fill-column 88)
+
+  (unless current-env
+    (setq current-env venv))
+
+  (setq-local xref-after-jump-hook
+	      #'(lambda ()
+		  ;; mypy is not happy about top level modules.
+		  (let ((foundpath (f-traverse-upwards
+				    (lambda (path)
+				      (or (equal path (f-expand "~"))
+					  (f-exists? (f-join path "site-packages")))))))
+		    (if (f-exists? (f-join foundpath "site-packages"))
+			(setq-local flycheck--automatically-disabled-checkers '(python-mypy))))))
+
   (flycheck-mode 1)
   ;; Replace flymake with flycheck
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (with-eval-after-load 'elpy
-    (let ((command (trivialfis/determine-python)))
+    (let ((command (python-env-path current-env)))
       (message (format "Python command: %s" command))
       (setq elpy-rpc-virtualenv-path 'current)
       (setq elpy-rpc-python-command command
@@ -219,24 +223,30 @@ connection automatically."
                   :remote? t
                   :server-id 'pyls-remote))
 
-(defun trivialfis/python-lsp-setup()
-  "Setup for Python lsp mode."
+
+(defun trivialfis/python-lsp-setup(venv)
+  "Setup for Python lsp mode.  `VENV' is the virtual environment."
   (trivialfis/lsp)
+  (if (not current-env)
+      (setq current-env venv))
+
   (if (file-remote-p default-directory)
       ;; Tramp, find virtualenv or conda env
       (progn
 	(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-	(let* ((venv-path (trivialfis/find-venv))
-	       (conda-path (if venv-path venv-path (trivialfis/find-conda-env))))
+	(let* ((venv-path (python-env-path current-env))
+	       (conda-path (python-env-path current-env)))
 	  (cond
-	   (venv-path (progn
-			(message "Remote virtualenv path: %s" venv-path)
-			(add-to-list 'tramp-remote-path (f-join venv-path "bin"))))
-	   (conda-path (progn
-			 (message "Remote conda path: %s" conda-path)
-			 (add-to-list 'tramp-remote-path (f-join conda-path "bin")))))))
+	   ((eq (python-env-from current-env) 'virtual-env)
+	    (progn
+	      (message "Remote virtualenv path: %s" current-env)
+	      (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path)))))
+	   ((eq (python-env-from current-env) 'conda-env)
+	    (progn
+	      (message "Remote conda path: %s" conda-path)
+	      (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path))))))))
     ;; local file
-    (let* ((command (trivialfis/determine-python)) ; activate env if presented
+    (let* ((command (python-env-path current-env))
 	   (dir (if command (f-dirname command) 'nil)))
       (if dir
 	  (setq-local lsp-pylsp-server-command (f-join dir "pylsp")
@@ -277,9 +287,18 @@ This can make use of __name__ == '__main__'."
   (setq python-shell-completion-native-disabled-interpreters
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
   ;; Use elpy on local but lsp on remote.
-  (if (file-remote-p default-directory)
-      (trivialfis/python-lsp-setup)
-    (trivialfis/elpy-setup))
+  (let ((venv (new-python-env)))
+    (if (or
+	 (eq (python-env-from venv) 'conda-env)
+	 (eq (python-env-from venv) 'virtual-env))
+	(progn
+	  (message "Found a virtual environment")
+	  (print venv)
+	  ;; Stick to elpy for now
+	  (if (file-remote-p default-directory)
+	      (trivialfis/python-lsp-setup venv)
+	    (trivialfis/elpy-setup venv)))))
+
   (setq python-indent-def-block-scale 1)
   (add-hook 'inferior-python-mode-hook
 	    #'(lambda ()
