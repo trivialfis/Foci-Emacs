@@ -28,16 +28,6 @@
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
   (require 'use-package))
 
-(use-package window-purpose
-  :defer t
-  :commands purpose-mode
-  :config (progn
-	    (define-key purpose-mode-map (kbd "C-x b") nil)
-	    (define-key purpose-mode-map (kbd "C-x C-f") nil)
-	    (add-to-list 'purpose-user-regexp-purposes '("\\*Man.*" . Man-page))
-	    (purpose-compile-user-configuration)
-	    (message "Purpose loaded.")))
-
 (use-package dap-mode
   :defer t
   :commands dap-mode
@@ -52,7 +42,10 @@
 
 (use-package lsp-trivialfis)
 (use-package lsp-mode)
-(use-package lsp-ui)
+(use-package lsp-ui
+  :defer t
+  :commands lsp-ui-mode
+  :config (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references))
 
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-clients--clangd-command)
@@ -75,14 +68,6 @@
 		  lsp-ui-doc-use-webkit t
 		  lsp-ui-doc-max-width 90))
   
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references)
-  (lsp)
-  (lsp-ui-mode)
-  (flycheck-mode 1))
-
-(defun trivialfis/ccls ()
-  "Configuration for ccls."
-  (trivialfis/lsp)
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
@@ -90,8 +75,8 @@
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
-  (setq-local company-backends '())
-  (setq-default indent-tabs-mode 'nil)
+  (setq-local company-backends '()
+	      indent-tabs-mode 'nil)
   (add-to-list 'company-backends 'company-keywords)
   (add-to-list 'company-backends 'company-capf)
 

@@ -50,6 +50,16 @@
 
 (require 'helm-xref)
 
+(use-package window-purpose
+  :defer t
+  :commands purpose-mode
+  :config (progn
+	    (define-key purpose-mode-map (kbd "C-x b") nil)
+	    (define-key purpose-mode-map (kbd "C-x C-f") nil)
+	    (add-to-list 'purpose-user-regexp-purposes '("\\*Man.*" . Man-page))
+	    (purpose-compile-user-configuration)
+	    (message "Purpose loaded.")))
+
 (defun trivialfis/flycheck ()
   "Configurate flycheck."
   (add-to-list 'display-buffer-alist
@@ -86,6 +96,7 @@ MODE: the major programming mode"
   (hs-minor-mode 1)
 
   (local-set-key (kbd "TAB") 'company-indent-or-complete-common)
+  (setq-local company-tooltip-align-annotations t)
   ;; Quickhelp
   (autoload 'trivialfis/company-quickhelp "quickhelp-trivialfis")
   (add-hook 'company-mode-hook 'trivialfis/company-quickhelp))

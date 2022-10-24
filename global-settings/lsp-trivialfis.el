@@ -41,11 +41,9 @@
   "Configure lsp-mode."
   (setq-default
    lsp-prefer-flymake 'nil
-   company-transformers 'nil
    lsp-enable-on-type-formatting 'nil
    lsp-enable-snippet 'nil
    lsp-enable-semantic-highlighting t
-   ;; lsp-semantic-highlighting :deferred
    )
   )
 
