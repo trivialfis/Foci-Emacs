@@ -8,7 +8,6 @@
 
 (use-package programming-trivialfis)
 (use-package lsp-trivialfis)
-(use-package company-lsp)
 ;; Add metals backend for lsp-mode
 (require 'scala-mode)
 (use-package lsp-metals)

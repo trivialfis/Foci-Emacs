@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'company-lsp)
 (require 'programming-trivialfis)
 
 (use-package lsp-trivialfis)
