@@ -58,7 +58,7 @@
   "Clangd configuration."
   (trivialfis/lsp)
   (let ((clangd (if (string= system-type "windows-nt")
-		    "clangd"		; fixme
+		    "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clangd.exe"
 		  "clangd")))
     (setq-default lsp-clients-clangd-executable clangd
 		  lsp-clients-clangd-args '("--header-insertion=never")
