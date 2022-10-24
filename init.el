@@ -305,9 +305,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (add-hook 'c++-mode-hook 'trivialfis/c++)
 
 ;; Cuda mode
-(add-to-list 'auto-mode-alist '("\\.cuh\\'" . cuda-mode))
-(autoload 'trivialfis/cuda "cuda-trivialfis")
-(add-hook 'cuda-mode-hook 'trivialfis/cuda)
+(add-to-list 'auto-mode-alist '("\\.cuh\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.cu\\'" . c++-mode))
+(autoload 'trivialfis/c++ "cc-trivialfis")
+
 
 ;; OpenCL mode
 (add-to-list 'auto-mode-alist '("\\.cl\\'" . opencl-mode))
