@@ -46,7 +46,8 @@
 (use-package lsp
   :defer t
   :commands lsp
-  :autoload lsp-find-references lsp-tramp-connection)
+  :autoload lsp-find-references lsp-tramp-connection
+  :config (setq-local lsp-client-packages '(lsp-clangd)))
 (use-package lsp-ui
   :defer t
   :commands lsp-ui-mode
