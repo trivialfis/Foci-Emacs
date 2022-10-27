@@ -170,8 +170,7 @@
   :defer t
   :commands (trivialfis/replace-completion-region
 	     trivialfis/replace-completing-read
-	     trivialfis/replace-read-file
-	     helm-find-files))
+	     trivialfis/replace-read-file))
 (let ((helm-commands '(helm-M-x
 		       helm-find-files
 		       helm-buffers-list
