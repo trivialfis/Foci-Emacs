@@ -146,9 +146,10 @@
   "Elpy configuration."
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
   (setq-local
-   ;; flycheck-disabled-checkers '(python-pylint)
    flycheck-flake8-maximum-line-length 88 ; black
-   fill-column 88)
+   fill-column 88
+   ;; way too slow
+   flycheck-disabled-checkers '(python-pylint))
 
   (unless current-env
     (setq current-env venv))
@@ -161,7 +162,7 @@
 				      (or (equal path (f-expand "~"))
 					  (f-exists? (f-join path "site-packages")))))))
 		    (if (f-exists? (f-join foundpath "site-packages"))
-			(setq-local flycheck--automatically-disabled-checkers '(python-mypy))))))
+			(setq-local flycheck-disabled-checkers '(python-mypy python-pylint))))))
 
   (flycheck-mode 1)
   ;; Replace flymake with flycheck
