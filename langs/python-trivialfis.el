@@ -164,7 +164,6 @@
 		    (if (f-exists? (f-join foundpath "site-packages"))
 			(setq-local flycheck-disabled-checkers '(python-mypy python-pylint))))))
 
-  (flycheck-mode 1)
   ;; Replace flymake with flycheck
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (with-eval-after-load 'elpy
@@ -179,7 +178,8 @@
 	  elpy-rpc-ignored-buffer-size (* 102400 10))
     (add-to-list 'company-backends 'elpy-company-backend)
     (elpy-enable)
-    (elpy-mode 1)))
+    (elpy-mode 1))
+  (flycheck-mode 1))
 
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-tramp-connection "pylsp")
@@ -203,11 +203,11 @@
 	  (cond
 	   ((eq (python-env-from current-env) 'virtual-env)
 	    (progn
-	      (message "Remote virtualenv path: %s" current-env)
+	      (message "Remote virtualenv path: %s, %s" current-env (buffer-file-name))
 	      (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path)))))
 	   ((eq (python-env-from current-env) 'conda-env)
 	    (progn
-	      (message "Remote conda path: %s" conda-path)
+	      (message "Remote conda path: %s, filename: %s" conda-path (buffer-file-name))
 	      (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path))))))))
     ;; local file
     (let* ((command (python-env-path current-env))
@@ -251,13 +251,13 @@ This can make use of __name__ == '__main__'."
   (setq python-shell-completion-native-disabled-interpreters
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
   ;; Use elpy on local but lsp on remote.
-  (let ((venv (new-python-env)))
+  ;; fixme: this limits emacs to a single project.
+  (let ((venv (if current-env current-env (new-python-env))))
     (if (or
 	 (eq (python-env-from venv) 'conda-env)
 	 (eq (python-env-from venv) 'virtual-env))
 	(progn
-	  (message "Found a virtual environment")
-	  (print venv)
+	  (message "Found a virtual environment: venv: %s, file: %s" venv (buffer-file-name))
 	  ;; Stick to elpy for now
 	  (if (file-remote-p default-directory)
 	      (trivialfis/python-lsp-setup venv)
