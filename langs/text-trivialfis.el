@@ -39,6 +39,7 @@
   "Configuration for normal text."
   (flyspell-mode 1)
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-at-point)
+  (make-local-variable company-backends)
   (add-to-list 'company-backends 'company-ispell)
   (setq langtool-language-tool-jar
 	"~/.emacs.d/LanguageTool-4.3/languagetool-commandline.jar"
