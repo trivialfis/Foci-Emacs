@@ -161,10 +161,6 @@ Saves to a temp file and puts the filename in the kill ring."
     (kill-new filename)
     (message filename)))
 
-(defun vterm-send-M-\\ ()
-  (interactive)
-  (vterm-send-key "\\" nil t nil))
-
 
 (defun trivialfis/new-term (&optional window)
   "Split window and open a new term, optional WINDOW."
@@ -189,23 +185,29 @@ Saves to a temp file and puts the filename in the kill ring."
   ;; Add this to gnome shortcut key `'emacs --eval "(trivialfis/vterm)"'
   (load-nix-elpa-packages)
   (use-package vterm
-    :config (setq vterm-kill-buffer-on-exit t
-		  vterm-max-scrollback 100000)
-    :autoload vterm-send-key)
+    :config
+    (use-package bind-key)
+    (setq vterm-kill-buffer-on-exit t
+	  vterm-max-scrollback 100000)
+    (set-face-foreground 'vterm-color-blue "#CCFFCC")
+    (set-face-foreground 'vterm-color-magenta "#cc99ff")
+    :bind
+    (:map vterm-mode-map
+	  ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
+	  ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
+	  ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))) ;M-\
+	  ("C-S-n" . trivialfis/new-term))
+    :commands vterm
+    :autoload vterm-send-key vterm)
 
-  (define-key vterm-mode-map (kbd "M-p") 'vterm-send-C-p)
-  (define-key vterm-mode-map (kbd "M-n") 'vterm-send-C-n)
-  (define-key vterm-mode-map (kbd "M-\\") 'vterm-send-M-\\)
-  (set-face-foreground 'vterm-color-blue "#CCFFCC")
-  (set-face-foreground 'vterm-color-magenta "#cc99ff")
   (vterm t) ;; addtional argument to make sure it spwans a new shell
-  (define-key vterm-mode-map (kbd "C-S-n") 'trivialfis/new-term)
   ;; Don't ask on exist
   (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)
   ;; FIXME: Enable per-buffer highlight
   (global-hl-line-mode -1))
 
 (defun trivialfis/remove-blank-lines ()
+  "Remove all blank lines in current buffer."
   (interactive)
   (flush-lines "^$"))
 
