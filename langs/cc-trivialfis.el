@@ -99,10 +99,6 @@
    '(
      ;; Disaster
      ("C-c d a" . disaster)
-     ;; Clang formating
-     ("C-c f b" . clang-format-buffer)
-     ("C-c f r" . clang-format-region)
-     ("C-c C-f" . find-file-in-project)
      )
    ))
 
