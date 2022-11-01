@@ -1,6 +1,6 @@
 ;;; misc-trivialfis.el --- Misc functions.
 ;;;
-;;; Copyright © 2016-2021 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2016-2022 Jiamingy <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -201,7 +201,7 @@ Saves to a temp file and puts the filename in the kill ring."
     :autoload vterm-send-key vterm)
 
   (vterm t) ;; addtional argument to make sure it spwans a new shell
-  ;; Don't ask on exist
+  ;; Don't ask on exit
   (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)
   ;; FIXME: Enable per-buffer highlight
   (global-hl-line-mode -1))
@@ -211,7 +211,9 @@ Saves to a temp file and puts the filename in the kill ring."
   (interactive)
   (flush-lines "^$"))
 
-(require 'windmove)
+(use-package windmove
+  :defer t
+  :autoload windmove-find-other-window)
 
 ;; Utilities from https://www.emacswiki.org/emacs/buffer-move.el
 (defun buf-move-left ()
