@@ -20,6 +20,10 @@
 ;;; Commentary:
 ;;; Code:
 
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (require 'use-package))
+
 (defun trivialfis/goto-pos ()
   "Go to position.
 If you want to go to the middle, enter 50. 50 means 50% of the buffer."
@@ -175,15 +179,20 @@ Saves to a temp file and puts the filename in the kill ring."
   (select-window (next-window))
   (trivialfis/vterm))
 
+(use-package nix-elpa
+  :defer t
+  :autoload load-nix-elpa-packages)
+
 (defun trivialfis/vterm ()
   "Open vterm."
   (interactive)
   ;; Add this to gnome shortcut key `'emacs --eval "(trivialfis/vterm)"'
-  (require 'nix-elpa)
   (load-nix-elpa-packages)
-  (require 'vterm)
-  (setq vterm-kill-buffer-on-exit t
-	vterm-max-scrollback 100000)
+  (use-package vterm
+    :config (setq vterm-kill-buffer-on-exit t
+		  vterm-max-scrollback 100000)
+    :autoload vterm-send-key)
+
   (define-key vterm-mode-map (kbd "M-p") 'vterm-send-C-p)
   (define-key vterm-mode-map (kbd "M-n") 'vterm-send-C-n)
   (define-key vterm-mode-map (kbd "M-\\") 'vterm-send-M-\\)
