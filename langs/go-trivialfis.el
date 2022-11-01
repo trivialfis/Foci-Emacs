@@ -26,7 +26,7 @@
 (defun trivialfis/go ()
   "Go configuration."
   (lsp)
-  (setq tab-width 4)
+  (setq-local tab-width 4)
   (yas-minor-mode t))
 
 (provide 'go-trivialfis)

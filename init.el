@@ -300,7 +300,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (add-hook 'LaTeX-mode-hook 'trivialfis/LaTeX)
 
 ;; C++ mode
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c-or-c++-mode))
 (autoload 'trivialfis/c++ "cc-trivialfis")
 (add-hook 'c++-mode-hook 'trivialfis/c++)
 
