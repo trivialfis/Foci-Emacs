@@ -22,7 +22,9 @@
 
 (require 'company)
 (require 'langtool)
+
 (eval-when-compile			; Get rid of the free reference
+  (require 'use-package)
   (defvar flyspell-mode-map))
 
 (defvar accepted-mode-list '(text-mode org-mode markdown-mode mu4e-compose-mode))
@@ -30,25 +32,31 @@
 (defun trivialfis/check-buffer-on-save ()
   "Use language tool to check text mode buffer on save."
   (interactive)
-  (add-hook 'after-save-hook '(lambda ()
-  				(when (memq major-mode accepted-mode-list)
-  				  (unless langtool-buffer-process
-  				    (langtool-check-buffer))))))
+  (use-package langtool
+    :init
+    (add-hook 'after-save-hook #'(lambda ()
+  				   (when (memq major-mode accepted-mode-list)
+  				     (unless langtool-buffer-process
+  				       (langtool-check-buffer)))))
+    :config
+    (setq-local
+     langtool-language-tool-jar "~/.emacs.d/LanguageTool-4.3/languagetool-commandline.jar"
+     langtool-default-language "en-US"))
+  :demand t)
 
 (defun trivialfis/_text ()
   "Configuration for normal text."
   (flyspell-mode 1)
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-at-point)
-  (make-local-variable company-backends)
+  (make-local-variable 'company-backends)
   (add-to-list 'company-backends 'company-ispell)
-  (setq langtool-language-tool-jar
-	"~/.emacs.d/LanguageTool-4.3/languagetool-commandline.jar"
-	langtool-default-language "en-US")
   (setq require-final-newline 'nil))
 
 (defun trivialfis/cjk ()
+  "Enable CJK input method."
   (interactive)
-  (require 'pyim)
+  (use-package pyim
+    :commands pyim-basedict-enable)
   (pyim-basedict-enable)   ; 拼音词库，五笔用户 *不需要* 此行设置
   (setq default-input-method "pyim")
   (flyspell-mode 'f))
