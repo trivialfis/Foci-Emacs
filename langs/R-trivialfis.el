@@ -3,7 +3,6 @@
 ;;; Code:
 
 (require 'ess)
-(require 'programming-trivialfis)
 (eval-when-compile
   (require 'use-package))
 
