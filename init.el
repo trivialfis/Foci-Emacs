@@ -104,18 +104,18 @@
 		       (float-time
 			(time-subtract after-init-time before-init-time)))))
 
-(let ((packages-autoload '(trivialfis/pop-frame
-			   trivialfis/close-frame
-			   trivialfis/goto-pos
-			   trivialfis/local-set-keys
-			   trivialfis/nav-indent-shift-right
-			   trivialfis/nav-indent-shift-left
-			   trivialfis/screenshot
-			   trivialfis/vterm
-			   trivialfis/remove-blank-lines
-			   trivialfis/swap-windows-horizontal)))
-  (dolist (x packages-autoload)
-    (autoload x "misc-trivialfis" :interactive t)))
+(use-package misc-trivialfis
+  :commands
+  (trivialfis/pop-frame
+   trivialfis/close-frame
+   trivialfis/goto-pos
+   trivialfis/local-set-keys
+   trivialfis/nav-indent-shift-right
+   trivialfis/nav-indent-shift-left
+   trivialfis/screenshot
+   trivialfis/vterm
+   trivialfis/remove-blank-lines
+   trivialfis/swap-windows-horizontal))
 
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"
@@ -164,14 +164,13 @@
   :commands
   winum-mode
   :bind*
-  (("M-o" . trivialfis/swap-windows-horizontal)
-   :map winum-keymap
-   ("M-1" . winum-select-window-1)
-   ("M-2" . winum-select-window-2)
-   ("M-3" . winum-select-window-3)
-   ("M-4" . winum-select-window-4)
-   ("M-5" . winum-select-window-5)
-   ("M-6" . winum-select-window-6)))
+  (:map winum-keymap
+	("M-1" . winum-select-window-1)
+	("M-2" . winum-select-window-2)
+	("M-3" . winum-select-window-3)
+	("M-4" . winum-select-window-4)
+	("M-5" . winum-select-window-5)
+	("M-6" . winum-select-window-6)))
 
 ;; FIXME: If the first time invoke of helm is via xref-helm, these functions won't be loaded.
 (use-package helm-trivialfis
@@ -279,7 +278,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
    ;; Frames
    ("C-x 4"        .            trivialfis/pop-frame)
    ("C-x C-c"      .          trivialfis/close-frame)
-
+   ("M-o"       . trivialfis/swap-windows-horizontal)
    ))
 
 ;; End global settings--------------------------------------------------------------------------
