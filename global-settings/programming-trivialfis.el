@@ -53,6 +53,7 @@
 (use-package window-purpose
   :defer t
   :commands purpose-mode
+  :autoload purpose-compile-user-configuration
   :config (progn
 	    (define-key purpose-mode-map (kbd "C-x b") nil)
 	    (define-key purpose-mode-map (kbd "C-x C-f") nil)

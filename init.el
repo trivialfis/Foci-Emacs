@@ -153,17 +153,25 @@
 (powerline-center-theme)
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
-(require 'winum)
-(setq winum-auto-setup-mode-line nil
-      winum-scope 'frame-local)
-(define-key winum-keymap (kbd "M-1") 'winum-select-window-1)
-(define-key winum-keymap (kbd "M-2") 'winum-select-window-2)
-(define-key winum-keymap (kbd "M-3") 'winum-select-window-3)
-(define-key winum-keymap (kbd "M-4") 'winum-select-window-4)
-(define-key winum-keymap (kbd "M-5") 'winum-select-window-5)
-(define-key winum-keymap (kbd "M-6") 'winum-select-window-6)
-(set-face-attribute 'winum-face nil :weight 'bold)
-(winum-mode)
+(use-package winum
+  :demand t				; otherwise the keymap won't be available
+  :config
+  (use-package bind-key)
+  (setq winum-auto-setup-mode-line nil
+	winum-scope 'frame-local)
+  (set-face-attribute 'winum-face nil :weight 'bold)
+  (winum-mode 1)
+  :commands
+  winum-mode
+  :bind*
+  (("M-o" . trivialfis/swap-windows-horizontal)
+   :map winum-keymap
+   ("M-1" . winum-select-window-1)
+   ("M-2" . winum-select-window-2)
+   ("M-3" . winum-select-window-3)
+   ("M-4" . winum-select-window-4)
+   ("M-5" . winum-select-window-5)
+   ("M-6" . winum-select-window-6)))
 
 ;; FIXME: If the first time invoke of helm is via xref-helm, these functions won't be loaded.
 (use-package helm-trivialfis
