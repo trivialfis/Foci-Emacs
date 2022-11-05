@@ -43,7 +43,7 @@
 (use-package lsp-trivialfis
   :defer t
   :autoload trivialfis/lsp)
-(use-package lsp
+(use-package lsp-mode
   :defer t
   :commands lsp
   :autoload lsp-find-references lsp-tramp-connection lsp-register-client make-lsp-client
