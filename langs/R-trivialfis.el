@@ -28,7 +28,6 @@
   :commands lsp
   :config
   (setq-local lsp-client-packages '(lsp-r))
-  (use-package lsp-r)
   ;; check renv first, then anaconda.
   (let ((profile (locate-dominating-file "." ".Rprofile")))
     (if profile
@@ -46,7 +45,8 @@
 	(if condapy
 	    (progn
 	      (trivialfis/lsp)
-	      (lsp-ui-mode 1)))))))
+	      (lsp-ui-mode 1))))))
+  (use-package lsp-r))
 
 
 (defun trivialfis/ess ()
