@@ -251,6 +251,13 @@ one, an error is signaled."
       (buf-move-left)
     (buf-move-right)))
 
+(defun trivialfis/new-vterm-frame()
+  "Open vterm in a new frame."
+  (interactive)
+  (trivialfis/new-term)
+  (trivialfis/pop-frame))
+
+
 ;; Other functions that might be useful
 ;; Set the coding system for a specific file
 ;;   set-buffer-file-coding-system utf-8-unix

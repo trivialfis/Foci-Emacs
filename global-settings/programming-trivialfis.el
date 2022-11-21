@@ -100,7 +100,11 @@ MODE: the major programming mode"
   (setq-local company-tooltip-align-annotations t)
   ;; Quickhelp
   (autoload 'trivialfis/company-quickhelp "quickhelp-trivialfis")
-  (add-hook 'company-mode-hook 'trivialfis/company-quickhelp))
+  (add-hook 'company-mode-hook 'trivialfis/company-quickhelp)
+  (use-package hl-line
+    :config
+    (hl-line-mode 1)
+    (set-face-foreground 'highlight nil)))
 
 (autoload 'auto-update-file-header "header2")
 (defun trivialfis/programming-post ()

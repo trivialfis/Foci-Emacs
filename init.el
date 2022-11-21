@@ -114,6 +114,7 @@
    trivialfis/nav-indent-shift-left
    trivialfis/screenshot
    trivialfis/vterm
+   trivialfis/new-vterm-frame
    trivialfis/remove-blank-lines
    trivialfis/swap-windows-horizontal))
 
