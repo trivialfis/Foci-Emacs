@@ -22,6 +22,9 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   # Use docker-tramp for emacs 28.x, for newer emacs, builtin tramp container should suffice
   # docker-tramp
   vterm
+  winum
+  dockerfile-mode
+  font-lock-studio
   # magit
   magit
   forge
