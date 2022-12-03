@@ -3,5 +3,13 @@
 * Introduction
 It's just my Emacs configuration. Emacs itself along with some packages are managed by nix with the help of [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] from nix-community.
 
+* Install
+Change ~nixpkgs~ configuration according to notes in _foci.nix_, run:
+#+BEGIN_SRC sh
+  nix-env -iA nixpkgs.fociEmacs
+#+END_SRC
+
+This installs a partial set of packages, rest of them is listed in ~package-selected-packages~. They are being moved to nix-based installation over time, checking whether they are still relevant takes time ...
+
 * License
 GPL-v3
