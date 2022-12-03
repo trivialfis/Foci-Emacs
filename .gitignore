@@ -23,6 +23,7 @@ url
 thumbs
 backup
 *.txt
+session.*
 
 # Packages
 elpa

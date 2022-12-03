@@ -48,7 +48,8 @@
   :commands lsp
   :autoload lsp-find-references lsp-tramp-connection lsp-register-client make-lsp-client
   :config
-  (setq-local lsp-client-packages '(lsp-clangd))
+  (setq-local lsp-client-packages '(lsp-clangd)
+	      lsp-enable-dap-auto-configure nil)
   (use-package lsp-clangd))
 (use-package lsp-ui
   :defer t

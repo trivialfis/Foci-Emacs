@@ -1,22 +1,7 @@
 #+TITLE: Emacs configuration.
 
 * Introduction
-It's just my Emacs configuration abstracted as an usable distribution.
-
-Emacs 25+ are supported.
-
-All packages are listed in *selected-packages.el*. Use
-`package-install-selected-packages' to install them all at once. **Note**: Due
-to the fact that I dumped _dash_ as part of Emacs build, others need to install
-it manually.
-
-* To-do
-+ Add better Ecb faces.
-+ Better langtool support.
-+ Add some useful macros.
-+ Add better windows management.
+It's just my Emacs configuration. Emacs itself along with some packages are managed by nix with the help of [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] from nix-community.
 
 * License
 GPL-v3
-
-#  LocalWords:  init linum el LocalWords emacs
