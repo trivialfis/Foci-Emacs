@@ -19,7 +19,6 @@ let
   emacsWithPackages = (pkgs.emacsPackagesFor emacsPgtk).emacsWithPackages;
 in
 emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
-  groovy-mode
   # Use docker-tramp for emacs 28.x, for newer emacs, builtin tramp container should suffice
   # docker-tramp
   vterm
@@ -27,9 +26,17 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   magit
   forge
   magit-delta
+  # helm
+  helm
+  helm-gtags
+  helm-xref
+  # flyspell
+  flyspell-correct
+  flyspell-correct-helm
   # langs
   nix-mode
   json-mode
+  groovy-mode
   # lsp mode
   lsp-mode
   lsp-ui
@@ -37,9 +44,9 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   lsp-treemacs
   lsp-docker
   lsp-origami
+  dap-mode
   # lsp langs
   lsp-metals
   lsp-haskell
   lsp-java
-  dap-mode
 ]))
