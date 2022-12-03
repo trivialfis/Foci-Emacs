@@ -35,9 +35,8 @@
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (put 'narrow-to-region 'disabled nil)
-(if (> emacs-major-version 25)
-    (global-display-line-numbers-mode t)
-  (global-linum-mode t))
+(global-display-line-numbers-mode t)
+
 ;; (modify-all-frames-parameters '((scroll-bar-width . 8)))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -51,7 +50,7 @@
  '(ecb-options-version "2.50")
  '(ediff-split-window-function 'split-window-sensibly)
  '(package-selected-packages
-   '(eat docker-tramp visual-fill-column org-roam kotlin-mode minimap nginx-mode htmlize conda polymode cask company-math flyspell-correct-helm paradox paredit scala-mode winum racer sml-mode dockerfile-mode powershell dap-mode lua-mode realgud pyim github-review json-mode let-alist guix company-posframe forge bbdb cython-mode mu4e-alert ess xterm-color yaml-mode markdown-toc racket-mode ninja-mode cuda-mode foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm flycheck-rust rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser toc-org vala-mode toml-mode rust-mode font-lock-studio langtool org-bullets projectile aggressive-indent disaster markdown-mode vline cmake-mode go-mode all-the-icons-dired font-lock+ powerline atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company magit))
+   '(eat visual-fill-column org-roam kotlin-mode minimap nginx-mode htmlize conda polymode cask company-math flyspell-correct-helm paradox paredit scala-mode winum racer sml-mode dockerfile-mode powershell lua-mode realgud pyim github-review json-mode let-alist guix company-posframe forge bbdb cython-mode mu4e-alert ess xterm-color yaml-mode markdown-toc racket-mode ninja-mode cuda-mode foci-org-dashboard nix-mode slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm flycheck-rust rainbow-mode opencl-mode window-purpose helm-xref helm-gtags header2 geiser toc-org vala-mode toml-mode rust-mode font-lock-studio langtool org-bullets projectile aggressive-indent disaster markdown-mode vline cmake-mode go-mode all-the-icons-dired font-lock+ powerline atom-dark-theme company-go highlight-symbol company-quickhelp company-auctex auctex srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company magit))
  '(paradox-github-token t)
  '(safe-local-variable-values
    '((eval modify-syntax-entry 43 "'")
@@ -93,7 +92,6 @@
 (add-to-list 'load-path "~/.emacs.d/langs/")
 
 (package-initialize)
-
 (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
   (require 'use-package))
@@ -104,9 +102,6 @@
 		       (float-time
 			(time-subtract after-init-time before-init-time)))))
 
-(use-package nix-elpa
-  :autoload load-nix-elpa-packages)
-(load-nix-elpa-packages)
 
 (use-package misc-trivialfis
   :commands
@@ -379,10 +374,8 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (add-hook 'makefile-gmake-mode-hook 'trivialfis/makefile)
 
 ;; groovy mode
-(use-package groovy-trivialfis
-  :defer t
-  :autoload groovy-mode trivialfis/groovy
-  :config (trivialfis/groovy))
+(autoload 'trivialfis/groovy "groovy-trivialfis")
+(add-hook 'groovy-mode-hook 'trivialfis/groovy)
 
 ;; prolog mode
 (autoload 'trivialfis/prolog "prolog-trivialfis")
