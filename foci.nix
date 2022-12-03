@@ -25,6 +25,14 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   winum
   dockerfile-mode
   font-lock-studio
+  all-the-icons-dired
+  # company
+  company
+  company-box
+  company-posframe
+  company-quickhelp
+  company-shell
+  company-math
   # magit
   magit
   forge
@@ -40,6 +48,12 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   nix-mode
   json-mode
   groovy-mode
+  cmake-mode
+  company-auctex                # Tex
+  company-c-headers             # C
+  slime                         # Lisp
+  slime-company                 # Lisp
+  elpy                          # python
   # lsp mode
   lsp-mode
   lsp-ui
@@ -52,4 +66,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   lsp-metals
   lsp-haskell
   lsp-java
+  # treemacs
+  treemacs
 ]))

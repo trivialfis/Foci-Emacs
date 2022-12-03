@@ -1,7 +1,7 @@
 ;;; package --- Summary  -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;;
-;;; Copyright © 2015-2020 Fis Trivial <jm.yuan@outlook.com>
+;;; Copyright © 2015-2022 Jiamingy <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -50,7 +50,7 @@
  '(ecb-options-version "2.50")
  '(ediff-split-window-function 'split-window-sensibly)
  '(package-selected-packages
-   '(eat visual-fill-column org-roam kotlin-mode minimap nginx-mode htmlize conda polymode cask company-math paradox paredit scala-mode racer sml-mode powershell lua-mode realgud pyim let-alist company-posframe bbdb cython-mode mu4e-alert ess xterm-color yaml-mode markdown-toc racket-mode ninja-mode foci-org-dashboard slime mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell sage-shell-mode meson-mode csv-mode slime-company cargo ox-gfm flycheck-rust rainbow-mode opencl-mode window-purpose header2 geiser toc-org vala-mode toml-mode rust-mode langtool org-bullets projectile aggressive-indent disaster markdown-mode vline cmake-mode go-mode all-the-icons-dired font-lock+ powerline company-go highlight-symbol company-quickhelp company-auctex auctex srefactor company-php company-shell fill-column-indicator ecb elpy flycheck company))
+   '(eat visual-fill-column org-roam kotlin-mode minimap nginx-mode htmlize conda polymode cask paradox paredit scala-mode racer sml-mode powershell lua-mode realgud pyim let-alist bbdb cython-mode mu4e-alert ess xterm-color yaml-mode markdown-toc racket-mode ninja-mode foci-org-dashboard mu4e-jump-to-list sr-speedbar debbugs flycheck-haskell sage-shell-mode meson-mode csv-mode cargo ox-gfm flycheck-rust rainbow-mode opencl-mode window-purpose header2 geiser toc-org vala-mode toml-mode rust-mode langtool org-bullets projectile aggressive-indent disaster markdown-mode vline go-mode all-the-icons-dired font-lock+ powerline highlight-symbol auctex srefactor fill-column-indicator ecb flycheck))
  '(paradox-github-token t)
  '(safe-local-variable-values
    '((eval modify-syntax-entry 43 "'")
