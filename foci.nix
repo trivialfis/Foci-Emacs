@@ -24,6 +24,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   winum
   dockerfile-mode
   font-lock-studio
+  all-the-icons
   all-the-icons-dired
   realgud
   powerline
@@ -33,12 +34,21 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   projectile
   window-purpose
   polymode
-  all-the-icons-dired
   visual-fill-column
   fill-column-indicator
   demap
   paradox
   vline
+  package-build
+  use-package
+  bind-key
+  edit-indirect
+  ansi
+  memoize
+  f
+  s
+  yasnippet
+  origami
   # org
   toc-org
   ox-gfm
@@ -67,6 +77,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   flyspell-correct-helm
   # langs
   nix-mode
+  php-mode
   kotlin-mode
   nginx-mode
   json-mode
@@ -97,6 +108,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   ess                           # R/S
   geiser                        # Scheme
   go-mode
+  haskell-mode
   markdown-mode
   markdown-toc
   yaml-mode
@@ -118,7 +130,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   treemacs
   # mu
   mu4e-alert
-  mu4e-jump-to-list
 ]) ++ (with epkgs.elpaPackages; [
   auctex         # ; LaTeX mode
   sml-mode
@@ -127,6 +138,9 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   debbugs
   csv-mode
   minimap
+  xref
+  xr
+  eldoc
 ]) ++ (with epkgs.nongnuPackages; [
   eat
 ]) ++ (with epkgs; [
