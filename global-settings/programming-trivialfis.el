@@ -27,14 +27,6 @@
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
   (require 'use-package))
 
-(use-package ecb
-  :init (setf ecb-fix-window-size 'width
-	      ;; ecb-minor-mode-text "Ecb"
-	      ecb-windows-width 0.18)
-  :defer t
-  :commands (ecb-activate)
-  :config (message "ECB loaded."))
-
 (use-package semantic/idle
   :commands (semantic-mode
 	     semanticdb-enable-gnu-global-databases)
