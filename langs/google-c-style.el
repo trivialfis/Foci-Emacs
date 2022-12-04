@@ -30,6 +30,7 @@
 ;; For some reason 1) c-backward-syntactic-ws is a macro and 2)  under Emacs 22
 ;; bytecode cannot call (unexpanded) macros at run time:
 (eval-when-compile (require 'cc-defs))
+(require 'cc-mode)
 
 ;; Wrapper function needed for Emacs 21 and XEmacs (Emacs 22 offers the more
 ;; elegant solution of composing a list of lineup functions or quantities with
@@ -144,8 +145,8 @@ Suitable for inclusion in `c-offsets-alist'."
   "Sets up preferred newline behavior. Not set by default. Meant
   to be added to `c-mode-common-hook'."
   (interactive)
-  (define-key c-mode-base-map "\C-m" 'newline-and-indent)
-  (define-key c-mode-base-map [ret] 'newline-and-indent))
+  (define-key c-mode-map "\C-m" 'newline-and-indent)
+  (define-key c-mode-map [ret] 'newline-and-indent))
 
 (provide 'google-c-style)
 ;;; google-c-style.el ends here
