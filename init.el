@@ -49,8 +49,7 @@
  '(custom-enabled-themes '(misterioso))
  '(ecb-options-version "2.50")
  '(ediff-split-window-function 'split-window-sensibly)
- '(package-selected-packages
-   '(org-roam kotlin-mode nginx-mode htmlize conda scala-mode racer sml-mode lua-mode realgud pyim let-alist cython-mode ess xterm-color racket-mode ninja-mode foci-org-dashboard sr-speedbar flycheck-haskell meson-mode cargo flycheck-rust opencl-mode header2 geiser vala-mode toml-mode rust-mode vline go-mode font-lock+ powerline auctex srefactor flycheck))
+ '(package-selected-packages '())
  '(paradox-github-token t)
  '(safe-local-variable-values
    '((eval modify-syntax-entry 43 "'")

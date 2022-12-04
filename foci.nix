@@ -38,10 +38,12 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   fill-column-indicator
   demap
   paradox
+  vline
   # org
   toc-org
   ox-gfm
   org-bullets
+  org-roam
   # terms
   vterm
   xterm-color
@@ -65,6 +67,8 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   flyspell-correct-helm
   # langs
   nix-mode
+  kotlin-mode
+  nginx-mode
   json-mode
   groovy-mode
   cmake-mode
