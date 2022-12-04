@@ -21,7 +21,6 @@
 ;;; Code:
 
 (require 'company)
-(require 'langtool)
 
 (eval-when-compile			; Get rid of the free reference
   (require 'use-package)
