@@ -1,6 +1,6 @@
 ;;; python-trivialfis --- Python configuration -*- lexical-binding: t -*-
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2016-2022 Jiamingy <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -53,7 +53,7 @@
   from)
 
 (defun new-python-env-rec (funcs)
-  "Find python environment. `Funcs' is a list of functions to be called."
+  "Find python environment.  `FUNCS' is a list of functions to be called."
   (if funcs
       (let* ((pair (car funcs))
 	     (func (car pair))
