@@ -37,6 +37,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   visual-fill-column
   fill-column-indicator
   demap
+  paradox
   # org
   toc-org
   ox-gfm
@@ -111,6 +112,9 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   lsp-java
   # treemacs
   treemacs
+  # mu
+  mu4e-alert
+  mu4e-jump-to-list
 ]) ++ (with epkgs.elpaPackages; [
   auctex         # ; LaTeX mode
   sml-mode
@@ -118,4 +122,11 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   rainbow-mode
   debbugs
   csv-mode
+  minimap
+]) ++ (with epkgs.nongnuPackages; [
+  eat
+]) ++ (with epkgs; [
+  cask
+]) ++ (with pkgs; [
+  mu
 ]))
