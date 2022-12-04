@@ -250,12 +250,12 @@ This can make use of __name__ == '__main__'."
   (interactive)
   (unless (equal major-mode 'python-mode)
     (error "Not in python-mode"))
-  (let* ((isort "isort")
-	 (*isort* (get-buffer-create (concat "*" isort "*"))))
+  (let ((isort "isort"))
     (unless (executable-find isort)
       (error "Executable isort is not found"))
-    (call-process isort nil *isort* nil "--profile=black" (buffer-file-name)))
-  (revert-buffer-quick))
+    (let ((*isort* (get-buffer-create (concat "*" isort "*"))))
+      (call-process isort nil *isort* nil "--profile=black" (buffer-file-name))
+      (revert-buffer-quick))))
 
 (defun trivialfis/python()
   "Python configuration."
