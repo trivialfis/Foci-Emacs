@@ -21,11 +21,29 @@ in
 emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   # Use docker-tramp for emacs 28.x, for newer emacs, builtin tramp container should suffice
   # docker-tramp
-  vterm
   winum
   dockerfile-mode
   font-lock-studio
   all-the-icons-dired
+  realgud
+  powerline
+  flycheck
+  htmlize
+  highlight-symbol
+  projectile
+  window-purpose
+  polymode
+  all-the-icons-dired
+  visual-fill-column
+  fill-column-indicator
+  demap
+  # org
+  toc-org
+  ox-gfm
+  org-bullets
+  # terms
+  vterm
+  xterm-color
   # company
   company
   company-box
@@ -51,9 +69,34 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   cmake-mode
   company-auctex                # Tex
   company-c-headers             # C
+  disaster                      # C
   slime                         # Lisp
   slime-company                 # Lisp
-  elpy                          # python
+  aggressive-indent             # Lisp alike (elisp)
+  paredit                       # Lisp alike (elisp)
+  elpy                          # Python
+  conda                         # Python
+  ninja-mode
+  opencl-mode
+  racket-mode
+  lua-mode
+  meson-mode
+  pyim
+  rust-mode                     # Rust
+  cargo                         # Rust
+  scala-mode
+  toml-mode
+  vala-mode
+  yaml-mode
+  cython-mode
+  ess                           # R/S
+  geiser                        # Scheme
+  go-mode
+  markdown-mode
+  markdown-toc
+  yaml-mode
+  powershell
+  sage-shell-mode
   # lsp mode
   lsp-mode
   lsp-ui
@@ -68,4 +111,11 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   lsp-java
   # treemacs
   treemacs
+]) ++ (with epkgs.elpaPackages; [
+  auctex         # ; LaTeX mode
+  sml-mode
+  project
+  rainbow-mode
+  debbugs
+  csv-mode
 ]))
