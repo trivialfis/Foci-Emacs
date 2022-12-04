@@ -245,6 +245,15 @@ This can make use of __name__ == '__main__'."
     (run-python)
     (python-shell-send-file path)))
 
+(defun trivialfis/isort()
+  "Run Python isort."
+  (interactive)
+  (unless (equal major-mode 'python-mode)
+    (error "Not in python-mode"))
+  (call-process
+   "isort" nil (get-buffer-create "*isort*") nil "--profile=black" (buffer-file-name))
+  (revert-buffer-quick))
+
 (defun trivialfis/python()
   "Python configuration."
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
