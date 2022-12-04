@@ -1,17 +1,3 @@
-# Place following configurations in respected files.
-#
-# .config/nixpkgs/config.nix
-# {
-#   packageOverrides = pkgs: with pkgs; {
-#     fociEmacs = pkgs.callPackage ~/.emacs.d/foci.nix pkgs;
-#   };
-# }
-#
-# .config/nixpkgs/overlays/emacs-packages.nix
-# import (builtins.fetchTarball {
-#   url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-# })
-
 { pkgs, ... }:
 
 let

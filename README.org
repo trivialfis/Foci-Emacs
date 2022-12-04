@@ -1,15 +1,31 @@
 #+TITLE: Emacs configuration.
 
 * Introduction
-It's just my Emacs configuration. Emacs itself along with some packages are managed by nix with the help of [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] from nix-community.
+It's just my Emacs configuration. Emacs itself along with all the packages are managed by nix with the help of [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] from the [[https://github.com/nix-community][nix-community]].
 
 * Install
-Change ~nixpkgs~ configuration according to notes in _foci.nix_, run:
+I use nix on other Linux distributions instead of the NixOS, system configuration is hence not supported. For folks like me, place following configurations into respected files for fetching the emacs overlay and defining the package override:
+
+- /.config/nixpkgs/config.nix/
+#+BEGIN_SRC nix
+ {
+   packageOverrides = pkgs: with pkgs; {
+     fociEmacs = pkgs.callPackage ~/.emacs.d/foci.nix pkgs;
+   };
+ }
+#+END_SRC
+
+- /.config/nixpkgs/overlays/emacs-packages.nix/
+#+BEGIN_SRC nix
+ import (builtins.fetchTarball {
+   url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+ })
+#+END_SRC
+
+run:
 #+BEGIN_SRC sh
   nix-env -iA nixpkgs.fociEmacs
 #+END_SRC
-
-This installs a partial set of packages, rest of them is listed in ~package-selected-packages~. They are being moved to nix-based installation over time, checking whether they are still relevant takes time ...
 
 * License
 GPL-v3
