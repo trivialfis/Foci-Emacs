@@ -30,7 +30,11 @@
 (require 'window-purpose)
 (require 'helm-xref)
 
-;; (toggle-debug-on-error)
+(use-package aggressive-indent-mode
+  :commands aggressive-indent-mode)
+(use-package flycheck
+  :commands flycheck-mode)
+
 (defvar info-buffers '("*Flycheck errors*" "*Compile-Log*"))
 (defun get-info-buffers ()
   "Get windows display info related buffers."
