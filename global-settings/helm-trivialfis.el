@@ -23,7 +23,7 @@
 (require 'helm)
 (require 'helm-mode)
 (require 'helm-files)
-(require 'helm-config)
+(require 'helm-command)
 (require 'helm-net)
 (require 'bind-key)
 
