@@ -190,8 +190,9 @@ Saves to a temp file and puts the filename in the kill ring."
     (:map vterm-mode-map
 	  ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
 	  ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
-	  ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))) ;M-\
-	  ("C-S-n" . trivialfis/new-term))
+	  ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
+	  ("C-S-n" . trivialfis/new-term)
+	  ("<down-mouse-1>" . (lambda () (interactive))))
     :commands vterm
     :autoload vterm-send-key vterm)
 
