@@ -185,7 +185,7 @@
  (make-lsp-client :new-connection (lsp-tramp-connection "pylsp")
                   :major-modes '(python-mode)
                   :remote? t
-                  :server-id 'pyls-remote))
+                  :server-id 'pylsp-remote))
 
 
 (defun trivialfis/python-lsp-setup(venv)
