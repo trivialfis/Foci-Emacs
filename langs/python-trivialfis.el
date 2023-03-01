@@ -169,9 +169,11 @@
   (with-eval-after-load 'elpy
     (let ((command (python-env-path current-env)))
       (message (format "Python command: %s" command))
-      (setq elpy-rpc-virtualenv-path 'current)
-      (setq elpy-rpc-python-command command
-	    python-shell-interpreter command))
+      (setq
+       elpy-rpc-virtualenv-path 'current
+       elpy-rpc-python-command command
+       python-shell-interpreter command
+       elpy-formatter 'black))
     ;; ipython makes use of xterm ansi code.
     ;; (elpy-use-ipython)
     (setq elpy-rpc-timeout 3
