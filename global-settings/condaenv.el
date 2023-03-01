@@ -52,7 +52,7 @@
 	(progn
 	  (conda-env-activate project-name)
 	  (message (format "Anaconda project name: %s\n" project-name))
-	  (trivialfis/python-from-which))
+	  (f-join (conda-env-name-to-dir project-name) "bin" "python3"))
       'nil)))
 
 (provide 'condaenv)
