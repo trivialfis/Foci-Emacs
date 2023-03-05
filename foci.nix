@@ -1,7 +1,8 @@
 { pkgs, ... }:
 
 let
-  emacsPgtk = pkgs.emacsPgtk;
+  emacsPgtk = pkgs.emacs-gtk;
+  # emacsPgtk = pkgs.emacsPgtk;
   emacsWithPackages = (pkgs.emacsPackagesFor emacsPgtk).emacsWithPackages;
 in
 emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
