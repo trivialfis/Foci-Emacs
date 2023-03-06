@@ -24,6 +24,9 @@
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
   (require 'use-package))
 
+(use-package which-key
+  :defer t
+  :commands which-key-mode)
 (use-package lsp-mode
   :defer t
   :commands lsp)
@@ -49,8 +52,10 @@
    lsp-ui-doc-delay 1
    lsp-ui-doc-use-webkit t
    lsp-ui-doc-max-width 90
-   )
-  )
+   lsp-keep-workspace-alive nil
+   lsp-keymap-prefix "C-c l")
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  (which-key-mode))
 
 (provide 'lsp-trivialfis)
 ;;; lsp-trivialfis.el ends here
