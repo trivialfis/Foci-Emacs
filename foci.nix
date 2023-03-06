@@ -36,6 +36,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   s
   yasnippet
   origami
+  which-key
   # org
   toc-org
   ox-gfm
