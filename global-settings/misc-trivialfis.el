@@ -243,9 +243,13 @@ one, an error is signaled."
 (defun trivialfis/swap-windows-horizontal()
   "Swap windows."
   (interactive)
-  (if (null (windmove-find-other-window 'right))
-      (buf-move-left)
-    (buf-move-right)))
+  (let ((on-right (windmove-find-other-window 'left))
+	(on-left (windmove-find-other-window 'right))
+	(cur (selected-window)))
+    (unless (and (null on-left) (null on-right))
+      (if (null on-right)
+	  (window-swap-states cur on-left)
+	(window-swap-states cur on-right)))))
 
 (defun trivialfis/new-vterm-frame()
   "Open vterm in a new frame."
