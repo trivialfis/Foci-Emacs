@@ -34,8 +34,23 @@
 (use-package conda
   :custom
   (conda-anaconda-home  "~/.anaconda"))
-(use-package lsp-trivialfis)
-(use-package lsp)
+
+(use-package lsp-trivialfis
+  :defer t
+  :autoload trivialfis/lsp)
+
+(use-package lsp-mode
+  :defer t
+  :commands lsp
+  :autoload
+  lsp-register-client
+  make-lsp-client
+  lsp-find-references
+  lsp-tramp-connection
+  :config
+  (setq-local lsp-client-packages '(lsp-pylsp))
+  (trivialfis/lsp)
+  (use-package lsp-pylsp))
 
 
 (use-package repl-trivialfis
@@ -192,32 +207,36 @@
 
 (defun trivialfis/python-lsp-setup(venv)
   "Setup for Python lsp mode.  `VENV' is the virtual environment."
-  (trivialfis/lsp)
   (if (not current-env)
       (setq current-env venv))
 
-  (if (file-remote-p default-directory)
-      ;; Tramp, find virtualenv or conda env
-      (progn
-	(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-	(let* ((venv-path (python-env-path current-env))
-	       (conda-path (python-env-path current-env)))
-	  (cond
-	   ((eq (python-env-from current-env) 'virtual-env)
-	    (progn
-	      (message "Remote virtualenv path: %s, %s" current-env (buffer-file-name))
-	      (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path)))))
-	   ((eq (python-env-from current-env) 'conda-env)
-	    (progn
-	      (message "Remote conda path: %s, filename: %s" conda-path (buffer-file-name))
-	      (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path))))))))
-    ;; local file
-    (let* ((command (python-env-path current-env))
-	   (dir (if command (f-dirname command) 'nil)))
-      (if dir
-	  (setq-local lsp-pylsp-server-command (f-join dir "pylsp")
-		      lsp-pylsp-plugins-flake8-max-line-length 88
-		      lsp-pylsp-plugins-pydocstyle-ignore ["D205" "D400"]))))
+  (let ((max-line-length 88)
+	(pydoc-ignore ["D205" "D400"]))
+    (if (file-remote-p default-directory)
+	;; Tramp, find virtualenv or conda env
+	(progn
+	  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+	  (let* ((venv-path (python-env-path current-env))
+		 (conda-path (python-env-path current-env)))
+	    (cond
+	     ((eq (python-env-from current-env) 'virtual-env)
+	      (progn
+		(message "Remote virtualenv path: %s, %s" current-env (buffer-file-name))
+		(add-to-list 'tramp-remote-path (f-join (f-dirname venv-path)))))
+	     ((eq (python-env-from current-env) 'conda-env)
+	      (progn
+		(message "Remote conda path: %s, filename: %s" conda-path (buffer-file-name))
+		(add-to-list 'tramp-remote-path (f-join (f-dirname venv-path)))))))
+	  (setq-local lsp-pylsp-plugins-flake8-max-line-length max-line-length
+		      lsp-pylsp-plugins-pydocstyle-ignore pydoc-ignore))
+      ;; local file
+      (let* ((command (python-env-path current-env))
+	     (dir (if command (f-dirname command) 'nil)))
+	(if dir
+	    (setq-local lsp-pylsp-server-command (f-join dir "pylsp")
+			lsp-pylsp-plugins-flake8-max-line-length max-line-length
+			lsp-pylsp-plugins-pydocstyle-ignore pydoc-ignore)))))
+
 
   (lsp)
   (lsp-ui-mode)
