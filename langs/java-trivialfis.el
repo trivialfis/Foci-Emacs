@@ -4,18 +4,29 @@
 
 (require 'programming-trivialfis)
 
-(use-package lsp-trivialfis)
-(use-package lsp-java)
-(require 'lsp-ui)
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (require 'use-package))
+
+(use-package lsp-trivialfis
+  :defer t
+  :autoload trivialfis/lsp)
+(use-package lsp-mode
+  :defer t
+  :commands lsp
+  :config
+  (trivialfis/lsp))
+(use-package lsp-ui
+  :defer t
+  :commands lsp-ui-mode)
 
 (defun trivialfis/java ()
   "Java configuration."
   ;; Don't know why prog mode isn't loaded.
-  (c-set-style "gnu")
-  (setq lsp-before-save-edits nil)
   (trivialfis/programming-init)
+  ;; (c-set-style "gnu")
+  (setq lsp-before-save-edits nil)
   (flycheck-mode 1)
-  (trivialfis/lsp)
   (lsp)
   (lsp-ui-mode))
 
