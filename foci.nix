@@ -88,6 +88,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   pyim
   rust-mode                     # Rust
   cargo                         # Rust
+  lean-mode
   scala-mode
   toml-mode
   vala-mode
