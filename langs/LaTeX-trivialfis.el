@@ -28,6 +28,17 @@
 (require 'f)
 (require 'subr-x)			; string-join
 
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (require 'use-package))
+
+(use-package flycheck
+  :defer t
+  :commands flycheck-mode)
+(use-package async
+  :defer t
+  :commands async-start)
+
 (defun trivialfis/f--loop-files (files target-file)
   "Check each file in FILES for TARGET-FILE."
   (let ((home-dir (f-full "~")))
