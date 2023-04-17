@@ -1,16 +1,17 @@
-'''VTerm in right click menu of nautilus.  Put this file under:
+"""VTerm in right click menu of nautilus.  Put this file under:
 
   ~/.local/share/nautilus-python/extensions/vterm.py
 
 and install `python3-nautilus` on Ubuntu.  Restart nautilus service if necessary.
 
-'''
+"""
 
 import os
 import subprocess
-from urllib.parse import urlparse, unquote
+from urllib.parse import unquote, urlparse
 
-from gi.repository import Nautilus, GObject
+from gi.repository import GObject, Nautilus
+
 
 class ColumnExtension(GObject.GObject, Nautilus.MenuProvider):
     def __init__(self):
@@ -24,9 +25,11 @@ class ColumnExtension(GObject.GObject, Nautilus.MenuProvider):
             subprocess.Popen(cmd, shell=True)
 
     def get_background_items(self, window, file):
-        item = Nautilus.MenuItem(name='MenuProvider::VTerm',
-                                 label='Open in VTerm',
-                                 tip='Open VTerm here.',
-                                 icon='')
-        item.connect('activate', self.menu_activate_cb, file)
-        return item,
+        item = Nautilus.MenuItem(
+            name="MenuProvider::VTerm",
+            label="Open in VTerm",
+            tip="Open VTerm here.",
+            icon="",
+        )
+        item.connect("activate", self.menu_activate_cb, file)
+        return (item,)
