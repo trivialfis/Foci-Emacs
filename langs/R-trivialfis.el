@@ -2,11 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'ess)
 (eval-when-compile
   (require 'use-package))
 
-(use-package ess-site)
+(use-package ess-r-mode)
+
 (use-package condaenv
   :defer t
   :autoload trivialfis/find-activate-conda-env)
