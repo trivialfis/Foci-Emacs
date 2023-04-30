@@ -175,26 +175,41 @@ Saves to a temp file and puts the filename in the kill ring."
   (select-window (next-window))
   (trivialfis/vterm))
 
+;; check pt is not nil, don't emit quit signal.
+(defun war/vterm-mouse-set-point (event &optional promote-to-region)
+  "Move point to the position clicked on with the mouse.
+But when clicking to the unused area below the last prompt,
+move the cursor to the prompt area."
+  (interactive "e\np")
+  (let ((pt (mouse-set-point event promote-to-region)))
+    (if (and (not (null pt)) (= (count-words pt (point-max)) 0))
+        (vterm-reset-cursor-point)
+      pt)))
+
+(use-package vterm
+  :config
+  (use-package bind-key)
+  (setq vterm-kill-buffer-on-exit t
+	vterm-max-scrollback 100000)
+  (set-face-foreground 'vterm-color-blue "#CCFFCC")
+  (set-face-foreground 'vterm-color-magenta "#cc99ff")
+  :defer t
+  :bind
+  (:map vterm-mode-map
+	("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
+	("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
+	("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
+	("C-S-n" . trivialfis/new-term)
+	("<mouse-1>" . war/vterm-mouse-set-point))
+  :commands vterm
+  :autoload vterm-send-key vterm vterm-reset-cursor-point)
+
 (defun trivialfis/vterm ()
   "Open vterm."
   (interactive)
+  ;; (vterm-mouse-set-point)
   ;; Add this to gnome shortcut key `'emacs --eval "(trivialfis/vterm)"'
-  (use-package vterm
-    :config
-    (use-package bind-key)
-    (setq vterm-kill-buffer-on-exit t
-	  vterm-max-scrollback 100000)
-    (set-face-foreground 'vterm-color-blue "#CCFFCC")
-    (set-face-foreground 'vterm-color-magenta "#cc99ff")
-    :bind
-    (:map vterm-mode-map
-	  ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
-	  ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
-	  ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
-	  ("C-S-n" . trivialfis/new-term)
-	  ("<down-mouse-1>" . (lambda () (interactive))))
-    :commands vterm
-    :autoload vterm-send-key vterm)
+
 
   (vterm t) ;; addtional argument to make sure it spwans a new shell
   ;; Don't ask on exit
