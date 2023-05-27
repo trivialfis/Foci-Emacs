@@ -110,6 +110,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   lsp-treemacs
   lsp-docker
   lsp-origami
+  lsp-grammarly
   dap-mode
   # lsp langs
   lsp-metals
