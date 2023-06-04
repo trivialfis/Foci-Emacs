@@ -392,6 +392,12 @@ KEY-COMMANDS: A list containing one or more (key command)"
 	      (autoload 'trivialfis/xml-format-region "xml-trivialfis"
 		:interactive t)))
 
+(add-hook 'yaml-mode-hook
+	  #'(lambda ()
+	      (use-package flycheck
+		:commands flycheck-mode)
+	      (flycheck-mode 1)))
+
 (autoload 'mlir-mode "mlir-mode")
 (add-to-list 'auto-mode-alist '("\\.mlir\\'" . mlir-mode))
 
