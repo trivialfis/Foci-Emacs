@@ -94,7 +94,7 @@ Modified from `lsp-clients--clangd-command'."
 (defun trivialfis/clangd ()
   "Clangd configuration."
   (let ((clangd (lsp-clients-clangd-command)))
-    (setq-default lsp-clients-clangd-executable clangd
+    (setq-default lsp-clients--clangd-command clangd
 		  lsp-clients-clangd-args '("--header-insertion=never")))
   (lsp)
   (lsp-ui-mode)
