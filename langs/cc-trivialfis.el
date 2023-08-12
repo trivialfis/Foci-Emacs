@@ -55,9 +55,20 @@
   lsp-package-path
   lsp-clients-executable-find
   :config
-  (setq-local lsp-client-packages '(lsp-clangd))
+  (setq-local lsp-client-packages '(lsp-clangd)
+	      lsp-clients-clangd-executable (or (lsp-package-path 'clangd)
+						(-first #'executable-find
+							(-map (lambda (version)
+								(concat "clangd" version))
+							      ;; Prefer `clangd` without a version number appended.
+							      (cl-list* "" (-map
+									    (lambda (vernum) (format "-%d" vernum))
+									    (number-sequence 17 6 -1)))))
+						(lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
+						(lsp-clients-executable-find "xcrun" "--find" "clangd")))
   (trivialfis/lsp)
-  (use-package lsp-clangd))
+  (use-package lsp-clangd)
+  (setq-default lsp-clients-clangd-args '("--header-insertion=never")))
 
 (use-package lsp-ui
   :defer t
@@ -67,24 +78,6 @@
 (use-package dash
   :autoload -first -map)
 
-(defun lsp-clients-clangd-command ()
-  "Find clangd executable.
-
-Modified from `lsp-clients--clangd-command'."
-  (if (string= system-type "windows-nt")
-      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clangd.exe"
-    (or lsp-clients-clangd-executable lsp-clients--clangd-default-executable
-	(or (lsp-package-path 'clangd)
-            (-first #'executable-find
-                    (-map (lambda (version)
-                            (concat "clangd" version))
-                          ;; Prefer `clangd` without a version number appended.
-                          (cl-list* "" (-map
-					(lambda (vernum) (format "-%d" vernum))
-					(number-sequence 17 6 -1)))))
-            (lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
-            (lsp-clients-executable-find "xcrun" "--find" "clangd")))))
-
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-clients--clangd-command)
                   :major-modes '(c++-mode)
@@ -93,9 +86,7 @@ Modified from `lsp-clients--clangd-command'."
 
 (defun trivialfis/clangd ()
   "Clangd configuration."
-  (let ((clangd (lsp-clients-clangd-command)))
-    (setq-default lsp-clients--clangd-command clangd
-		  lsp-clients-clangd-args '("--header-insertion=never")))
+  
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
