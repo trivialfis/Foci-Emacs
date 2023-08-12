@@ -44,19 +44,6 @@
   :defer t
   :autoload trivialfis/lsp)
 
-(defun find-clangd ()
-  "Find clangd executable"
-  (or (lsp-package-path 'clangd)
-      (-first #'executable-find
-	      (-map (lambda (version)
-		      (concat "clangd" version))
-		    ;; Prefer `clangd` without a version number appended.
-		    (cl-list* "" (-map
-				  (lambda (vernum) (format "-%d" vernum))
-				  (number-sequence 17 6 -1)))))
-      (lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
-      (lsp-clients-executable-find "xcrun" "--find" "clangd")))
-
 (use-package lsp-mode
   :defer t
   :commands lsp
@@ -68,20 +55,10 @@
   lsp-package-path
   lsp-clients-executable-find
   :config
-  (setq-local lsp-client-packages '(lsp-clangd)
-	      lsp-clients-clangd-executable (or (lsp-package-path 'clangd)
-						(-first #'executable-find
-							(-map (lambda (version)
-								(concat "clangd" version))
-							      ;; Prefer `clangd` without a version number appended.
-							      (cl-list* "" (-map
-									    (lambda (vernum) (format "-%d" vernum))
-									    (number-sequence 17 6 -1)))))
-						(lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
-						(lsp-clients-executable-find "xcrun" "--find" "clangd")))
+  (setq-local lsp-client-packages '(lsp-clangd))
   (trivialfis/lsp)
-  (use-package lsp-clangd)
-  (setq-default lsp-clients-clangd-args '("--header-insertion=never")))
+  (use-package lsp-clangd
+    :autoload lsp-clients--clangd-command))
 
 (use-package lsp-ui
   :defer t
@@ -90,6 +67,24 @@
 
 (use-package dash
   :autoload -first -map)
+
+(defun lsp-clients-clangd-command (remote)
+  "Find clangd executable.
+
+Modified from `lsp-clients--clangd-command'."
+  (if (string= system-type "windows-nt")
+      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clangd.exe"
+    (or (lsp-package-path 'clangd)
+        (-first #'(lambda (command)
+		    (executable-find command remote))
+		(-map (lambda (version)
+			(concat "clangd" version))
+		      ;; Prefer `clangd` without a version number appended.
+		      (cl-list* "" (-map
+				    (lambda (vernum) (format "-%d" vernum))
+				    (number-sequence 17 6 -1)))))
+        (lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
+        (lsp-clients-executable-find "xcrun" "--find" "clangd"))))
 
 ;; not working with the latest lsp, can start the connection, then hangs at starting.
 (lsp-register-client
@@ -100,6 +95,10 @@
 
 (defun trivialfis/clangd ()
   "Clangd configuration."
+  (let ((clangd (lsp-clients-clangd-command (file-remote-p default-directory))))
+    (message "found clangd: %s" clangd)
+    (setq-default lsp-clients-clangd-executable clangd
+		  lsp-clients-clangd-args '("--header-insertion=never")))
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
