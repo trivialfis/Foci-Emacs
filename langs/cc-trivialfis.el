@@ -55,7 +55,6 @@
   lsp-package-path
   lsp-clients-executable-find
   :config
-  (setq-local lsp-client-packages '(lsp-clangd))
   (trivialfis/lsp)
   (use-package lsp-clangd
     :autoload lsp-clients--clangd-command))
