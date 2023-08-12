@@ -71,6 +71,8 @@
 (defun lsp-clients-clangd-command (remote)
   "Find clangd executable.
 
+REMOTE is for `executable-find'.
+
 Modified from `lsp-clients--clangd-command'."
   (if (string= system-type "windows-nt")
       "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clangd.exe"
