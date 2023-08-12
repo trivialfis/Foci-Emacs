@@ -22,7 +22,7 @@
   :autoload f-join)
 
 ;; https://github.com/REditorSupport/languageserver
-;; install.packages("languageserver", Ncpus=16)
+;; install.packages("languageserver", Ncpus=parallel::detectCores())
 (use-package lsp-mode
   :defer t
   :commands lsp

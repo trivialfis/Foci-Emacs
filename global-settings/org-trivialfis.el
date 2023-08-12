@@ -135,7 +135,7 @@ Minor mode for using org and mu4e to manage projects (Foci playground).
 
 \(fn)" t nil))
 
-(setq org-directory (concat (getenv "HOME") "/Workspace/roam/"))
+(setq org-directory (concat (getenv "HOME") "/workspace/roam/"))
 
 (use-package bind-key)
 (use-package org-roam

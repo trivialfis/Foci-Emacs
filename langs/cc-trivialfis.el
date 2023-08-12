@@ -44,6 +44,19 @@
   :defer t
   :autoload trivialfis/lsp)
 
+(defun find-clangd ()
+  "Find clangd executable"
+  (or (lsp-package-path 'clangd)
+      (-first #'executable-find
+	      (-map (lambda (version)
+		      (concat "clangd" version))
+		    ;; Prefer `clangd` without a version number appended.
+		    (cl-list* "" (-map
+				  (lambda (vernum) (format "-%d" vernum))
+				  (number-sequence 17 6 -1)))))
+      (lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
+      (lsp-clients-executable-find "xcrun" "--find" "clangd")))
+
 (use-package lsp-mode
   :defer t
   :commands lsp
@@ -78,15 +91,15 @@
 (use-package dash
   :autoload -first -map)
 
+;; not working with the latest lsp, can start the connection, then hangs at starting.
 (lsp-register-client
- (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-clients--clangd-command)
+ (make-lsp-client :new-connection (lsp-tramp-connection #'(lambda () (lsp-clients-clangd-command t)))
                   :major-modes '(c++-mode)
                   :remote? t
                   :server-id 'clangd-remote))
 
 (defun trivialfis/clangd ()
   "Clangd configuration."
-  
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
