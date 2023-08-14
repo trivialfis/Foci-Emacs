@@ -3,6 +3,7 @@
 ;;; Code:
 
 (require 'programming-trivialfis)
+(require 'cc-mode)
 
 (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
@@ -25,7 +26,9 @@
   ;; Don't know why prog mode isn't loaded.
   (trivialfis/programming-init)
   ;; (c-set-style "gnu")
-  (setq lsp-before-save-edits nil)
+  (setq lsp-before-save-edits nil
+	c-basic-offset 2
+	indent-tabs-mode nil)
   (flycheck-mode 1)
   (lsp)
   (lsp-ui-mode))
