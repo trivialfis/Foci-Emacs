@@ -154,5 +154,10 @@ Minor mode for using org and mu4e to manage projects (Foci playground).
                 ("C-c n a" . org-roam-alias-add)
                 ("C-c n l" . org-roam-buffer-toggle)))))
 
+;; useful utilities for referencing heading in a different file
+;; https://emacs.stackexchange.com/questions/19598/org-mode-link-to-heading-in-other-org-file
+;; (global-set-key (kbd "C-c l") 'org-store-link)
+;; (global-set-key (kbd "C-c C-l") 'org-insert-link)
+
 (provide 'org-trivialfis)
 ;;; org-trivialfis ends here
