@@ -215,7 +215,8 @@ move the cursor to the prompt area."
   ;; Don't ask on exit
   (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)
   ;; FIXME: Enable per-buffer highlight
-  (global-hl-line-mode -1))
+  (global-hl-line-mode -1)
+  (set-frame-parameter (selected-frame) 'alpha-background 90))
 
 (defun trivialfis/remove-blank-lines ()
   "Remove all blank lines in current buffer."
