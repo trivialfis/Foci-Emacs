@@ -23,6 +23,9 @@
 (require 'company)
 (require 'company-shell)
 
+(use-package flycheck
+  :autoload flycheck-mode)
+
 (defun trivialfis/bash()
   "Shell configuration."
   (add-to-list 'company-backends 'company-shell)
