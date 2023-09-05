@@ -14,11 +14,12 @@
 (use-package lsp-ui
   :defer t
   :commands lsp-ui-mode
-  :config (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references))
+  :config
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references)
+  (trivialfis/lsp))
 
 (defun trivialfis/haskell ()
   "Configuration for haskell."
-  (trivialfis/lsp)
   (lsp)
   (lsp-ui-mode))
 
