@@ -90,6 +90,7 @@
 
 (add-to-list 'load-path "~/.emacs.d/global-settings/")
 (add-to-list 'load-path "~/.emacs.d/langs/")
+(add-to-list 'load-path "~/.emacs.d/copilot.el/")
 
 (package-initialize)
 (eval-when-compile

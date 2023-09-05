@@ -104,5 +104,20 @@ MODE: the major programming mode"
 Enabled by specific programming language."
   (auto-update-file-header))
 
+
+(use-package copilot
+  :defer t
+  :config
+  (setq copilot--base-dir (expand-file-name "~/.emacs.d/copilot.el"))
+  (company-box-mode)
+  (local-set-key (kbd "C-<tab>") 'copilot-accept-completion)
+  :commands
+  copilot-mode)
+
+(use-package company-box
+  :defer t
+  :commands
+  company-box-mode)
+
 (provide 'programming-trivialfis)
 ;;; programming-trivialfis.el ends here

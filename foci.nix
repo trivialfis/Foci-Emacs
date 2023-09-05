@@ -30,6 +30,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   use-package
   bind-key
   edit-indirect
+  editorconfig
   ansi
   memoize
   f
