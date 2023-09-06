@@ -34,6 +34,7 @@
 (set-face-attribute 'default nil :height 90)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
+(menu-bar-mode 0)
 (put 'narrow-to-region 'disabled nil)
 (global-display-line-numbers-mode t)
 
