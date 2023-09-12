@@ -207,9 +207,7 @@ move the cursor to the prompt area."
 (defun trivialfis/vterm ()
   "Open vterm."
   (interactive)
-  ;; (vterm-mouse-set-point)
   ;; Add this to gnome shortcut key `emacs --eval "(trivialfis/vterm)"'
-
 
   (vterm t) ;; addtional argument to make sure it spwans a new shell
   ;; Don't ask on exit

@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Foci";
 
   inputs = {emacs-overlay.url = "github:nix-community/emacs-overlay";};
   outputs = { self, nixpkgs, emacs-overlay }:
