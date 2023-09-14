@@ -10,6 +10,10 @@
 (use-package lsp-trivialfis
   :defer t
   :autoload trivialfis/lsp)
+(use-package lsp-haskell
+  :defer t
+  :config
+  (setq lsp-haskell-server-args `("-l" ,lsp-haskell-server-log-file)))
 
 (use-package lsp-ui
   :defer t

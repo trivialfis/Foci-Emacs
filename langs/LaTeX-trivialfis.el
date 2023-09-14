@@ -26,6 +26,8 @@
 (require 'company-posframe)
 (require 'text-trivialfis)
 (require 'f)
+(use-package lsp
+  :commands lsp)
 (require 'subr-x)			; string-join
 
 (eval-when-compile
