@@ -162,7 +162,7 @@ Saves to a temp file and puts the filename in the kill ring."
     (message filename)))
 
 
-(defun trivialfis/new-term (&optional window)
+(defun trivialfis/new-term (newterm &optional window)
   "Split window and open a new term, optional WINDOW."
   (interactive)
   (let ((window (or (selected-window) window))
@@ -173,7 +173,7 @@ Saves to a temp file and puts the filename in the kill ring."
       (with-selected-window window
 	(split-window-vertically))))
   (select-window (next-window))
-  (trivialfis/vterm))
+  (funcall newterm))
 
 ;; check pt is not nil, don't emit quit signal.
 (defun war/vterm-mouse-set-point (event &optional promote-to-region)
@@ -199,10 +199,39 @@ move the cursor to the prompt area."
 	("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
 	("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
 	("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
-	("C-S-n" . trivialfis/new-term)
+	("C-S-n" . (lambda () (interactive) (trivialfis/new-term #'(lambda () (trivialfis/vterm)))))
 	("<mouse-1>" . war/vterm-mouse-set-point))
   :commands vterm
   :autoload vterm-send-key vterm vterm-reset-cursor-point)
+
+(use-package eat
+  :defer t
+  :config
+  (use-package bind-key)
+  :commands eat
+  :config
+  (unbind-key "M-1" eat-semi-char-mode-map)
+  (unbind-key "M-2" eat-semi-char-mode-map)
+  (unbind-key "M-3" eat-semi-char-mode-map)
+  (unbind-key "M-4" eat-semi-char-mode-map)
+  (unbind-key "M-5" eat-semi-char-mode-map)
+  (unbind-key "M-6" eat-semi-char-mode-map)
+  (unbind-key "M->" eat-semi-char-mode-map)
+  (unbind-key "M-<" eat-semi-char-mode-map)
+  ;; (add-hook 'eat-exec-hook #'(lambda (_) (goto-char (point-max))))
+  :bind
+  (:map eat-mode-map
+	("C-S-n" . (lambda () (interactive) (trivialfis/new-term #'(lambda () (trivialfis/eat)))))
+	("C-c C-l" . eat-reset)))
+
+
+(defun trivialfis/eat()
+  "Open eat term."
+  (interactive)
+  (eat nil t)
+  ;; (set-window-scroll-bars (selected-window) nil 'right)
+  (set-frame-parameter (selected-frame) 'alpha-background 85)
+  (global-hl-line-mode -1))
 
 (defun trivialfis/vterm ()
   "Open vterm."
@@ -214,7 +243,8 @@ move the cursor to the prompt area."
   (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)
   ;; FIXME: Enable per-buffer highlight
   (global-hl-line-mode -1)
-  (set-frame-parameter (selected-frame) 'alpha-background 90))
+  (set-window-scroll-bars (selected-window) nil 'right)
+  (set-frame-parameter (selected-frame) 'alpha-background 85))
 
 (defun trivialfis/remove-blank-lines ()
   "Remove all blank lines in current buffer."
@@ -268,7 +298,7 @@ one, an error is signaled."
 (defun trivialfis/new-vterm-frame()
   "Open vterm in a new frame."
   (interactive)
-  (trivialfis/new-term)
+  (trivialfis/new-term #'(lambda () (trivialfis/vterm)))
   (trivialfis/pop-frame))
 
 

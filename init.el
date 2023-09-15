@@ -115,6 +115,7 @@
    trivialfis/nav-indent-shift-left
    trivialfis/screenshot
    trivialfis/vterm
+   trivialfis/eat
    trivialfis/new-vterm-frame
    trivialfis/remove-blank-lines
    trivialfis/swap-windows-horizontal))
@@ -197,7 +198,6 @@
 
 ;; Fill indicator mode
 (autoload 'fci-mode "fill-col")
-
 
 ;; highlight current line
 (global-hl-line-mode 1)
