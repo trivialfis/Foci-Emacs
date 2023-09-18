@@ -27,7 +27,6 @@
   :defer t
   :commands lsp
   :config
-  (setq-local lsp-client-packages '(lsp-r))
   ;; check renv first, then anaconda.
   (let ((profile (locate-dominating-file "." ".Rprofile")))
     (if profile
