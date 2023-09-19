@@ -26,10 +26,15 @@
   (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references)
   (trivialfis/lsp))
 
+(use-package yassnippet
+  :autoload yas-minor-mode)
+(use-package company)
+
 (defun trivialfis/haskell ()
   "Configuration for haskell."
   (lsp)
-  (lsp-ui-mode))
+  (lsp-ui-mode)
+  (yas-minor-mode))
 
 (provide 'haskell-trivialfis)
 ;;; haskell-trivialfis.el ends here
