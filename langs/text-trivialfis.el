@@ -26,22 +26,7 @@
   (require 'use-package)
   (defvar flyspell-mode-map))
 
-(defvar accepted-mode-list '(text-mode org-mode markdown-mode mu4e-compose-mode))
-
-(defun trivialfis/check-buffer-on-save ()
-  "Use language tool to check text mode buffer on save."
-  (interactive)
-  (use-package langtool
-    :init
-    (add-hook 'after-save-hook #'(lambda ()
-  				   (when (memq major-mode accepted-mode-list)
-  				     (unless langtool-buffer-process
-  				       (langtool-check-buffer)))))
-    :config
-    (setq-local
-     langtool-language-tool-jar "~/.emacs.d/LanguageTool-4.3/languagetool-commandline.jar"
-     langtool-default-language "en-US"))
-  :demand t)
+(defvar accepted-mode-list '(text-mode org-mode markdown-mode mu4e-compose-mode rst-mode))
 
 (defun trivialfis/_text ()
   "Configuration for normal text."

@@ -400,6 +400,10 @@ KEY-COMMANDS: A list containing one or more (key command)"
 		:commands flycheck-mode)
 	      (flycheck-mode 1)))
 
+(add-hook 'rst-mode-hook
+	  #'(lambda ()
+	      (trivialfis/text)))
+
 (autoload 'mlir-mode "mlir-mode")
 (add-to-list 'auto-mode-alist '("\\.mlir\\'" . mlir-mode))
 
