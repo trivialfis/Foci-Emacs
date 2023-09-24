@@ -9,8 +9,7 @@
 (use-package lsp-mode
   :defer t
   :commands lsp
-  :autoload
-  lsp-find-references)
+  :autoload lsp-find-references)
 (use-package lsp-trivialfis
   :defer t
   :autoload trivialfis/lsp)

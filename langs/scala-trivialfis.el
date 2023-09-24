@@ -7,10 +7,8 @@
   (require 'use-package))
 
 (use-package programming-trivialfis)
-(use-package lsp-trivialfis)
 ;; Add metals backend for lsp-mode
-(require 'scala-mode)
-(use-package lsp-metals)
+(use-package scala-mode)
 (use-package sbt-mode
   :commands sbt-start sbt-command
   :config
@@ -21,22 +19,39 @@
    'self-insert-command
    minibuffer-local-completion-map)
   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-  (setq sbt:program-options '("-Dsbt.supershell=false"))
-  )
+  (setq sbt:program-options '("-Dsbt.supershell=false")))
 
+(use-package lsp-trivialfis
+  :autoload trivialfis/lsp)
 (use-package lsp-mode
-  ;; Optional - enable lsp-mode automatically in scala files
-  :hook  (scala-mode . lsp)
-  (lsp-mode . lsp-lens-mode)
+  :defer t
+  :commands lsp
+  :config (trivialfis/lsp)
+  :autoload lsp-find-references)
+(use-package lsp-metals
+  :custom
+  ;; You might set metals server options via -J arguments. This might not always work, for instance when
+  ;; metals is installed using nix. In this case you can use JAVA_TOOL_OPTIONS environment variable.
+  (lsp-metals-server-args '(;; Metals claims to support range formatting by default but it supports range
+                            ;; formatting of multiline strings only. You might want to disable it so that
+                            ;; emacs can use indentation provided by scala-mode.
+                            "-J-Dmetals.allow-multiline-string-formatting=off"
+                            ;; Enable unicode icons. But be warned that emacs might not render unicode
+                            ;; correctly in all cases.
+                            "-J-Dmetals.icons=unicode"))
+  ;; In case you want semantic highlighting. This also has to be enabled in lsp-mode using
+  ;; `lsp-semantic-tokens-enable' variable. Also you might want to disable highlighting of modifiers
+  ;; setting `lsp-semantic-tokens-apply-modifiers' to `nil' because metals sends `abstract' modifier
+  ;; which is mapped to `keyword' face.
+  (lsp-metals-enable-semantic-highlighting t)
+  (setq lsp-semantic-tokens-enable t
+	lsp-semantic-tokens-apply-modifiers' nil))
+
+(use-package lsp-ui
+  :defer t
+  :commands lsp-ui-mode
   :config
-  ;; Uncomment following section if you would like to tune lsp-mode performance according to
-  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
-  ;;       (setq gc-cons-threshold 100000000) ;; 100mb
-  ;;       (setq read-process-output-max (* 1024 1024)) ;; 1mb
-  ;;       (setq lsp-idle-delay 0.500)
-  ;;       (setq lsp-log-io nil)
-  ;;       (setq lsp-completion-provider :capf)
-  (setq lsp-prefer-flymake nil))
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references))
 
 ;; Super slow at initialization.
 (defun trivialfis/scala ()
