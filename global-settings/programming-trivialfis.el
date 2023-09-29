@@ -110,7 +110,7 @@ Enabled by specific programming language."
   :config
   (setq copilot--base-dir (expand-file-name "~/.emacs.d/copilot.el"))
   (company-box-mode)
-  (local-set-key (kbd "C-<tab>") 'copilot-accept-completion)
+  (define-key (current-global-map) (kbd "C-<tab>") 'copilot-accept-completion)
   :commands
   copilot-mode)
 
