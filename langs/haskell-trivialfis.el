@@ -16,7 +16,7 @@
 (use-package lsp-haskell
   :defer t
   :config
-  (setq lsp-haskell-server-args `("-l" ,lsp-haskell-server-log-file)))
+  (setq lsp-haskell-server-args `("-l" ,lsp-haskell-server-log-file "-j" ,(number-to-string (num-processors)))))
 
 (use-package lsp-ui
   :defer t
