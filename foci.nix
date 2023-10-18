@@ -86,6 +86,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   racket-mode
   lua-mode
   meson-mode
+  julia-mode
   pyim
   rust-mode                     # Rust
   cargo                         # Rust
