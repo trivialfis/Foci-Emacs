@@ -422,6 +422,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 (autoload 'trivialfis/mu4e "mu4e-trivialfis" :interactive t)
 
+(autoload 'trivialfis/json "json-trivialfis")
+(add-hook 'json-mode-hook 'trivialfis/json)
+
 (autoload 'trivialfis/markdown "markdown-trivialfis")
 (add-hook 'markdown-mode-hook 'trivialfis/markdown)
 (add-to-list 'auto-mode-alist '("\\.Rmd\\'" . markdown-mode))
