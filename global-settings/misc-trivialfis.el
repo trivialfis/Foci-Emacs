@@ -1,6 +1,6 @@
 ;;; misc-trivialfis.el --- Misc functions.
 ;;;
-;;; Copyright © 2016-2022 Jiamingy <jm.yuan@outlook.com>
+;;; Copyright © 2016-2023 Jiamingy <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -166,7 +166,7 @@ Saves to a temp file and puts the filename in the kill ring."
   "Split window and open a new term, optional WINDOW."
   (interactive)
   (let ((window (or (selected-window) window))
-	(split-wh-threshold 3.5))
+	(split-wh-threshold 2.8))
     (if (< (* (window-height) split-wh-threshold) (window-width))
 	(with-selected-window window
 	  (split-window-horizontally))
