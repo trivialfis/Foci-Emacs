@@ -244,7 +244,7 @@ move the cursor to the prompt area."
   ;; FIXME: Enable per-buffer highlight
   (global-hl-line-mode -1)
   (set-window-scroll-bars (selected-window) nil 'right)
-  (set-frame-parameter (selected-frame) 'alpha-background 85))
+  (set-frame-parameter (selected-frame) 'alpha-background 65))
 
 (defun trivialfis/remove-blank-lines ()
   "Remove all blank lines in current buffer."
