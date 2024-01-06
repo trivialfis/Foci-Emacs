@@ -1,6 +1,6 @@
 ;;; python-trivialfis --- Python configuration -*- lexical-binding: t -*-
 ;;;
-;;; Copyright © 2016-2022 Jiamingy <jm.yuan@outlook.com>
+;;; Copyright © 2016-2024 Jiamingy <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -158,7 +158,7 @@
 (defvar current-env 'nil)
 
 (defun trivialfis/elpy-setup(venv)
-  "Elpy configuration."
+  "Elpy configuration.  VENV is the virtual env to be activated."
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
   (setq-local
    flycheck-flake8-maximum-line-length 88 ; black
@@ -167,7 +167,17 @@
    flycheck-disabled-checkers '(python-pylint))
 
   (unless current-env
-    (setq current-env venv))
+    (setq current-env venv)
+    ;; Set the mypy cache for flycheck to a global directory to avoid polluting the source
+    ;; dir.
+    (let* ((command (python-env-path current-env))
+	   (remove-/ (substring command 1)) ; remove the root / to make f-join happy
+	   (path (f-join (f-expand "~/.cache/mypy/") remove-/)))
+      ;; The final path is ~/.cache/mypy/<Python command path>
+      (if (and (or (not (f-exists? path)) (f-dir? path))
+	       ;; I haven't tested on Windows.
+	       (not (string= system-type "windows-nt")))
+	  (setq flycheck-python-mypy-cache-dir path))))
 
   (add-hook 'xref-after-jump-hook
 	    #'(lambda ()
