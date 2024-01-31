@@ -52,6 +52,11 @@
   (trivialfis/lsp)
   (use-package lsp-pylsp))
 
+(use-package lsp-ui
+  :defer t
+  :commands lsp-ui-mode
+  :config (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references))
+
 
 (use-package repl-trivialfis
   :commands (trivialfis/comint-send-input))
@@ -240,6 +245,7 @@
 
   (lsp)
   (lsp-ui-mode)
+  (flycheck-mode 1)
   (setq-local forward-sexp-function 'nil
 	      fill-column 88))
 
