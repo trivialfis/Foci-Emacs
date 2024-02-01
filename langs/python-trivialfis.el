@@ -250,7 +250,9 @@
 	(if dir
 	    (setq-local lsp-pylsp-server-command (f-join dir "pylsp")
 			lsp-pylsp-plugins-flake8-max-line-length max-line-length
-			lsp-pylsp-plugins-pydocstyle-ignore pydoc-ignore)))))
+			lsp-pylsp-plugins-pydocstyle-ignore pydoc-ignore
+			lsp-pylsp-plugins-isort-enabled t
+			lsp-pylsp-plugins-black-enabled t)))))
 
 
   (lsp)
