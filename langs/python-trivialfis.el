@@ -285,7 +285,10 @@ This can make use of __name__ == '__main__'."
     (python-shell-send-file path)))
 
 (defun trivialfis/isort()
-  "Run Python isort."
+  "Run Python isort.
+
+Find pyproject.toml if available, call isort and replace the
+buffer content with formatted result."
   (interactive)
   (unless (equal major-mode 'python-mode)
     (error "Not in python-mode"))
@@ -319,8 +322,8 @@ This can make use of __name__ == '__main__'."
 	(goto-char (point-max))
 	(let ((pmax (point)))
 	  (insert-file-contents temp-file)  ; append to the end of the buffer
-	  (delete-region (point-min) pmax)) ; remove old content
-	(goto-char current-point))	    ; go back to previous point
+	  (delete-region (point-min) pmax)) ; remove the old content
+	(goto-char current-point))	    ; go back to the previous point
       (delete-file temp-file))))
 
 (defun trivialfis/elpy-format-buffer()
