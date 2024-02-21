@@ -289,12 +289,38 @@ This can make use of __name__ == '__main__'."
   (interactive)
   (unless (equal major-mode 'python-mode)
     (error "Not in python-mode"))
-  (let ((isort "isort"))
+  (let ((isort "isort")
+	(pyproject (f-expand (locate-dominating-file default-directory "pyproject.toml")))
+	(name (f-filename (buffer-file-name))))
     (unless (executable-find isort)
       (error "Executable isort is not found"))
-    (let ((*isort* (get-buffer-create (concat "*" isort "*"))))
-      (call-process isort nil *isort* nil "--profile=black" (buffer-file-name))
-      (revert-buffer-quick))))
+
+    (let ((*isort* (get-buffer-create (concat "*" isort "*")))
+	  (src (if pyproject (format "--src=%s" pyproject) ""))
+	  (config (if pyproject (format "--settings-path=%s" pyproject) ""))
+	  (temp-file (make-temp-file
+		      "isort-emacs"	; PREFIX
+		      nil		; DIR-FLAG
+		      name
+		      (buffer-substring-no-properties (point-min) (point-max)))))
+      ;; "--profile=black"
+      (call-process
+       isort				; PROGRAM
+       nil				; INFILE
+       *isort*				; DESTINATION
+       nil				; DISPLAY
+       ;; args
+       temp-file
+       src
+       config)
+
+      (let ((current-point (point)))
+	(goto-char (point-max))
+	(let ((pmax (point)))
+	  (insert-file-contents temp-file)  ; append to the end of the buffer
+	  (delete-region (point-min) pmax)) ; remove old content
+	(goto-char current-point))	    ; go back to previous point
+      (delete-file temp-file))))
 
 (defun trivialfis/elpy-format-buffer()
   "Format buffer."
