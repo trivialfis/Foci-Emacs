@@ -289,9 +289,10 @@ This can make use of __name__ == '__main__'."
   (interactive)
   (unless (equal major-mode 'python-mode)
     (error "Not in python-mode"))
-  (let ((isort "isort")
-	(pyproject (f-expand (locate-dominating-file default-directory "pyproject.toml")))
-	(name (f-filename (buffer-file-name))))
+  (let* ((isort "isort")
+	 (pyproject-rel (locate-dominating-file default-directory "pyproject.toml"))
+	 (name (f-filename (buffer-file-name)))
+	 (pyproject (if pyproject-rel (f-expand pyproject-rel) nil)))
     (unless (executable-find isort)
       (error "Executable isort is not found"))
 
