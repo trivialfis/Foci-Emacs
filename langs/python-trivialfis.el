@@ -296,6 +296,12 @@ This can make use of __name__ == '__main__'."
       (call-process isort nil *isort* nil "--profile=black" (buffer-file-name))
       (revert-buffer-quick))))
 
+(defun trivialfis/elpy-format-buffer()
+  "Format buffer."
+  (interactive)
+  (elpy-format-code)
+  (trivialfis/isort))
+
 (defun trivialfis/python()
   "Python configuration."
   (local-set-key (kbd "C-c C-a") 'trivialfis/eval-file)
