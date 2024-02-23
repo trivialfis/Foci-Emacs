@@ -301,13 +301,12 @@ buffer content with formatted result."
 
     (let ((*isort* (get-buffer-create (concat "*" isort "*")))
 	  (src (if pyproject (format "--src=%s" pyproject) ""))
-	  (config (if pyproject (format "--settings-path=%s" pyproject) ""))
+	  (config (if pyproject (format "--settings-path=%s" pyproject) "--profile=black"))
 	  (temp-file (make-temp-file
 		      "isort-emacs"	; PREFIX
 		      nil		; DIR-FLAG
 		      name
 		      (buffer-substring-no-properties (point-min) (point-max)))))
-      ;; "--profile=black"
       (call-process
        isort				; PROGRAM
        nil				; INFILE
