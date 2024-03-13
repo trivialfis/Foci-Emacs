@@ -1,7 +1,7 @@
-;;; helm-trivialfis --- Summary
+;;; helm-trivialfis --- Summary -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright © 2016-2024 Jiamingy <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -55,6 +55,7 @@
 	helm-autoresize-min-height            32
 	helm-buffers-fuzzy-matching           t
 	helm-always-two-windows               t
+	helm-show-action-window-other-window  nil
 	helm-default-display-buffer-functions '(display-buffer-in-side-window))
 
   (helm-autoresize-mode 1)
