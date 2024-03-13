@@ -55,6 +55,8 @@
 	helm-autoresize-min-height            32
 	helm-buffers-fuzzy-matching           t
 	helm-always-two-windows               t
+	;; default is changed 'left upstream, which splits the action window horizontally,
+	;; The splitting can fail from time to time.
 	helm-show-action-window-other-window  nil
 	helm-default-display-buffer-functions '(display-buffer-in-side-window))
 
