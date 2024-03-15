@@ -302,6 +302,14 @@ one, an error is signaled."
   (trivialfis/pop-frame))
 
 
+(defun trivialfis/ghcs()
+  (interactive)
+  (use-package codespaces
+    :config (codespaces-setup)
+    :bind ("C-c S" . #'codespaces-connect)
+    :defer t
+    :commands codespaces-connect))
+
 ;; Other functions that might be useful
 ;; Set the coding system for a specific file
 ;;   set-buffer-file-coding-system utf-8-unix

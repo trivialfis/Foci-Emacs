@@ -118,7 +118,8 @@
    trivialfis/eat
    trivialfis/new-vterm-frame
    trivialfis/remove-blank-lines
-   trivialfis/swap-windows-horizontal))
+   trivialfis/swap-windows-horizontal
+   trivialfis/ghcs))
 
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"
