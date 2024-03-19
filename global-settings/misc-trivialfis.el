@@ -303,12 +303,13 @@ one, an error is signaled."
 
 
 (defun trivialfis/ghcs()
+  "Setup GitHUB codespaces."
   (interactive)
   (use-package codespaces
     :config (codespaces-setup)
     :bind ("C-c S" . #'codespaces-connect)
     :defer t
-    :commands codespaces-connect))
+    :commands codespaces-connect codespaces-setup))
 
 ;; Other functions that might be useful
 ;; Set the coding system for a specific file
