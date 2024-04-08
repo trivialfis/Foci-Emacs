@@ -99,8 +99,8 @@
 
 (cl-defun new-python-env ()
   "Create a new Python env struct."
-  (let* ((options '((trivialfis/find-activate-virtualenv . virtual-env)
-		    (trivialfis/find-activate-conda-env . conda-env)
+  (let* ((options '((trivialfis/find-activate-conda-env . conda-env)
+		    (trivialfis/find-activate-virtualenv . virtual-env)
 		    (trivialfis/filename-python-p . file-name)
 		    (trivialfis/python-from-shebang . shebang)))
 	 (env (new-python-env-rec options)))
