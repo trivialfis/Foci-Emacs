@@ -186,23 +186,29 @@ move the cursor to the prompt area."
         (vterm-reset-cursor-point)
       pt)))
 
+;; Be aware of the copy mode: https://github.com/akermu/emacs-libvterm/issues/367
 (use-package vterm
   :config
   (use-package bind-key)
   (setq vterm-kill-buffer-on-exit t
-	vterm-max-scrollback 100000)
+	vterm-max-scrollback 100000
+	;; vterm-copy-exclude-prompt nil
+	)
   (set-face-foreground 'vterm-color-blue "#CCFFCC")
   (set-face-foreground 'vterm-color-magenta "#cc99ff")
   :defer t
   :bind
-  (:map vterm-mode-map
-	("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
-	("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
-	("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
-	("C-S-n" . (lambda () (interactive) (trivialfis/new-term #'(lambda () (trivialfis/vterm)))))
-	("<mouse-1>" . war/vterm-mouse-set-point))
+  ((:map vterm-mode-map
+	 ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
+	 ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
+	 ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
+	 ("C-S-n" . (lambda () (interactive) (trivialfis/new-term #'(lambda () (trivialfis/vterm)))))
+	 ("<mouse-1>" . war/vterm-mouse-set-point))
+   ;; (:map vterm-copy-mode-map
+   ;; 	 ("M-w" . #'vterm-copy-mode-done))
+   )
   :commands vterm
-  :autoload vterm-send-key vterm vterm-reset-cursor-point)
+  :autoload vterm-send-key vterm vterm-reset-cursor-point vterm-copy-mode-done)
 
 (use-package eat
   :defer t
