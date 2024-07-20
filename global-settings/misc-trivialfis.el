@@ -308,6 +308,17 @@ one, an error is signaled."
   (trivialfis/pop-frame))
 
 
+;; https://www.reddit.com/r/emacs/comments/mhpkzj/how_can_i_replace_all_the_matches_of_a_find_and/
+(defun entire-buffer-replace (from to)
+  "Do search and replace on the entire buffer without moving point.
+FROM TO are range markers."
+  (interactive "MReplace: \nMWith: ")
+  (save-excursion
+    (goto-char (point-min))
+    (let ((case-fold-search nil))
+      (while (search-forward from nil t)
+        (replace-match to t t)))))
+
 (defun trivialfis/ghcs()
   "Setup GitHUB codespaces."
   (interactive)
