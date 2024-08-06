@@ -83,7 +83,7 @@ Modified from `lsp-clients--clangd-command'."
 		      ;; Prefer `clangd` without a version number appended.
 		      (cl-list* "" (-map
 				    (lambda (vernum) (format "-%d" vernum))
-				    (number-sequence 18 14 -1)))))
+				    (number-sequence 20 14 -1)))))
         (lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
         (lsp-clients-executable-find "xcrun" "--find" "clangd"))))
 
