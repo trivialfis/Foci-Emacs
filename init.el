@@ -21,16 +21,18 @@
 ;;; Code:
 
 ;; Global settings------------------------------------------------------------
-(setq initial-major-mode 'fundamental-mode  ; Prevents loading emacs lisp mode automatically
-      inhibit-startup-screen t
-      ;; Set the frame title to display file path and name
-      frame-title-format '((:eval (if (buffer-file-name)
-				      (abbreviate-file-name
-				       (buffer-file-name))
-				    "%b")))
-      package-enable-at-startup nil
-      visible-bell t			; Remove the beep
-      )
+(setq
+ gc-cons-threshold 2097152 ; Increase the GC threshold to make the initialization slightly faster.
+ initial-major-mode 'fundamental-mode  ; Prevents loading emacs lisp mode automatically
+ inhibit-startup-screen t
+ ;; Set the frame title to display file path and name
+ frame-title-format '((:eval (if (buffer-file-name)
+				 (abbreviate-file-name
+				  (buffer-file-name))
+			       "%b")))
+ package-enable-at-startup nil
+ visible-bell t			; Remove the beep
+ )
 (set-face-attribute 'default nil :height 90)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
@@ -443,6 +445,7 @@ KEY-COMMANDS: A list containing one or more (key command)"
 	      (transient-append-suffix 'magit-log "-A"
 		'("-m" "No merges" "--no-merges"))))
 
-
+(profiler-stop)
+(profiler-report)
 (provide 'init.el)
 ;;; init.el ends here
