@@ -27,6 +27,7 @@ session.*
 
 # Packages
 elpa
+package-quickstart.el
 
 # lsp
 eclipse.jdt.ls

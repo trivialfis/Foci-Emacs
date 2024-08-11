@@ -1,19 +1,19 @@
 ;;; package --- Summary
-;;; 
+;;;
 ;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
-;;; 
+;;;
 ;;; Foci-Emacs is free software: you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
 ;;; the Free Software Foundation, either version 3 of the License, or
 ;;; (at your option) any later version.
-;;; 
+;;;
 ;;; Foci-Emacs is distributed in the hope that it will be useful,
 ;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;;; GNU General Public License for more details.
-;;; 
+;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with Foci-Emacs.  If not, see <http://www.gnu.org/licenses/>.
 ;;;
@@ -89,17 +89,20 @@
   ;; (setq helm-display-function #'helm-display-buffer-at-info)
   (purpose-mode 1))
 
+(defun trivialfis/elisp/insert-header()
+  "Insert elisp header."
+  (interactive)
+  (insert ";;; " (buffer-name) " --- Summary\n"
+  ";;; Commentary:\n"
+  ";;; Code:"
+  "\n\n\n"
+  "(provide '" (s-chop-suffix ".el" (buffer-name)) ")\n"
+  ";;; " (buffer-name) " ends here"))
+
 (defun trivialfis/elisp()
   "Emacs Lisp configuration."
   (flycheck-mode 1)
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
-  (when (eq (buffer-size) 0)
-    (insert ";;; " (buffer-name) " --- Summary\n"
-	    ";;; Commentary:\n"
-	    ";;; Code:"
-	    "\n\n\n"
-	    "(provide '" (s-chop-suffix ".el" (buffer-name)) ")\n"
-	    ";;; " (buffer-name) " ends here"))
 
   (local-set-key (kbd "C-c C-a") 'byte-compile-file)
   (local-set-key (kbd "C-c C-b") 'eval-buffer)
