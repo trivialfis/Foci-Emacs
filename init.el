@@ -445,7 +445,5 @@ KEY-COMMANDS: A list containing one or more (key command)"
 	      (transient-append-suffix 'magit-log "-A"
 		'("-m" "No merges" "--no-merges"))))
 
-(profiler-stop)
-(profiler-report)
 (provide 'init.el)
 ;;; init.el ends here
