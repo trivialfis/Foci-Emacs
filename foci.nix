@@ -83,7 +83,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   elpy                          # Python
   conda                         # Python
   ninja-mode
-  opencl-mode
+  opencl-c-mode
   racket-mode
   lua-mode
   meson-mode
