@@ -27,5 +27,12 @@ run:
   nix-env -iA nixpkgs.fociEmacs
 #+END_SRC
 
+Alternatively, go to the repository and run:
+#+BEGIN_SRC sh
+  nix profile install .
+#+END_SRC
+
+The configuration uses /package_quickstart_refresh/ to speedup the load time.
+
 * License
 GPL-v3

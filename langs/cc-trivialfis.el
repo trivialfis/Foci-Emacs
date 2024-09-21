@@ -49,9 +49,6 @@
   :commands lsp
   :autoload
   lsp-find-references
-  lsp-tramp-connection
-  lsp-register-client
-  make-lsp-client
   lsp-package-path
   lsp-clients-executable-find
   :config
@@ -87,19 +84,13 @@ Modified from `lsp-clients--clangd-command'."
         (lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
         (lsp-clients-executable-find "xcrun" "--find" "clangd"))))
 
-;; not working with the latest lsp, can start the connection, then hangs at starting.
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-tramp-connection #'(lambda () (lsp-clients-clangd-command t)))
-                  :major-modes '(c++-mode)
-                  :remote? t
-                  :server-id 'clangd-remote))
-
 (defun trivialfis/clangd ()
   "Clangd configuration."
   (let ((clangd (lsp-clients-clangd-command (file-remote-p default-directory))))
     (message "found clangd: %s" clangd)
     (setq-default lsp-clients-clangd-executable clangd
-		  lsp-clients-clangd-args '("--header-insertion=never")))
+		  lsp-clients-clangd-args '("--header-insertion=never")
+		  lsp-json-use-lists t))
   (lsp)
   (lsp-ui-mode)
   (flycheck-mode 1))
