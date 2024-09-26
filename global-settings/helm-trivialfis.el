@@ -42,6 +42,7 @@
   (define-key helm-find-files-map (kbd "<tab>") 'helm-execute-persistent-action)
   (define-key helm-find-files-map (kbd "M-p") 'helm-previous-line)
   (define-key helm-find-files-map (kbd "M-n") 'helm-next-line)
+  (define-key helm-find-files-map (kbd "M-l") 'nil)
 
   (when (executable-find "curl")
     (setq helm-net-prefer-curl t))
