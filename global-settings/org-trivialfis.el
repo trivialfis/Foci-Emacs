@@ -29,6 +29,12 @@
 (require 'org-bullets)
 (require 'misc-trivialfis)
 
+(use-package company
+  :defer t
+  :config
+  (add-hook 'company-mode-hook 'company-box-mode)
+  :commands company-mode)
+
 (defun trivialfis/org-insert-src ()
   "Insert src block at point."
   (interactive)
@@ -95,7 +101,7 @@
     (dolist (face org-level)
       (set-face-attribute face nil :weight 'semi-bold :height level)
       (setf level (- level 0.1))))
-  (company-posframe-mode 1)
+  (company-mode 1)
 
   (let* ((agenda-file "~/.emacs.d/misc/org-agenda.el")
 	 (account-string (if (file-exists-p agenda-file)

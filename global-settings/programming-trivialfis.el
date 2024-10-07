@@ -93,6 +93,7 @@ MODE: the major programming mode"
   ;; Quickhelp
   (autoload 'trivialfis/company-quickhelp "quickhelp-trivialfis")
   (add-hook 'company-mode-hook 'trivialfis/company-quickhelp)
+  (add-hook 'company-mode-hook 'company-box-mode)
   (use-package hl-line
     :config
     (hl-line-mode 1)
@@ -109,7 +110,7 @@ Enabled by specific programming language."
   :defer t
   :config
   (setq copilot--base-dir (expand-file-name "~/.emacs.d/copilot.el"))
-  (company-box-mode)
+  ;; (company-box-mode)
   (define-key (current-global-map) (kbd "C-<tab>") 'copilot-accept-completion)
   :commands
   copilot-mode)
