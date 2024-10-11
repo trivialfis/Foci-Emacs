@@ -29,12 +29,6 @@
 (require 'org-bullets)
 (require 'misc-trivialfis)
 
-(use-package company
-  :defer t
-  :config
-  (add-hook 'company-mode-hook 'company-box-mode)
-  :commands company-mode)
-
 (defun trivialfis/org-insert-src ()
   "Insert src block at point."
   (interactive)
