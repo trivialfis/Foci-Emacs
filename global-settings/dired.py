@@ -1,6 +1,6 @@
-"""VTerm in right click menu of nautilus.  Put this file under:
+"""Dired in right click menu of nautilus.  Put this file under:
 
-  ~/.local/share/nautilus-python/extensions/vterm.py
+  ~/.local/share/nautilus-python/extensions/dired.py
 
 and install `python3-nautilus` on Ubuntu.  Restart nautilus service if necessary.
 
@@ -17,13 +17,13 @@ version = Nautilus._version.split(".")
 
 if int(version[0]) >= 4:
 
-    class VTermExtension(GObject.GObject, Nautilus.MenuProvider):
-        def menu_activate_cb(
+    class DiredExtension(GObject.GObject, Nautilus.MenuProvider):
+        def menu_activate_dired(
             self, menu: Nautilus.MenuItem, f: Nautilus.FileInfo
         ) -> None:
             parsed = urlparse(f.get_uri())
             path = unquote(parsed.path)
-            cmd = f'emacs --chdir="{path}" --eval="(trivialfis/vterm)"'
+            cmd = f'emacs --chdir="{path}" {path}'
             if f.is_directory():
                 subprocess.Popen(cmd, shell=True)
 
@@ -31,25 +31,25 @@ if int(version[0]) >= 4:
             self, current_folder: Nautilus.FileInfo
         ) -> List[Nautilus.MenuItem]:
             item = Nautilus.MenuItem(
-                name="MenuProvider::VTerm",
-                label="Open in VTerm",
-                tip="Open VTerm here.",
+                name="MenuProvider::Dired",
+                label="Open in Dired",
+                tip="Open Dired here.",
                 icon="",
             )
-            item.connect("activate", self.menu_activate_cb, current_folder)
+            item.connect("activate", self.menu_activate_dired, current_folder)
             return [
                 item,
             ]
 
 else:
 
-    class VTermExtension(GObject.GObject, Nautilus.MenuProvider):
-        def menu_activate_cb(
+    class DiredExtension(GObject.GObject, Nautilus.MenuProvider):
+        def menu_activate_dired(
             self, menu: Nautilus.MenuItem, f: Nautilus.FileInfo
         ) -> None:
             parsed = urlparse(f.get_uri())
             path = unquote(parsed.path)
-            cmd = f'emacs --chdir="{path}" --eval="(trivialfis/vterm)"'
+            cmd = f'emacs --chdir="{path}" {path}'
             if f.is_directory():
                 subprocess.Popen(cmd, shell=True)
 
@@ -57,12 +57,12 @@ else:
             self, window: Nautilus.FileInfo, f
         ) -> List[Nautilus.MenuItem]:
             item = Nautilus.MenuItem(
-                name="MenuProvider::VTerm",
-                label="Open in VTerm",
-                tip="Open VTerm here.",
+                name="MenuProvider::Dired",
+                label="Open in Dired",
+                tip="Open Dired here.",
                 icon="",
             )
-            item.connect("activate", self.menu_activate_cb, f)
+            item.connect("activate", self.menu_activate_dired, f)
             return [
                 item,
             ]
