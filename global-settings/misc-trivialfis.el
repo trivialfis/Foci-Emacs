@@ -224,6 +224,7 @@ move the cursor to the prompt area."
   (unbind-key "M-6" eat-semi-char-mode-map)
   (unbind-key "M->" eat-semi-char-mode-map)
   (unbind-key "M-<" eat-semi-char-mode-map)
+  (unbind-key "M-o" eat-semi-char-mode-map)
   ;; (add-hook 'eat-exec-hook #'(lambda (_) (goto-char (point-max))))
   :bind
   (:map eat-mode-map
