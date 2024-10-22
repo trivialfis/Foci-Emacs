@@ -45,7 +45,6 @@
   :autoload
   lsp-find-references
   :config
-  (setq-local lsp-client-packages '(lsp-pylsp))
   (trivialfis/lsp)
   (use-package lsp-pylsp))
 
