@@ -3,7 +3,10 @@
 ;; Copyright (C) 2019  Matt Curtis
 
 ;; Author: Matt Curtis <matt.r.curtis@gmail.com>
+;; Version: 1.0
+;; Package-Requires: ((emacs "26.1") (polymode "0.2") (transient "0.3"))
 ;; Keywords: languages
+;; URL: https://github.com/mrc/tla-tools
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -29,6 +32,14 @@
 ;;; Code:
 
 (require 'polymode)
+(require 'transient)
+(require 'seq)
+
+;;; Customization
+(defgroup tla+ nil
+  "Major mode for editing TLA+ and PlusCal files."
+  :group 'languages
+  :tag "TLA+")
 
 (defvar tla-mode-syntax-table
   (let ((table (make-syntax-table)))
@@ -113,8 +124,10 @@
   (setq-local indent-line-function #'pcal-mode-indent-line)
   )
 
-(defvar tla-mode-indent-offset 2
-  "Indent lines by this many columns.")
+(defcustom tla-mode-indent-offset 2
+  "Amount of columns to indent lines in TLA+ code."
+  :type 'integer
+  :safe 'integerp)
 
 (defvar tla-mode--conj-re "/\\\\") ; /\
 (defvar tla-mode--disj-re "\\\\/") ; \/
@@ -169,8 +182,10 @@
       (when col
         (indent-line-to col)))))
 
-(defvar pcal-mode-indent-offset 2
-  "Indent lines by this many columns.")
+(defcustom pcal-mode-indent-offset 2
+  "Amount of columns to indent lines in PlusCal code."
+  :type 'integer
+  :safe 'integerp)
 
 (defvar pcal-mode--block-begin-re
   (concat "^[[:blank:]]*"
@@ -249,7 +264,7 @@ nil if the syntax isn't recognized for indentation."
            (skip-chars-forward " ")
            (current-column))
           ((looking-at-p pcal-mode--process-end-re)
-           (setq current 0)) ; Possibly should match process start,
+           0) ; Possibly should match process start,
           ((or (looking-at-p pcal-mode--block-end-re)
                (looking-at-p pcal-mode--block-else-re))
            (pcal-mode--block-start)
@@ -284,11 +299,8 @@ nil if the syntax isn't recognized for indentation."
 (defun pcal-mode-indent-line ()
   "Indent the current line according to PlusCal rules."
   (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (let ((col (pcal-mode--indent-column)))
-      (when col
-        (indent-line-to col)))))
+  (when-let ((col (pcal-mode--indent-column)))
+    (indent-line-to col)))
 
 ;; polymode is doing a special indent for the first line, maybe it
 ;; expects it's lining up markdown or something, but it's no good
@@ -321,13 +333,154 @@ nil if the syntax isn't recognized for indentation."
     (insert (concat
              "------------------------------ MODULE " name " ------------------------------\n\n"
              (make-string (+ 69 (length name)) ?=))))
-  (previous-line))
+  (forward-line -1))
 (define-auto-insert 'tla-mode #'tla-auto-insert)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TLC configuration template
+(defvar-local tla--current-config-file nil
+  "The most recently-used or created configuration file for TLC.")
+
+(defun tla-create-tlc-config-file (config-file)
+  "Generate an empty TLC configuration in file CONFIG-FILE."
+  (interactive "FTLC configuration filename: ")
+  ;; TODO: we could detect all constants, and insert "X <-" for each
+  (when (or (not (file-exists-p config-file))
+            (yes-or-no-p "File exists, overwrite? "))
+    (let ((buffer (find-file-noselect config-file)))
+      (with-current-buffer buffer
+        (erase-buffer)
+        (insert "\\* -*- mode: tla; -*-
+
+\\* For documentation of this file, see e.g. Lamport,
+\\* \"Specifying Systems\" Section 14.7.1 (Page 262), available
+\\* online at http://lamport.azurewebsites.net/tla/book-21-07-04.pdf
+
+\\* CONSTANT definitions
+CONSTANTS
+\\* X <- const_X_1 \\* All constant definitions here
+
+\\* INIT definition
+INIT
+\\* Init \\* The name of the Init formula.
+
+\\* NEXT definition
+NEXT
+\\* Next \\* The name of the Next formula.
+
+\\* INVARIANT definitions
+INVARIANTS
+\\* TypeOk OtherInvariantOk \\* Any invariant formulas
+
+")
+        (tla-mode))
+      (setq tla--current-config-file config-file)
+      (pop-to-buffer buffer))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defcustom tla-tlc-jar "/home/jiamingy/workspace/pluscal/toolbox/tla2tools.jar"
+  "path to the tool's jar."
+  :type 'string)
+
+;; commands: tlc, pcal, tlatex
+(defcustom tla-tlc-command (concat "java -cp " tla-tlc-jar " tlc2.TLC")
+  "The command to run the TLC model checker.
+Can be a script, or e.g. directly `java -cp tla2tools.jar tlc2.TLC'."
+  :type 'string
+  :risky t)
+
+(defcustom tla-pcal-command (concat "java -cp " tla-tlc-jar " pcal.trans")
+  "The command to run the PlusCal translator.
+Can be a script, or e.g. directly `java -cp tla2tools.jar pcal.trans'."
+  :type 'string
+  :risky t)
+
+(defcustom tla-tlatex-command "tlatex -latexCommand pdflatex -latexOutputExt pdf"
+  "The command to run the TLA-to-LaTeX translator.
+Can be a script, or e.g. directly `java -cp tla2tools.jar tla2tex.TLA'.
+
+Note that any arguments except `-shade' and the filename should
+be added to this command."
+  :type 'string
+  :risky t)
+
+(transient-define-infix tla--tlc-config-file ()
+  :description "TLC configuration"
+  :class 'transient-lisp-variable
+  :variable 'tla--current-config-file
+  :key "-m"
+  :shortarg "-m"
+  :argument "-config "
+  :reader (lambda (prompt _initial-input _history)
+            (read-file-name
+             prompt
+             (file-name-directory (or tla--current-config-file ""))
+             (file-name-nondirectory (or tla--current-config-file ""))
+             t
+             nil
+             (lambda (f)
+               ;; If the extension isn't ".cfg", TLC will add ".cfg" to the
+               ;; filename by itself and then fail to find the config file
+               (or (not (stringp f))
+                   (directory-name-p f)
+                   (string= (file-name-extension f) "cfg"))))))
+
+(defun tla--run-pcal (&optional _args)
+  (interactive
+   (list (transient-args 'tla-pcal-transient)))
+  (transient-set)
+  (let ((filename (file-relative-name buffer-file-name)))
+    (set (make-local-variable 'compile-command)
+         (concat tla-pcal-command " "
+                 " "
+                 (shell-quote-argument filename)))
+    (compile compile-command)
+    ;; PlusCal creates a configuration file for us; use it
+    (setq tla--current-config-file (concat (file-name-sans-extension filename) ".cfg"))))
+
+(defun tla--run-tlc (&optional args)
+  (interactive
+   (list (transient-args 'tla-pcal-transient)))
+  (transient-set)
+  (set (make-local-variable 'compile-command)
+       (concat tla-tlc-command " "
+               "-config " tla--current-config-file " "
+               (if (member "-deadlock" args) "-deadlock " "")
+               (shell-quote-argument (file-relative-name buffer-file-name))))
+  (compile compile-command))
+
+(defun tla--convert-to-pdf (&optional args)
+  (interactive
+   (list (transient-args 'tla-pcal-transient)))
+  (transient-set)
+  (set (make-local-variable 'compile-command)
+       (concat tla-tlatex-command " "
+               (if (member "-shade" args) "-shade " "")
+               (shell-quote-argument buffer-file-name)))
+  (compile compile-command))
+
+(transient-define-prefix tla-pcal-transient ()
+  "Menu of commands for TLA+ and PlusCal files."
+  :value '("-shade")
+  ["TLC Configuration"
+   ("c" "Create new TLC configuration" tla-create-tlc-config-file)]
+  ["TLC"
+   ("-d" "Skip deadlock checking" "-deadlock")
+   (tla--tlc-config-file)
+   ("m" "Run TLC model checker" tla--run-tlc)]
+  ["PlusCal"
+   ("t" "Translate PlusCal to TLA+" tla--run-pcal)]
+  ["PDF"
+   ("-s" "Shade comments" "-shade")
+   ("p" "Create PDF Version of spec" tla--convert-to-pdf)])
 
 ;;;###autoload
 (define-polymode tla-pcal-mode
   :hostmode 'poly-tla-pcal-hostmode
   :innermodes '(poly-tla-pcal--pcal-innermode))
+
+(define-key tla-pcal-mode-map (kbd "C-c C-c") 'tla-pcal-transient)
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist (cons "\\.tla\\'" 'tla-pcal-mode))
