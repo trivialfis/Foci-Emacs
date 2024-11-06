@@ -82,6 +82,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   paredit                       # Lisp alike (elisp)
   elpy                          # Python
   conda                         # Python
+  # jupyter
   ninja-mode
   opencl-c-mode
   racket-mode

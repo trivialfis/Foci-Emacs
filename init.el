@@ -411,8 +411,8 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'mlir-mode "mlir-mode")
 (add-to-list 'auto-mode-alist '("\\.mlir\\'" . mlir-mode))
 
-(autoload 'tla-pcal-mode "tla-pcal-mode")
-(add-to-list 'auto-mode-alist '("\\.tla\\'" . tla-pcal-mode))
+(autoload 'trivialfis/tla+ "tla+-mode")
+(add-to-list 'auto-mode-alist '("\\.tla\\'" . trivialfis/tla+))
 
 (autoload 'tablegen-mode "tablegen-mode")
 (add-to-list 'auto-mode-alist '("\\.td\\'" . tablegen-mode))
