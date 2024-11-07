@@ -1,6 +1,6 @@
 ;;; programming-trivialfis.el --- Configurations hooked to prog-mode.
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
+;;; Copyright 2016-2024 Jiamingy <ybbs.daans@hotmail.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -38,7 +38,9 @@
 			  "Show messages of ERRORS unless the error list is visible.")
   :defer t
   :commands (flycheck-mode)
-  :config (message "Flycheck loaded."))
+  :config
+  (message "Flycheck loaded.")
+  (trivialfis/flycheck))
 
 (require 'helm-xref)
 
@@ -63,7 +65,10 @@
 		 (reusable-frames . visible)
 		 (window-height   . 0.23)))
   (setq flycheck-display-errors-function
-	#'flycheck-display-error-messages-unless-error-list))
+	#'flycheck-display-error-messages-unless-error-list)
+  (if (and (memq 'idle-change flycheck-check-syntax-automatically)
+	   (file-remote-p default-directory))
+      (delete 'idle-change flycheck-check-syntax-automatically)))
 
 (defun trivialfis/semantic (MODE)
   "Custom semantic mode.
@@ -85,7 +90,6 @@ MODE: the major programming mode"
   "Added before any programming mode configuration."
   (add-hook 'eldoc-mode-hook #'(lambda ()
 				 (setf eldoc-idle-delay 0.5)))
-  (trivialfis/flycheck)
   (hs-minor-mode 1)
 
   (local-set-key (kbd "TAB") 'company-indent-or-complete-common)

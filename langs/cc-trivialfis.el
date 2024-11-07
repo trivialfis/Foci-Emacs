@@ -1,6 +1,6 @@
 ;; cc-trivialfis --- Summary -*- lexical-binding: t -*-
 ;;;
-;;; Copyright © 2016-2018 Fis Trivial <jm.yuan@outlook.com>
+;;; Copyright 2016-2024 Jiamingy <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -36,13 +36,13 @@
 	    (dap-ui-mode)
 	    (use-package dap-lldb)))
 
-(use-package flycheck
-  :defer t
-  :commands flycheck-mode)
-
 (use-package lsp-trivialfis
   :defer t
   :autoload trivialfis/lsp)
+
+(use-package programming-trivialfis
+  :defer t
+  :autoload flycheck-mode)
 
 (use-package lsp-mode
   :defer t
