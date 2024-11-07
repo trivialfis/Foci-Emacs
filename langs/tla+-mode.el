@@ -10,7 +10,7 @@
   comint-check-proc
   make-comint-in-buffer)
 (use-package tla-pcal-mode
-  :defer
+  :defer t
   :commands
   tla-pcal-mode)
 
