@@ -113,8 +113,9 @@
   :syntax-table tla-mode-syntax-table
   (setq font-lock-defaults '(tla-mode-font-lock-keywords))
   (tla-pcal-mode-set-comment-syntax-vars)
-  (setq-local indent-line-function #'tla-mode-indent-line)
-  )
+  (toggle-debug-on-error)
+
+  (setq-local indent-line-function #'tla-mode-indent-line))
 
 (define-derived-mode pcal-mode prog-mode "PlusCal"
   "Major mode for editing TLA+ and PlusCal files."
@@ -155,10 +156,11 @@
   (pcal-mode--indent-column))
 
 (defun tla-mode--align-indent ()
-  "When looking at the special TLA+ symbols where whitespace is significant,\
-   check line above: if it doesn't have those symbols, go to left column;\
-   if it *does* have those symbols: if current indent is less than that of \
-   line above, go to that indent; otherwise return nil to indicate do nothing."
+  "When looking at the special TLA+ symbols where whitespace is.
+significant, check line above: if it doesn't have those symbols,
+go to left column; if it *does* have those symbols: if current
+indent is less than that of \ line above, go to that indent;
+otherwise return nil to indicate do nothing."
   (save-excursion
     (skip-chars-forward "[[:blank:]]")
     (let ((cur-indent (current-indentation)))
@@ -173,14 +175,78 @@
                 (current-column)))
           0)))))
 
-(defun tla-mode-indent-line ()
-  "Indent the current line according to TLA+ rules."
-  (interactive)
+
+(defconst tla-def-re "^[a-zA-Z_$0-9]*[:blank:]*==")
+
+(defun find-prev-block()
   (save-excursion
-    (beginning-of-line)
-    (let ((col (tla-mode--indent-column)))
-      (when col
-        (indent-line-to col)))))
+    (let* ((block-pos (re-search-backward (rx
+					   (or
+					    "IF .* THEN"
+					    "ELSE"
+					    "VARIABLES"
+					    "CONSTANTS"
+					    (regexp tla-def-re)))
+					  nil t)))
+      block-pos)))
+
+
+(defun find-prev-block-ci()
+  (let ((block (find-prev-block)))
+    (if (not block)
+	-1
+      (progn
+	(current-indentation)))))
+
+(defun previous-line-empty()
+  (if (/= (line-number-at-pos) 1)
+      (progn
+	(forward-line -1)
+	(equal (- (line-end-position) (line-beginning-position)) 0))
+    'nil))
+
+(defun no-indent-act ()
+  (save-excursion
+    (if (search-backward "===" nil t)
+	t
+      (progn (beginning-of-line)
+	     (let* ((line (buffer-substring (line-beginning-position) (line-end-position)))
+		    (is_d (or (string-match-p "[:blank:]*\\\\/" line)
+			      (string-match-p "[:blank:]*/\\\\" line)))
+		    (is_def (string-match-p tla-def-re line))
+		    (no-block-indent (or is_d is_def))
+		    (empty-prev (previous-line-empty)))
+	       (or no-block-indent empty-prev))))))
+
+
+(defun tla-compute-indentation ()
+  "Simple indentation rule."
+  (let* ((no-indent (no-indent-act))
+	 (block (find-prev-block)))
+    (if no-indent
+	-1
+      (if (equal block -1)		; not found
+	  0				; no indent if this is the starting block
+	(save-excursion
+	  (goto-char block)
+	  (+ (current-indentation) tla-mode-indent-offset))))))
+
+(defun tla-mode-indent-line ()
+  "Simple indentation rule."
+  (interactive)
+  (let ((ci (current-indentation))
+	(need (tla-compute-indentation)))
+    (if (/= need -1)
+	(save-excursion
+	  (if (and (equal last-command this-command)
+		   (/= ci 0))
+	      (indent-line-to (* (/ (- ci 1) tla-mode-indent-offset) tla-mode-indent-offset))
+	    (progn
+	      (indent-line-to need)))))
+    (progn
+      (if (< (current-column) (current-indentation))
+          (forward-to-indentation 0)))))
+
 
 (defcustom pcal-mode-indent-offset 2
   "Amount of columns to indent lines in PlusCal code."
@@ -295,6 +361,7 @@ nil if the syntax isn't recognized for indentation."
                 ((bobp)
                  (setq current 0))))
              (and current (max 0 current)))))))
+
 
 (defun pcal-mode-indent-line ()
   "Indent the current line according to PlusCal rules."
@@ -480,6 +547,7 @@ be added to this command."
   :hostmode 'poly-tla-pcal-hostmode
   :innermodes '(poly-tla-pcal--pcal-innermode))
 
+(defvar tla-pcal-mode-map (make-sparse-keymap))
 (define-key tla-pcal-mode-map (kbd "C-c C-c") 'tla-pcal-transient)
 
 ;;;###autoload
