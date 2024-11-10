@@ -40,7 +40,18 @@
   :commands (flycheck-mode)
   :config
   (message "Flycheck loaded.")
-  (trivialfis/flycheck))
+  (add-to-list 'display-buffer-alist
+	       `(,(rx bos "*Flycheck errors*" eos)
+		 (display-buffer-reuse-window
+		  display-buffer-in-side-window)
+		 (side            . bottom)
+		 (reusable-frames . visible)
+		 (window-height   . 0.23)))
+  (setq flycheck-display-errors-function
+	#'flycheck-display-error-messages-unless-error-list)
+  (if (and (memq 'idle-change flycheck-check-syntax-automatically)
+	   (file-remote-p default-directory))
+      (delete 'idle-change flycheck-check-syntax-automatically)))
 
 (require 'helm-xref)
 
@@ -54,21 +65,6 @@
 	    (add-to-list 'purpose-user-regexp-purposes '("\\*Man.*" . Man-page))
 	    (purpose-compile-user-configuration)
 	    (message "Purpose loaded.")))
-
-(defun trivialfis/flycheck ()
-  "Configurate flycheck."
-  (add-to-list 'display-buffer-alist
-	       `(,(rx bos "*Flycheck errors*" eos)
-		 (display-buffer-reuse-window
-		  display-buffer-in-side-window)
-		 (side            . bottom)
-		 (reusable-frames . visible)
-		 (window-height   . 0.23)))
-  (setq flycheck-display-errors-function
-	#'flycheck-display-error-messages-unless-error-list)
-  (if (and (memq 'idle-change flycheck-check-syntax-automatically)
-	   (file-remote-p default-directory))
-      (delete 'idle-change flycheck-check-syntax-automatically)))
 
 (defun trivialfis/semantic (MODE)
   "Custom semantic mode.
