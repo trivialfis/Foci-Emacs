@@ -176,27 +176,20 @@ otherwise return nil to indicate do nothing."
           0)))))
 
 
-(defconst tla-def-re "^[a-zA-Z_$0-9]*[:blank:]*==")
+(defconst tla-def-re "^[a-zA-Z_$0-9]*[[:blank:]]*==")
 
 (defun find-prev-block()
   (save-excursion
     (let* ((block-pos (re-search-backward (rx
 					   (or
-					    "IF .* THEN"
 					    "ELSE"
+					    (: "IF" (one-or-more blank) (* anychar) (one-or-more blank) "THEN")
 					    "VARIABLES"
 					    "CONSTANTS"
 					    (regexp tla-def-re)))
 					  nil t)))
       block-pos)))
 
-
-(defun find-prev-block-ci()
-  (let ((block (find-prev-block)))
-    (if (not block)
-	-1
-      (progn
-	(current-indentation)))))
 
 (defun previous-line-empty()
   (if (/= (line-number-at-pos) 1)
@@ -209,31 +202,38 @@ otherwise return nil to indicate do nothing."
   (save-excursion
     (if (search-backward "===" nil t)
 	t
-      (progn (beginning-of-line)
-	     (let* ((line (buffer-substring (line-beginning-position) (line-end-position)))
-		    (is_d (or (string-match-p "[:blank:]*\\\\/" line)
-			      (string-match-p "[:blank:]*/\\\\" line)))
-		    (is_def (string-match-p tla-def-re line))
-		    (no-block-indent (or is_d is_def))
-		    (empty-prev (previous-line-empty)))
-	       (or no-block-indent empty-prev))))))
+      (progn
+	(beginning-of-line)
+	(let* ((line (buffer-substring (line-beginning-position) (line-end-position)))
+	       (is_d (or (string-match-p "[:blank:]*\\\\/" line)
+			 (string-match-p "[:blank:]*/\\\\" line)))
+	       (is_def (string-match-p tla-def-re line))
+	       (no-block-indent (or is_d is_def))
+	       (empty-prev (previous-line-empty)))
+	  (or no-block-indent empty-prev))))))
 
+
+(defun is-else-p ()
+  (string-match-p "ELSE" (buffer-substring (line-beginning-position) (line-end-position))))
 
 (defun tla-compute-indentation ()
   "Simple indentation rule."
   (let* ((no-indent (no-indent-act))
-	 (block (find-prev-block)))
+	 (block (find-prev-block))
+	 (is-else (is-else-p)))
     (if no-indent
 	-1
       (if (equal block -1)		; not found
 	  0				; no indent if this is the starting block
 	(save-excursion
 	  (goto-char block)
-	  (+ (current-indentation) tla-mode-indent-offset))))))
+	  (if is-else
+	      ;; need to handle nested conditions,treesitter might help
+	      (current-indentation)	; assume it's a if block
+	    (+ (current-indentation) tla-mode-indent-offset)))))))
 
 (defun tla-mode-indent-line ()
   "Simple indentation rule."
-  (interactive)
   (let ((ci (current-indentation))
 	(need (tla-compute-indentation)))
     (if (/= need -1)
