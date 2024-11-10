@@ -43,17 +43,34 @@
 (defvar-local tla+/apalache-bin  "/home/jiamingy/workspace/pluscal/apalache/bin/apalache-mc")
 (defvar-local tla+/apalache-jar  "/home/jiamingy/workspace/pluscal/apalache/lib/apalache.jar")
 
-;; (use-package programming-trivialfis
-;;   :commands flycheck-mode)
 (require 'flycheck)
+
+(defun tla+/flycheck-error-filter (errors)
+  "Remove duplicated ERRORS."
+  (seq-remove
+   (lambda (err)
+     (when-let (msg (flycheck-error-message err))
+       (message msg)
+       (string-match-p "Parsing error: ***" msg)))
+   errors))
 
 (flycheck-define-checker tla+/apalache
   "TLA+ checker using apalache."
-  :command ("java" "-jar" "/home/jiamingy/workspace/pluscal/apalache/lib/apalache.jar" "parse" source)
+  :command ("java" "-jar" (eval tla+/apalache-jar) "parse" source)
   :error-patterns
   ;; Encountered "Init" at line 4, column 1 and token "Apalache"
-  ((error line-start (message) "at line " line ", column " column (one-or-more not-newline) line-end))
+  ((error line-start (message) "at line " line ", column " column (one-or-more not-newline) line-end)
+   ;; line 12, col 15 to line 12, col 17 of module BinSearch0
+   (error line-start
+	  (message)
+	  (one-or-more "\n")
+	  ;; Actual error
+	  line-start "line " line ", col " column " to line " end-line ", col " end-column (one-or-more not-newline)
+	  line-end)
+   )
   :modes (tla-mode)
+  ;; Parsing error: *** Errors: 2
+  :error-filter tla+/flycheck-error-filter
   :predicate flycheck-buffer-nonempty-p)
 
 (defun trivialfis/tla+ ()
