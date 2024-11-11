@@ -8,6 +8,11 @@
 (require 'flycheck)
 (require 'treesit)
 
+(defgroup tlaplus nil
+  "Major mode for editing TLA+ files."
+  :group 'languages
+  :tag "TLA+")
+
 (defcustom tla+/toolbox-jar ""
   "The path to the toolbox's jar file."
   :type 'string
@@ -18,14 +23,16 @@
   :type 'string
   :group 'tlaplus)
 
+(defcustom tla+/indent-offset 2
+  "Indent offset for tlaplus-ts-mode."
+  :type 'integer
+  :group 'tlaplus)
+
 (use-package comint
   :defer t
   :commands
   comint-check-proc
   make-comint-in-buffer)
-
-
-(defvar-local tla+/comint-buffer "*Tla+*")
 
 ;; https://www.masteringemacs.org/article/comint-writing-command-interpreter
 (defun run-tla+-repl ()
@@ -33,6 +40,7 @@
   (interactive)
   (let* ((tla+/arguments `("-cp" ,tla+/toolbox-jar "tlc2.REPL"))
 	 (tla+-program "java")
+	 (tla+/comint-buffer "*TLA+*")
 	 (buffer (get-buffer-create tla+/comint-buffer))
 	 (proc-alive (comint-check-proc buffer)))
     ;; (process (get-buffer-process buffer))
@@ -140,7 +148,20 @@
     "VARIABLES"
     "WF_"
     "WITH"
-    "WITNESS")
+    "WITNESS"
+    ;; (def_eq)
+    (set_in)
+    (gets)
+    (forall)
+    (exists)
+    (temporal_forall)
+    (temporal_exists)
+    (all_map_to)
+    (maps_to)
+    (case_box)
+    (case_arrow)
+    (address)
+    (label_as))
   "Tla+ keywords for tree-sitter font-locking.")
 
 (defun tla+/set-comment-syntax-vars ()
@@ -149,7 +170,6 @@
   (setq-local comment-use-syntax t)
   (setq-local comment-start-skip "\\(\\\\\\*\\)\\s *"))
 
-
 (defvar tlaplus-ts-mode--font-lock-settings
   (treesit-font-lock-rules
    :language 'tlaplus
@@ -157,9 +177,22 @@
    '((["(" ")" "[" "]" "]_" "{" "}"]) @font-lock-bracket-face)
 
    :language 'tlaplus
+   :feature 'op
+   '((operator_definition name: (identifier) @font-lock-function-name-face))
+
+   :language 'tlaplus
+   :feature 'const
+   '(((constant_declaration (identifier) @font-lock-constant-face)))
+
+   :language 'tlaplus
    :feature 'comment
    '((comment) @font-lock-comment-face
      (block_comment) @font-lock-comment-face)
+
+   :language 'tlaplus
+   :override 't
+   :feature 'module
+   '((module name: (identifier) @font-lock-type-face))
 
    :language 'tlaplus
    :feature 'keyword
@@ -186,12 +219,12 @@
 			    ("\\\\div" . 'font-lock-builtin-face)
 			    ("\\\\E" . 'font-lock-builtin-face)
 			    ("\\\\in" . 'font-lock-builtin-face)))
-  (setq-local treesit-font-lock-feature-list
-              '((bracket)
-		(comment)
-                (keyword string)
-		(case-box)
-		(string)))
+  (setq-local
+   treesit-font-lock-level 4
+   treesit-font-lock-feature-list
+   '((comment module)			;l1
+     (keyword string)			;l2
+     (case-box op bracket const)))
   ;; (setq-local treesit--indent-verbose t)
   ;; (setq-local treesit-simple-indent-rules
   ;; 	      `((tlaplus
