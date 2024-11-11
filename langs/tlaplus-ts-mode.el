@@ -55,7 +55,6 @@
   (seq-remove
    (lambda (err)
      (when-let (msg (flycheck-error-message err))
-       (message msg)
        (string-match-p "Parsing error: ***" msg)))
    errors))
 
@@ -187,9 +186,6 @@
 			    ("\\\\div" . 'font-lock-builtin-face)
 			    ("\\\\E" . 'font-lock-builtin-face)
 			    ("\\\\in" . 'font-lock-builtin-face)))
-  ;; (font-lock-add-keywords 'c-mode
-  ;; 			  '(("\\<\\(FIXME\\):" 1 'font-lock-warning-face prepend)
-  ;; 			    ("\\<\\(and\\|or\\|not\\)\\>" . 'font-lock-keyword-face)))
   (setq-local treesit-font-lock-feature-list
               '((bracket)
 		(comment)
