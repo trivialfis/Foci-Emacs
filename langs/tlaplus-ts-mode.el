@@ -154,6 +154,10 @@
 (defvar tlaplus-ts-mode--font-lock-settings
   (treesit-font-lock-rules
    :language 'tlaplus
+   :feature 'bracket
+   '((["(" ")" "[" "]" "{" "}"]) @font-lock-bracket-face)
+
+   :language 'tlaplus
    :feature 'comment
    '((comment) @font-lock-comment-face)
 
@@ -167,57 +171,26 @@
 
    :language 'tlaplus
    :feature 'string
-   '((string) @font-lock-string-face)
-
-   ;; Following doesn't work yet
-   :language 'tlaplus
-   :feature 'function-definition
-   '((function_definition) @font-lock-function-name-face)
-
-   :language 'tlaplus
-   :feature 'pcal_macro_decl
-   '((pcal_macro_decl) @font-lock-function-name-face)
-
-   :language 'tlaplus
-   :feature 'module
-   '((module) @font-lock-constant-face)
-
-   :language 'tlaplus
-   :feature 'case-arrow
-   '((case_arrow) @font-lock-keyword-face)
-
-   :language 'tlaplus
-   :feature 'def-eq
-   '((def_eq) @font-lock-function-name-face)
-
-   :language 'tlaplus
-   :feature 'assign
-   '((assign) @font-lock-function-name-face)
-
-   :language 'tlaplus
-   :feature 'exists
-   '((exists) @font-lock-keyword-face)))
+   '((string) @font-lock-string-face)))
 
 (defun tlaplus-ts-setup()
   "Setup treesit for tlaplus-ts-mode."
   (setq-local treesit-font-lock-settings
               tlaplus-ts-mode--font-lock-settings)
   (setq-local treesit-font-lock-feature-list
-              '((comment)
+              '((bracket)
+		(comment)
                 (keyword string)
 		(case-box)
-		(string)
-		(function-definition)
-		(pcal_macro_decl)
-		(module)
-		(case-arrow)
-		(def-eq)
-		(assign)
-		(exists)))
-  (setq-local treesit--indent-verbose t)
+		(string)))
+  ;; (setq-local treesit--indent-verbose t)
   ;; (setq-local treesit-simple-indent-rules
   ;; 	      `((tlaplus
-  ;; 		 ((parent-is "let_in") parent 2))))
+  ;; 		 ((parent-is "let_in") parent 2))
+  ;; 		(tlaplus
+  ;; 		 ((parent-is "operator_definition") parent 2))
+  ;; 		(tlaplus
+  ;; 		 ((parent-is "constant_declaration") parent 2))))
   (tla+/set-comment-syntax-vars)
   (treesit-major-mode-setup))
 
