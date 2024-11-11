@@ -4,11 +4,6 @@
 ;;;
 ;;; Commentary:
 ;;; Code:
-(use-package tla-pcal-mode
-  :defer t
-  :commands
-  tla-pcal-mode)
-
 (use-package yasnippet
   :ensure t
   :defines yas-snippet-dir
@@ -30,7 +25,6 @@
 
 (defun trivialfis/tla+ ()
   "Basic configuration for TLA+."
-  ;; (tla-pcal-mode)
   (tlaplus-ts-mode)
   (setq-local flycheck-checker 'tla+/apalache)
   (flycheck-mode))
