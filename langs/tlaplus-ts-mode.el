@@ -175,8 +175,20 @@
 
 (defun tlaplus-ts-setup()
   "Setup treesit for tlaplus-ts-mode."
-  (setq-local treesit-font-lock-settings
-              tlaplus-ts-mode--font-lock-settings)
+  (setq-local treesit-font-lock-settings tlaplus-ts-mode--font-lock-settings)
+  (font-lock-add-keywords 'tlaplus-ts-mode
+			  '(("UNCHANGED" . 'font-lock-keyword-face)
+			    ("DOMAIN" . 'font-lock-keyword-face)
+			    ("SUBSET" . 'font-lock-keyword-face)
+			    ("@" . 'font-lock-builtin-face)
+			    ("\\\\A" . 'font-lock-builtin-face)
+			    ("\\\\cup" . 'font-lock-builtin-face)
+			    ("\\\\div" . 'font-lock-builtin-face)
+			    ("\\\\E" . 'font-lock-builtin-face)
+			    ("\\\\in" . 'font-lock-builtin-face)))
+  ;; (font-lock-add-keywords 'c-mode
+  ;; 			  '(("\\<\\(FIXME\\):" 1 'font-lock-warning-face prepend)
+  ;; 			    ("\\<\\(and\\|or\\|not\\)\\>" . 'font-lock-keyword-face)))
   (setq-local treesit-font-lock-feature-list
               '((bracket)
 		(comment)
