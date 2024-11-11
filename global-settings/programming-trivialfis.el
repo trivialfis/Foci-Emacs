@@ -108,7 +108,6 @@ Enabled by specific programming language."
 (use-package copilot
   :defer t
   :config
-  (setq copilot--base-dir (expand-file-name "~/.emacs.d/copilot.el"))
   (company-box-mode)
   (define-key (current-global-map) (kbd "C-<tab>") 'copilot-accept-completion)
   :commands

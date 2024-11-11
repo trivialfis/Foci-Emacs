@@ -184,6 +184,8 @@ otherwise return nil to indicate do nothing."
 					   (or
 					    "ELSE"
 					    (: "IF" (one-or-more blank) (* anychar) (one-or-more blank) "THEN")
+					    (: "LET" (* anychar) "==")
+					    "IN"
 					    "VARIABLES"
 					    "CONSTANTS"
 					    (regexp tla-def-re)))
@@ -215,6 +217,9 @@ otherwise return nil to indicate do nothing."
 
 (defun is-else-p ()
   (string-match-p "ELSE" (buffer-substring (line-beginning-position) (line-end-position))))
+
+(defun is-in-p ()
+  (string-match-p "IN" (buffer-substring (line-beginning-position) (line-end-position))))
 
 (defun tla-compute-indentation ()
   "Simple indentation rule."

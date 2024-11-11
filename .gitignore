@@ -49,3 +49,6 @@ tramp
 org-roam.db
 eln-cache
 projects
+
+# ts
+tree-sitter
