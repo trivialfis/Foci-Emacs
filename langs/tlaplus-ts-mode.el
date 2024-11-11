@@ -155,11 +155,12 @@
   (treesit-font-lock-rules
    :language 'tlaplus
    :feature 'bracket
-   '((["(" ")" "[" "]" "{" "}"]) @font-lock-bracket-face)
+   '((["(" ")" "[" "]" "]_" "{" "}"]) @font-lock-bracket-face)
 
    :language 'tlaplus
    :feature 'comment
-   '((comment) @font-lock-comment-face)
+   '((comment) @font-lock-comment-face
+     (block_comment) @font-lock-comment-face)
 
    :language 'tlaplus
    :feature 'keyword
