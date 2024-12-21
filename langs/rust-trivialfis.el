@@ -32,14 +32,14 @@
 
 (require 'programming-trivialfis)
 (require 'rust-mode)
-(require 'racer)
 (require 'company)
 (require 'flycheck)
 
 (eval-when-compile
   (require 'use-package))
 
-(use-package lsp-trivialfis)
+(use-package lsp-trivialfis
+  :autoload trivialfis/lsp)
 
 (defun trivialfis/rust-compile ()
   "Compile rust code using cargo."
@@ -53,27 +53,25 @@
 	     "\n\n"))
     (display-buffer compile-buf)))
 
+(use-package lsp-mode
+  :defer t
+  :commands lsp
+  :autoload
+  lsp-find-references
+  lsp-package-path
+  lsp-clients-executable-find
+  :config
+  (trivialfis/lsp))
+
+(use-package lsp-ui
+  :defer t
+  :commands lsp-ui-mode
+  :config (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references))
+
 (defun trivialfis/rust ()
   "Common configuration for rust mode."
-  ;; (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-
-  ;; (add-hook 'racer-mode-hook 'eldoc-mode)
-  ;; (add-hook 'racer-mode-hook 'company-mode)
-
-  ;; (setq company-backends '((company-capf
-  ;; 			    company-dabbrev-code
-  ;; 			    company-yasnippet
-  ;; 			    company-files
-  ;; 			    company-keywords)))
-  ;; (flycheck-mode 1)
-  ;; (racer-mode 1)
-
-  ;; (define-key rust-mode-map (kbd "C-c C-a") #'trivialfis/rust-compile)
-  ;; (setq company-tooltip-align-annotations t)
-  (trivialfis/lsp)
   (lsp)
-  (lsp-ui-mode)
-  )
+  (lsp-ui-mode))
 
 (provide 'rust-trivialfis)
 ;;; rust-trivialfis.el ends here
