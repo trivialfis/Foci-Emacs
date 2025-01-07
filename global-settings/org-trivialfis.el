@@ -114,8 +114,13 @@
 
 (defun trivialfis/org-post()
   "Run after org mode initialization."
+  (require 'org-agenda)
   (setf org-bullets-bullet-list '("◉" "○" "■" "◆")
-	org-image-actual-width nil)
+	org-image-actual-width nil
+	org-agenda-prefix-format '((agenda . " %i %-12:c%?-12t% s")
+				   (todo . "%l %i %-12:c")
+				   (tags . " %i %-12:c")
+				   (search . " %i %-12:c")))
   ;; (org-indent-mode 1)
   (org-bullets-mode 1)
   (toc-org-enable)
