@@ -39,7 +39,9 @@
   (require 'use-package))
 
 (use-package lsp-trivialfis
-  :autoload trivialfis/lsp)
+  :autoload
+  trivialfis/lsp
+  lsp-ui-mode)
 
 (defun trivialfis/rust-compile ()
   "Compile rust code using cargo."
@@ -56,17 +58,11 @@
 (use-package lsp-mode
   :defer t
   :commands lsp
-  :autoload
-  lsp-find-references
-  lsp-package-path
-  lsp-clients-executable-find
   :config
   (trivialfis/lsp))
 
-(use-package lsp-ui
-  :defer t
-  :commands lsp-ui-mode
-  :config (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references))
+(use-package lsp-rust
+  :custom lsp-rust-analyzer-server-command '("~/.cargo/bin/rust-analyzer"))
 
 (defun trivialfis/rust ()
   "Common configuration for rust mode."

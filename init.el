@@ -51,7 +51,6 @@
  '(auth-source-save-behavior nil)
  '(custom-enabled-themes '(misterioso))
  '(ecb-options-version "2.50")
- '(package-quickstart 't)
  '(ediff-split-window-function 'split-window-sensibly)
  '(package-selected-packages
    '(company-shell ess flycheck font-lock-studio company-posframe mu4e-alert vterm lsp-metals paradox company-box realgud magit-delta powerline rust-mode slime-company cmake-mode sage-shell-mode debbugs nix-mode forge window-purpose lsp-haskell paredit eat groovy-mode toc-org vala-mode ninja-mode flyspell-correct-helm fill-column-indicator pyim htmlize csv-mode kotlin-mode company-auctex minimap disaster all-the-icons-dired org-bullets elpy sml-mode aggressive-indent lsp-origami mu4e-jump-to-list meson-mode helm-gtags yaml-mode lsp-java org-roam company-quickhelp toml-mode lua-mode cargo ox-gfm go-mode demap geiser markdown-toc highlight-symbol company-math winum company-c-headers lsp-ui powershell racket-mode polymode conda opencl-mode nginx-mode dockerfile-mode visual-fill-column json-mode helm-xref projectile rainbow-mode vline cython-mode))

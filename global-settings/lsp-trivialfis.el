@@ -29,15 +29,22 @@
   :commands which-key-mode)
 (use-package lsp-mode
   :defer t
-  :commands lsp)
+  :commands lsp
+  :autoload
+  lsp-find-references
+  lsp-package-path
+  :config
+  (message "use lsp-mode"))
 (use-package lsp-ui
   :defer t
   :commands lsp-ui-mode
-  :config '(trivialfis/global-set-keys
-	    '(
-	      ("M-n"          .           highlight-symbol-next)
-	      ("M-p"          .           highlight-symbol-prev)
-	      )))
+  :config
+  '(trivialfis/global-set-keys
+    '(
+      ("M-n"          .           highlight-symbol-next)
+      ("M-p"          .           highlight-symbol-prev)
+      ))
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-find-references))
 (use-package programming-trivialfis)
 
 (defun trivialfis/lsp ()
@@ -52,6 +59,7 @@
    lsp-ui-doc-delay 1
    lsp-ui-doc-use-webkit t
    lsp-ui-doc-max-width 90
+   lsp-inline-completion-enable 't
    lsp-keep-workspace-alive nil
    lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)

@@ -28,8 +28,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   paradox
   vline
   package-build
-  use-package
-  bind-key
   edit-indirect
   editorconfig
   ansi
@@ -76,6 +74,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   company-auctex                # Tex
   company-c-headers             # C
   disaster                      # C
+  jq-mode                       # jq
   slime                         # Lisp
   slime-company                 # Lisp
   aggressive-indent             # Lisp alike (elisp)
@@ -92,7 +91,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   pyim
   rust-mode                     # Rust
   cargo                         # Rust
-  lean-mode
   scala-mode
   toml-mode
   vala-mode
@@ -138,7 +136,9 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
 ]) ++ (with epkgs.nongnuPackages; [
   eat
 ]) ++ (with epkgs; [
+  bind-key
   cask
+  use-package
 ]) ++ (with pkgs; [
   mu
 ]))
