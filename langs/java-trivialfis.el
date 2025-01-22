@@ -17,6 +17,10 @@
   :commands lsp
   :config
   (trivialfis/lsp))
+(use-package lsp-java
+  :config
+  (message "load lsp java")
+  (setq lsp-java-autobuild-enabled nil))
 (use-package lsp-ui
   :defer t
   :commands lsp-ui-mode)
