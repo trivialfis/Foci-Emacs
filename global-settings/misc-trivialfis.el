@@ -202,7 +202,15 @@ move the cursor to the prompt area."
 	 ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
 	 ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
 	 ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
-	 ("C-S-n" . (lambda () (interactive) (trivialfis/new-term #'(lambda () (trivialfis/vterm)))))
+	 ("C-S-n" . (lambda (&optional name)
+		      "Provide optional NAME for a new term."
+		      (interactive
+		       (list (if current-prefix-arg
+				 (read-from-minibuffer "Name of the new term:")
+			       nil)))
+		      (trivialfis/new-term #'(lambda () (trivialfis/vterm)))
+		      (if name
+			  (rename-buffer name))))
 	 ("<mouse-1>" . war/vterm-mouse-set-point))
    ;; (:map vterm-copy-mode-map
    ;; 	 ("M-w" . #'vterm-copy-mode-done))
