@@ -32,6 +32,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   editorconfig
   ansi
   memoize
+  gptel
   f
   s
   yasnippet
