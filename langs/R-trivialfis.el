@@ -29,7 +29,11 @@
   :config
   ;; check renv first, then anaconda.
   (let ((profile (locate-dominating-file "." ".Rprofile")))
-    (if profile
+    (if (and profile
+	     ;; Make sure the `.Rprfoile' under the home directory is not used
+	     (not (string=
+		   (file-name-as-directory (expand-file-name profile))
+		   (file-name-as-directory (getenv "HOME")))))
 	(let* ((activate-path (f-join profile "renv" "activate.R"))
 	       ;; Otherwise renv will bootstrap at current working directory
 	       (chdir (format "setwd('%s')" profile))
