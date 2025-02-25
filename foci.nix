@@ -13,6 +13,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   dockerfile-mode
   font-lock-studio
   all-the-icons
+  move-text
   all-the-icons-dired
   realgud
   powerline

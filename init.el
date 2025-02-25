@@ -123,6 +123,11 @@
    trivialfis/swap-windows-horizontal
    trivialfis/ghcs))
 
+(use-package gh-log
+  :defer t
+  :commands
+  (trivialfis/gh-log-mode))
+
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"
   :interactive t
