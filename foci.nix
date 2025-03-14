@@ -1,8 +1,8 @@
 { pkgs, ... }:
 
 let
-  emacsGtk = pkgs.emacs29-gtk3;
-  emacsPgtk = pkgs.emacs29-pgtk;
+  emacsGtk = pkgs.emacs30-gtk3;
+  emacsPgtk = pkgs.emacs30-pgtk;
   emacsWithPackages = (pkgs.emacsPackagesFor emacsPgtk).emacsWithPackages;
 in
 emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
@@ -33,7 +33,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   editorconfig
   ansi
   memoize
-  gptel
   f
   s
   yasnippet
@@ -124,6 +123,9 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   treemacs
   # mu
   mu4e-alert
+  # llm
+  gptel
+  aidermacs
 ]) ++ (with epkgs.elpaPackages; [
   auctex         # ; LaTeX mode
   sml-mode
