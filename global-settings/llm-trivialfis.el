@@ -1,4 +1,4 @@
-;;; llm-trivialfis.el --- llm related functions.
+;;; llm-trivialfis.el --- llm related functions.  -*- lexical-binding: t -*-
 ;;;
 ;;; Copyright © 2025 Jiamingy <jm.yuan@outlook.com>
 ;;;
