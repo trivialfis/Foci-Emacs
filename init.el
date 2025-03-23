@@ -128,6 +128,12 @@
   :commands
   (trivialfis/gh-log-mode))
 
+(use-package llm-trivialfis
+  :defer t
+  :commands
+  (trivialfis/make-gptel-claude
+   trivialfis/aidermacs-minor-mode))
+
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"
   :interactive t
