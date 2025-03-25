@@ -126,6 +126,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   # llm
   gptel
   aidermacs
+  copilot-language-server
 ]) ++ (with epkgs.elpaPackages; [
   auctex         # ; LaTeX mode
   sml-mode
