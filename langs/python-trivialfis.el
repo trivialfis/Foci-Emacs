@@ -182,13 +182,16 @@
 
   (add-hook 'xref-after-jump-hook
 	    #'(lambda ()
-		;; mypy is not happy about top level modules.
-		(let ((foundpath (f-traverse-upwards
-				  (lambda (path)
-				    (or (equal path (f-expand "~"))
-					(f-exists? (f-join path "site-packages")))))))
-		  (if (f-exists? (f-join foundpath "site-packages"))
-		      (setq-local flycheck-disabled-checkers '(python-mypy python-pylint))))))
+		(let ((major-mode (with-current-buffer (current-buffer)
+				    major-mode)))
+		  (if (eq major-mode 'python-mode)
+		      ;; mypy is not happy about top level modules.
+		      (let ((foundpath (f-traverse-upwards
+					(lambda (path)
+					  (or (equal path (f-expand "~"))
+					      (f-exists? (f-join path "site-packages")))))))
+			(if (f-exists? (f-join foundpath "site-packages"))
+			    (setq-local flycheck-disabled-checkers '(python-mypy python-pylint))))))))
 
   ;; Replace flymake with flycheck
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
