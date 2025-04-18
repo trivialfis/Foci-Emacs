@@ -84,7 +84,7 @@
 	  aidermacs-editor-model "openai/claude-3-7"
 	  aidermacs-use-architect-mode t
 	  aidermacs-backend 'vterm
-	  aidermacs-extra-args '("--analytics-disable" "--no-gitignore" "--cache-prompts"))
+	  aidermacs-extra-args '("--analytics-disable" "--no-gitignore" "--cache-prompts" "--watch-files"))
     (let* ((host (concat "https://" (trivialfis/get-dft-host)))
 	   (api-base (concat host DFT-ENDPOINT)))
       (setenv "AIDER_OPENAI_API_BASE" api-base))
