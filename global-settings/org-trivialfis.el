@@ -1,4 +1,4 @@
-;;; org-trivialfis --- Org configuration.
+;;; org-trivialfis --- Org configuration. -*- lexical-binding: t; -*-
 ;;;
 ;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
