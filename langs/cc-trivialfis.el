@@ -44,6 +44,8 @@
   :defer t
   :autoload flycheck-mode)
 
+;; This one is loaded, then the global lsp configuration. Multiple files can reuse the
+;; same clangd session, regardless how a file is loaded.
 (use-package lsp-mode
   :defer t
   :commands lsp
@@ -52,6 +54,7 @@
   lsp-package-path
   lsp-clients-executable-find
   :config
+  (message "Use lsp with clangd.")
   (trivialfis/lsp)
   (use-package lsp-clangd
     :autoload lsp-clients--clangd-command))
