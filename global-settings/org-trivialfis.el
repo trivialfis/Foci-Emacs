@@ -95,7 +95,7 @@
     (dolist (face org-level)
       (set-face-attribute face nil :weight 'semi-bold :height level)
       (setf level (- level 0.1))))
-  (company-mode 1)
+  ;; (company-mode 1)
 
   (let* ((agenda-file "~/.emacs.d/misc/org-agenda.el")
 	 (account-string (if (file-exists-p agenda-file)
@@ -111,6 +111,10 @@
     (setq org-agenda-files evaluated))
 
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo))
+
+(use-package toc-org
+  :defer t
+  :commands toc-org-enable)
 
 (defun trivialfis/org-post()
   "Run after org mode initialization."
