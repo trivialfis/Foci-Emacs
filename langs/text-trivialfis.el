@@ -34,7 +34,8 @@
   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-at-point)
   (make-local-variable 'company-backends)
   (add-to-list 'company-backends 'company-ispell)
-  (setq require-final-newline 'nil))
+  (setq require-final-newline 'nil)
+  (setq-local indent-tabs-mode 'nil))
 
 (defun trivialfis/cjk ()
   "Enable CJK input method."
