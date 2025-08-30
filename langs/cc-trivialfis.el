@@ -73,7 +73,7 @@
 REMOTE is for `executable-find'.
 
 Modified from `lsp-clients--clangd-command'."
-  (if (string= system-type "windows-nt")
+  (if (and (string= system-type "windows-nt") (not (file-remote-p default-directory)))
       "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clangd.exe"
     (or (lsp-package-path 'clangd)
         (-first #'(lambda (command)
