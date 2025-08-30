@@ -30,12 +30,13 @@
 
 (defun trivialfis/_text ()
   "Configuration for normal text."
-  (flyspell-mode 1)
-  (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-at-point)
-  (make-local-variable 'company-backends)
-  (add-to-list 'company-backends 'company-ispell)
-  (setq require-final-newline 'nil)
-  (setq-local indent-tabs-mode 'nil))
+  (when (not (string= system-type "windows-nt"))
+    (flyspell-mode 1)
+    (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-at-point)
+    (make-local-variable 'company-backends)
+    (add-to-list 'company-backends 'company-ispell))
+  (setq-local require-final-newline 'nil
+	      indent-tabs-mode 'nil))
 
 (defun trivialfis/cjk ()
   "Enable CJK input method."

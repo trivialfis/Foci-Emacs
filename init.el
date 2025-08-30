@@ -448,7 +448,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (add-hook 'magit-diff-mode-hook
 	  #'(lambda ()
 	      (setq magit-diff-refine-hunk 'all
-		    magit-diff-refine-ignore-whitespace 'nil)))
+		    magit-diff-refine-ignore-whitespace 'nil)
+	      (when (string= system-type "windows-nt")
+		(add-to-list 'exec-path "C:/Program Files/Git/usr/bin/"))))
 (add-hook 'magit-status-mode-hook
 	  #'(lambda ()
 	      (transient-append-suffix 'magit-log "-A"
