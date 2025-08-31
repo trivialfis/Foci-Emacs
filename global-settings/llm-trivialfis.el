@@ -91,5 +91,15 @@
     (setenv "AIDER_OPENAI_API_KEY" (trivialfis/get-key "perflab"))))
 
 ;; aider --analytics-disable --model=openai/claude-3-7 --env-file ./.env  ./CMakeLists.txt
+
+(use-package claude-code-ide
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+  :commands
+  claude-code-ide
+  :config
+  (message "enable claude code ide")
+  (claude-code-ide-emacs-tools-setup))
+
 (provide 'llm-trivialfis)
 ;;; llm-trivialfis.el ends here
