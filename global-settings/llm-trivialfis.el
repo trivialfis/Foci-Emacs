@@ -82,7 +82,7 @@
 	  ;; Editor model for code generation (initially defaults to
 	  ;; aidermacs-default-model)
 	  aidermacs-editor-model "openai/claude-3-7"
-	  aidermacs-use-architect-mode t
+	  aidermacs-default-chat-mode 'architect
 	  aidermacs-backend 'vterm
 	  aidermacs-extra-args '("--analytics-disable" "--no-gitignore" "--cache-prompts" "--watch-files"))
     (let* ((host (concat "https://" (trivialfis/get-dft-host)))
@@ -92,6 +92,10 @@
 
 ;; aider --analytics-disable --model=openai/claude-3-7 --env-file ./.env  ./CMakeLists.txt
 
+(use-package condaenv
+  :autoload trivialfis/find-activate-conda-env
+  :defer t)
+
 (use-package claude-code-ide
   :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
   :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
@@ -99,6 +103,7 @@
   claude-code-ide
   :config
   (message "enable claude code ide")
+  (trivialfis/find-activate-conda-env)
   (claude-code-ide-emacs-tools-setup))
 
 (provide 'llm-trivialfis)
