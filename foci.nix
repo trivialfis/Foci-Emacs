@@ -144,7 +144,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
 ]) ++ (with epkgs; [
   bind-key
   cask
-  use-package
 ]) ++ (with pkgs; [
   mu
 ]))
