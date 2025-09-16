@@ -96,7 +96,6 @@
   :autoload trivialfis/find-activate-conda-env
   :defer t)
 
-
 (defun trivialfis/cci()
   "Enable claude-code-ide."
   (interactive)
