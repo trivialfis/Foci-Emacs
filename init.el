@@ -132,7 +132,7 @@
   :commands
   (trivialfis/make-gptel-claude
    trivialfis/aidermacs-minor-mode
-   trivialfis/claude-code-ide))
+   trivialfis/cci))
 
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"
