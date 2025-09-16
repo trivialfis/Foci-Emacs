@@ -96,15 +96,22 @@
   :autoload trivialfis/find-activate-conda-env
   :defer t)
 
-(use-package claude-code-ide
-  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
-  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
-  :commands
-  claude-code-ide
-  :config
-  (message "enable claude code ide")
-  (trivialfis/find-activate-conda-env)
-  (claude-code-ide-emacs-tools-setup))
+
+(defun trivialfis/cci()
+  "Enable claude-code-ide."
+  (interactive)
+  (use-package claude-code-ide
+    :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+    :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+    :defer t
+    :commands
+    claude-code-ide
+    :config
+    (message "enable claude code ide")
+    (global-hl-line-mode 0)
+    (trivialfis/find-activate-conda-env)
+    (claude-code-ide-emacs-tools-setup))
+  (claude-code-ide))
 
 (provide 'llm-trivialfis)
 ;;; llm-trivialfis.el ends here
