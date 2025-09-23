@@ -1,5 +1,6 @@
 (custom-set-variables
  '(custom-enabled-themes (quote (misterioso))))
+(custom-set-faces `(default ((t (:background "gray13")))))
 
 (setq initial-frame-alist '((tool-bar-lines . 0)
 			    (width . 128) ; chars
