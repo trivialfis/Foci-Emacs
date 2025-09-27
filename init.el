@@ -85,26 +85,9 @@
 
 (add-to-list 'backup-directory-alist (cons tramp-file-name-regexp nil))
 
-(defun logging-shell-command-handler(command &optional output-buffer error-buffer)
-  (message "execute:%s" command)
-  (tramp-handle-shell-command command output-buffer error-buffer))
-;; fixme: tramp-sh-file-name-handler-alist is a const value. We need a better way to
-;; assemble a different tramp method.
-;; (add-to-list 'load-path "~/ws/ridge_dev/tramp/lisp/")
-(add-hook
- 'find-file-hook
- #'(lambda ()
-     (if (file-remote-p default-directory)
-	 (progn
-	   (let ((method (tramp-file-name-method (tramp-dissect-file-name default-directory))))
-	     (setq vc-handled-backends 'nil)
-	     (unless (and (eq (alist-get 'shell-command tramp-sh-file-name-handler-alist)
- 			      #'logging-shell-command-handler)
-			  (or (string= method "ssh")
-			      (string= method "sshx")))
-	       (setcdr
-		(assoc 'shell-command tramp-sh-file-name-handler-alist)
-		#'logging-shell-command-handler)))))))
+(if (file-exists-p "~/.emacs.d/tramp-trunk")
+    (add-to-list 'load-path "~/.emacs.d/tramp-trunk"))
+
 ;; (toggle-debug-on-error)
 ;; (toggle-debug-on-quit)
 

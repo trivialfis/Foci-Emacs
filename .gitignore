@@ -46,6 +46,7 @@ forge-database.sqlite
 transient
 pyim
 tramp
+tramp-trunk
 org-roam.db
 eln-cache
 projects
