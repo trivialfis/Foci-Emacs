@@ -1,4 +1,4 @@
-;;; condaenv.el --- Summary
+;;; condaenv.el --- Summary  -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 (eval-when-compile
@@ -59,7 +59,9 @@
            (matches (-filter 'conda--env-dir-is-valid possibilities)))
       (if (> (length matches) 0)
           (file-name-as-directory (expand-file-name (car matches)))
-        (error "No such conda environment: %s" name)))))
+        (progn
+	  (display-warning 'conda (format "Environment %s not found." name) :warning)
+	  nil)))))
 
 
 
@@ -74,7 +76,7 @@
 	 (config (if json-str (json-parse-string json-str) 'nil))
 	 (project-name (if config (gethash "project-name" config) 'nil))
 	 (dirpath (if project-name (trivialfis/conda-env-name-to-dir project-name) 'nil)))
-    (if project-name
+    (if (and project-name dirpath)
 	(progn
 	  ;; Caller should handle the tramp path.
 	  (if (not (file-remote-p dirpath))
