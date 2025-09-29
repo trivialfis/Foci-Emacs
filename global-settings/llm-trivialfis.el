@@ -53,7 +53,7 @@
 	host
       (error "No available host"))))
 
-(defconst DFT-ENDPOINT "/openai/deployments/claude-3-7-sonnet-20250219")
+(defconst DFT-ENDPOINT "/openai/deployments/model-router")
 
 (defun trivialfis/make-gptel-claude ()
   "Make a gptel backend using claude."
@@ -77,20 +77,7 @@
     :commands
     aidermacs-transient-menu
     :config
-    (setq aidermacs-default-model "openai/claude-3-7"
-	  aidermacs-architect-model "openai/claude-3-7"
-	  ;; Editor model for code generation (initially defaults to
-	  ;; aidermacs-default-model)
-	  aidermacs-editor-model "openai/claude-3-7"
-	  aidermacs-default-chat-mode 'architect
-	  aidermacs-backend 'vterm
-	  aidermacs-extra-args '("--analytics-disable" "--no-gitignore" "--cache-prompts" "--watch-files"))
-    (let* ((host (concat "https://" (trivialfis/get-dft-host)))
-	   (api-base (concat host DFT-ENDPOINT)))
-      (setenv "AIDER_OPENAI_API_BASE" api-base))
-    (setenv "AIDER_OPENAI_API_KEY" (trivialfis/get-key "perflab"))))
-
-;; aider --analytics-disable --model=openai/claude-3-7 --env-file ./.env  ./CMakeLists.txt
+    (setq aidermacs-default-chat-mode 'architect)))
 
 (use-package condaenv
   :autoload trivialfis/find-activate-conda-env
