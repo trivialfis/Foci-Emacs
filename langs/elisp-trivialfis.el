@@ -1,4 +1,4 @@
-;;; package --- Summary
+;;; package --- Summary  -*- lexical-binding: t -*-
 ;;;
 ;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
@@ -93,11 +93,11 @@
   "Insert elisp header."
   (interactive)
   (insert ";;; " (buffer-name) " --- Summary\n"
-  ";;; Commentary:\n"
-  ";;; Code:"
-  "\n\n\n"
-  "(provide '" (s-chop-suffix ".el" (buffer-name)) ")\n"
-  ";;; " (buffer-name) " ends here"))
+	  ";;; Commentary:\n"
+	  ";;; Code:"
+	  "\n\n\n"
+	  "(provide '" (s-chop-suffix ".el" (buffer-name)) ")\n"
+	  ";;; " (buffer-name) " ends here"))
 
 (defun trivialfis/elisp()
   "Emacs Lisp configuration."
@@ -107,5 +107,6 @@
   (local-set-key (kbd "C-c C-a") 'byte-compile-file)
   (local-set-key (kbd "C-c C-b") 'eval-buffer)
   (aggressive-indent-mode)
-  (trivialfis/purpose))
+  ;; (trivialfis/purpose)
+  )
 ;;; elisp-trivialfis.el ends here
