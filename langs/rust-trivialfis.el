@@ -1,4 +1,4 @@
-;;; rust-trivialfis.el --- Summary
+;;; rust-trivialfis.el --- Summary  -*- lexical-binding: t -*-
 ;;;
 ;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
@@ -61,13 +61,11 @@
   :config
   (trivialfis/lsp))
 
-(use-package lsp-rust
-  :custom lsp-rust-analyzer-server-command '("~/.cargo/bin/rust-analyzer"))
-
 (defun trivialfis/rust ()
   "Common configuration for rust mode."
-  (lsp)
-  (lsp-ui-mode))
+  (when (executable-find "rust-analyzer")
+    (lsp)
+    (lsp-ui-mode)))
 
 (provide 'rust-trivialfis)
 ;;; rust-trivialfis.el ends here
