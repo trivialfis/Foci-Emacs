@@ -163,9 +163,11 @@
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
   (setq-local
    flycheck-flake8-maximum-line-length 88 ; black
-   fill-column 88
-   ;; way too slow
-   flycheck-disabled-checkers '(python-pylint))
+   fill-column 88)
+  ;; pylint is way too slow, pycompile couldn't find path on Windows
+  (if (string= system-type "windows-nt")
+      (setq-local flycheck-disabled-checkers '(python-pylint python-pycompile))
+    (setq-local flycheck-disabled-checkers '(python-pylint)))
 
   (unless current-env
     (setq current-env venv)

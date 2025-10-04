@@ -5,11 +5,23 @@
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
   (require 'use-package))
 
+(defun trivialfis/conda-get-home()
+  (if (string= system-type "windows-nt")
+      "C:\\Users\\jiamingy\\AppData\\Local\\miniforge3"
+    "~/.anaconda"))
+
 (use-package conda
   :custom
-  (conda-anaconda-home  "~/.anaconda")
+  (conda-anaconda-home (trivialfis/conda-get-home))
   :autoload conda-env-activate-path conda--env-dir-is-valid conda-env-default-location
-  :defer t)
+  :defer t
+  :config
+  (if (string= system-type "windows-nt")
+      (let* ((conda-home (trivialfis/conda-get-home))
+	     (bin-path (f-join conda-home conda-env-executables-dir)))
+	;; Set an internal variable in conda.el .
+	(setq conda--executable-path (locate-file "conda.exe" (list bin-path) exec-suffixes 'executable)))))
+
 (use-package f
   :autoload f-read-text f-join
   :defer t)
@@ -66,9 +78,9 @@
 
 
 (defun trivialfis/find-activate-conda-env ()
-  "Activate conda env if there's any."
-  (setq-default conda-env-home-directory "~/.anaconda/"
-		conda-anaconda-home "~/.anaconda/")
+  "Activate conda env, if there's any."
+  ;; (setq-default conda-env-home-directory "~/.anaconda/"
+  ;; 		conda-anaconda-home "~/.anaconda/")
   (let* ((hook ".conda-env.json")
 	 (path (locate-dominating-file "." hook))
 	 (project-file (if path (concat path hook) 'nil))
@@ -82,7 +94,9 @@
 	  (if (not (file-remote-p dirpath))
 	      (conda-env-activate-path dirpath))
 	  (message (format "Anaconda project name: %s\n" project-name))
-	  (f-join (trivialfis/conda-env-name-to-dir project-name) "bin" "python3"))
+	  (if (string= system-type "windows-nt")
+	      (f-join (trivialfis/conda-env-name-to-dir project-name) "python.exe")
+	    (f-join (trivialfis/conda-env-name-to-dir project-name) "bin" "python3")))
       'nil)))
 
 (provide 'condaenv)
