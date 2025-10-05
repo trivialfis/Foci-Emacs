@@ -17,6 +17,7 @@
   :server-id 'cmake-lsp))
 
 (use-package company-cmake
+  :defer t
   :defines company-cmake-executable)
 
 (defun trivialfis/cmake ()
