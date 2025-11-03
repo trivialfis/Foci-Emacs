@@ -57,7 +57,7 @@
   (message "Use lsp with clangd.")
   (trivialfis/lsp)
   (use-package lsp-clangd
-    :autoload lsp-clients--clangd-command))
+    :autoload lsp-clients--clangd-command lsp-clangd-find-other-file))
 
 (use-package lsp-ui
   :defer t
@@ -98,6 +98,17 @@ Modified from `lsp-clients--clangd-command'."
   (lsp-ui-mode)
   (flycheck-mode 1))
 
+(defun trivialfis/ff-find-other-file ()
+  "Bundles find other file with xref and clangd."
+  (interactive)
+  (xref-push-marker-stack)
+  (condition-case _
+      (if lsp-mode
+	  (lsp-clangd-find-other-file)
+	(ff-find-other-file))
+    (user-error
+     (ff-find-other-file))))
+
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
   ;; Company mode
@@ -122,19 +133,14 @@ Modified from `lsp-clients--clangd-command'."
   ;; Handle CUDA header files
   (add-to-list 'cc-other-file-alist
 	       '("\\.cu\\'"  (".cuh" ".h")))
+  (add-to-list 'cc-other-file-alist
+	       '("\\.cuh\\'" (".cu")))
 
   (trivialfis/local-set-keys
    '(
      ;; Disaster
      ("C-c d a" . disaster)
-     ("C-c f f" . (lambda ()
-		    (interactive)
-		    (condition-case error-data
-			(if lsp-mode
-			    (lsp-clangd-find-other-file)
-			  (ff-find-other-file))
-		      (user-error
-		       (ff-find-other-file)))))
+     ("C-c f f" . trivialfis/ff-find-other-file)
      )
    ))
 
