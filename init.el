@@ -216,7 +216,7 @@
 ;; highlight current line
 (global-hl-line-mode 1)
 (set-face-foreground 'highlight nil) ; keep the syntax highlighting
-(set-face-background 'highlight "gray9")
+(set-face-background 'highlight "#2f4f4f")
 
 
 ;; Highlight symbol at point

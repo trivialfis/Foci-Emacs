@@ -119,11 +119,22 @@ Modified from `lsp-clients--clangd-command'."
   (c-add-style "google-c-style" google-c-style)
 
   (c-set-style "google-c-style")
+  ;; Handle CUDA header files
+  (add-to-list 'cc-other-file-alist
+	       '("\\.cu\\'"  (".cuh" ".h")))
 
   (trivialfis/local-set-keys
    '(
      ;; Disaster
      ("C-c d a" . disaster)
+     ("C-c f f" . (lambda ()
+		    (interactive)
+		    (condition-case error-data
+			(if lsp-mode
+			    (lsp-clangd-find-other-file)
+			  (ff-find-other-file))
+		      (user-error
+		       (ff-find-other-file)))))
      )
    ))
 
