@@ -128,6 +128,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   aidermacs
   copilot
   copilot-chat
+  agent-shell
 ]) ++ (with epkgs.elpaPackages; [
   auctex         # ; LaTeX mode
   sml-mode
