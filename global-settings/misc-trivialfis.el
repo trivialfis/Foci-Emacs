@@ -1,6 +1,6 @@
-;;; misc-trivialfis.el --- Misc functions.
+;;; package --- Summary  -*- lexical-binding: t -*-
 ;;;
-;;; Copyright © 2016-2023 Jiamingy <jm.yuan@outlook.com>
+;;; Copyright © 2016-2025 Jiamingy <jm.yuan@outlook.com>
 ;;;
 ;;; This file is part of Foci-Emacs.
 ;;;
@@ -199,8 +199,8 @@ move the cursor to the prompt area."
   :defer t
   :bind
   ((:map vterm-mode-map
-	 ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
-	 ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
+	 ;; ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
+	 ;; ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
 	 ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
 	 ("C-S-n" . (lambda (&optional name)
 		      "Provide optional NAME for a new term."
