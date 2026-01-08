@@ -73,19 +73,17 @@
 REMOTE is for `executable-find'.
 
 Modified from `lsp-clients--clangd-command'."
-  (if (and (string= system-type "windows-nt") (not (file-remote-p default-directory)))
-      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\x64\\bin\\clangd.exe"
-    (or (lsp-package-path 'clangd)
-        (-first #'(lambda (command)
-		    (executable-find command remote))
-		(-map (lambda (version)
-			(concat "clangd" version))
-		      ;; Prefer `clangd` without a version number appended.
-		      (cl-list* "" (-map
-				    (lambda (vernum) (format "-%d" vernum))
-				    (number-sequence 22 14 -1)))))
-        (lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
-        (lsp-clients-executable-find "xcrun" "--find" "clangd"))))
+  (or (lsp-package-path 'clangd)
+      (-first #'(lambda (command)
+		  (executable-find command remote))
+	      (-map (lambda (version)
+		      (concat "clangd" version))
+		    ;; Prefer `clangd` without a version number appended.
+		    (cl-list* "" (-map
+				  (lambda (vernum) (format "-%d" vernum))
+				  (number-sequence 22 14 -1)))))
+      (lsp-clients-executable-find "xcodebuild" "-find-executable" "clangd")
+      (lsp-clients-executable-find "xcrun" "--find" "clangd")))
 
 (defun trivialfis/clangd ()
   "Clangd configuration."
