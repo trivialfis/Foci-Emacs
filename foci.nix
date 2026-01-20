@@ -145,6 +145,8 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
 ]) ++ (with epkgs; [
   bind-key
   cask
+  # Tree sitter
+  treesit-grammars.with-all-grammars
 ]) ++ (with pkgs; [
   mu
 ]))
