@@ -409,7 +409,11 @@ KEY-COMMANDS: A list containing one or more (key command)"
 	      (autoload 'trivialfis/xml-format-region "xml-trivialfis"
 		:interactive t)))
 
-(add-hook 'yaml-mode-hook
+;; yaml mode
+;; ("\\.\\(e?ya?\\|ra\\)ml\\'" . yaml-mode)
+;; ("\\.ya?ml\\'" . yaml-ts-mode)
+(add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-ts-mode))
+(add-hook 'yaml-ts-mode-hook
 	  #'(lambda ()
 	      (use-package flycheck
 		:commands flycheck-mode)

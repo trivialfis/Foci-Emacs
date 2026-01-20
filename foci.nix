@@ -95,7 +95,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   scala-mode
   toml-mode
   vala-mode
-  yaml-mode
   cython-mode
   ess                           # R/S
   geiser                        # Scheme
@@ -103,7 +102,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   haskell-mode
   markdown-mode
   markdown-toc
-  yaml-mode
   powershell
   sage-shell-mode
   # lsp mode
