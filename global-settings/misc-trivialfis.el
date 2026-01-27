@@ -337,6 +337,12 @@ FROM TO are range markers."
     :defer t
     :commands codespaces-connect codespaces-setup))
 
+(defun trivialfis/cp-bfn()
+  "Copy buffer file name."
+  (interactive)
+  (let ((fname (buffer-file-name)))
+    (kill-new fname)))
+
 ;; Other functions that might be useful
 ;; Set the coding system for a specific file
 ;;   set-buffer-file-coding-system utf-8-unix
