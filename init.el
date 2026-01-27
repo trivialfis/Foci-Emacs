@@ -120,7 +120,8 @@
    trivialfis/new-vterm-frame
    trivialfis/remove-blank-lines
    trivialfis/swap-windows-horizontal
-   trivialfis/ghcs))
+   trivialfis/ghcs
+   trivialfis/cp-bfn))
 
 (use-package gh-log
   :defer t
