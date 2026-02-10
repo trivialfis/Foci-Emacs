@@ -161,6 +161,7 @@
 (defun trivialfis/elpy-setup(venv)
   "Elpy configuration.  VENV is the virtual env to be activated."
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
+  (local-set-key (kbd "C-c l = =") #'trivialfis/ruff-format-buffer)
   (setq-local
    flycheck-flake8-maximum-line-length 88 ; black
    fill-column 88)
@@ -332,6 +333,90 @@ buffer content with formatted result."
   (interactive)
   (elpy-format-code)
   (trivialfis/isort))
+
+(defvar-local trivialfis/--ruff-pyproject-path nil
+  "Cached path to pyproject.toml for the current buffer.")
+
+(defun trivialfis/--ruff-run (args label)
+  "Pipe the current buffer through ruff with ARGS and replace contents.
+
+LABEL is used in error messages to identify the ruff sub-command.
+The entire buffer is always sent via stdin so that ruff has full
+context.  On success the buffer is updated with
+`replace-buffer-contents' to preserve markers and point."
+  (let ((output-buf (generate-new-buffer " *ruff-format*"))
+        (stderr-file (make-temp-file "ruff-stderr")))
+    (unwind-protect
+        (let ((exit-code (apply #'call-process-region
+                                (point-min) (point-max)
+                                "ruff"
+                                nil
+                                (list output-buf stderr-file)
+                                nil
+                                args)))
+          (if (zerop exit-code)
+              (replace-buffer-contents output-buf)
+            (user-error "%s failed (exit %d): %s"
+                        label exit-code
+                        (with-temp-buffer
+                          (insert-file-contents stderr-file)
+                          (string-trim (buffer-string))))))
+      (kill-buffer output-buf)
+      (delete-file stderr-file))))
+
+(defun trivialfis/--find-pyproject-dir ()
+  "Find the directory containing pyproject.toml.
+
+Return the cached path if available.  Otherwise search upward from
+the project root (via `project-current') or `default-directory'.
+The result is cached in the buffer-local variable
+`trivialfis/--ruff-pyproject-path'."
+  (or trivialfis/--ruff-pyproject-path
+      (let ((search-dir (if-let ((proj (project-current)))
+                            (project-root proj)
+                          default-directory)))
+        (when-let ((dir (locate-dominating-file
+                         search-dir "pyproject.toml")))
+          (setq trivialfis/--ruff-pyproject-path (expand-file-name dir))
+          trivialfis/--ruff-pyproject-path))))
+
+(defun trivialfis/ruff-format-buffer ()
+  "Format the current buffer or the active region using ruff.
+
+Sort imports with `ruff check --select I --fix', then format code
+with `ruff format'.  When a region is active, only format that
+region via --range (import sorting still applies to the whole
+buffer).  Buffer contents are piped through stdin/stdout and
+replaced using `replace-buffer-contents' to preserve markers and
+point."
+  (interactive)
+  (unless (executable-find "ruff")
+    (user-error "The `ruff' formatter is not accessible"))
+  (let* ((pyproject-dir (trivialfis/--find-pyproject-dir))
+         (config-args
+          (when pyproject-dir
+            (list "--config"
+                  (expand-file-name "pyproject.toml" pyproject-dir))))
+         (range-args
+          (when (use-region-p)
+            (let ((start-line (line-number-at-pos (region-beginning)))
+                  (end-line (line-number-at-pos (region-end))))
+              (list "--range" (format "%d-%d" start-line end-line)))))
+         (filename (or (buffer-file-name) "stdin")))
+    ;; 1. Sort imports (whole buffer)
+    (trivialfis/--ruff-run
+     (append (list "check" "--select" "I" "--fix"
+                   "--stdin-filename" filename)
+             config-args
+             (list "-"))
+     "ruff isort")
+    ;; 2. Format code (respects --range when region is active)
+    (trivialfis/--ruff-run
+     (append (list "format" "--stdin-filename" filename)
+             config-args
+             range-args
+             (list "-"))
+     "ruff format")))
 
 (defun trivialfis/python()
   "Python configuration."
