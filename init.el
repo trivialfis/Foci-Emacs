@@ -132,8 +132,7 @@
   :defer t
   :commands
   (trivialfis/make-gptel-claude
-   trivialfis/aidermacs-minor-mode
-   trivialfis/cci))
+   trivialfis/aidermacs-minor-mode))
 
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"
