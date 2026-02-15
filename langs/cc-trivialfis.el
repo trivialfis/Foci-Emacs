@@ -96,6 +96,8 @@ Modified from `lsp-clients--clangd-command'."
   (lsp-ui-mode)
   (flycheck-mode 1))
 
+(use-package find-file)
+
 (defun trivialfis/ff-find-other-file ()
   "Bundles find other file with xref and clangd."
   (interactive)
@@ -106,6 +108,7 @@ Modified from `lsp-clients--clangd-command'."
 	(ff-find-other-file))
     (user-error
      (ff-find-other-file))))
+
 
 (defun trivialfis/cc-base ()
   "Common configuration for c and c++ mode."
