@@ -8,5 +8,10 @@
 			    (left . 120)
 			    (top . 80)))
 
+;; Set default directory to home on Windows
+;; Must be set in early init, no idea why.
+(when (eq system-type 'windows-nt)
+  (cd (getenv "USERPROFILE")))
+
 ;; Override the internal function `internal-macroexpand-for-load' to see where the error
 ;; occurs.
