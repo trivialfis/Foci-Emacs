@@ -343,6 +343,17 @@ FROM TO are range markers."
   (let ((fname (buffer-file-name)))
     (kill-new fname)))
 
+(defun trivialfis/cp-bfn-base ()
+  "Copy the filename of (buffer-file-name)."
+  (interactive)
+  (let* ((path (buffer-file-name))
+	 (fname (if path
+		    (file-name-nondirectory path)
+		  nil)))
+    (if fname
+	(kill-new fname)
+      (kill-new ""))))
+
 ;; Other functions that might be useful
 ;; Set the coding system for a specific file
 ;;   set-buffer-file-coding-system utf-8-unix
