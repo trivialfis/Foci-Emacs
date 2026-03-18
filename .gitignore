@@ -50,6 +50,8 @@ tramp-trunk
 org-roam.db
 eln-cache
 projects
+.agent-shell
+elpy
 
 # ts
 tree-sitter
