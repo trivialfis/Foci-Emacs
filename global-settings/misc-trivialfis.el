@@ -187,36 +187,37 @@ move the cursor to the prompt area."
       pt)))
 
 ;; Be aware of the copy mode: https://github.com/akermu/emacs-libvterm/issues/367
-(use-package vterm
-  :config
-  (use-package bind-key)
-  (setq vterm-kill-buffer-on-exit t
-	vterm-max-scrollback 100000
-	;; vterm-copy-exclude-prompt nil
-	)
-  (set-face-foreground 'vterm-color-blue "#CCFFCC")
-  (set-face-foreground 'vterm-color-magenta "#cc99ff")
-  :defer t
-  :bind
-  ((:map vterm-mode-map
-	 ;; ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
-	 ;; ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
-	 ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
-	 ("C-S-n" . (lambda (&optional name)
-		      "Provide optional NAME for a new term."
-		      (interactive
-		       (list (if current-prefix-arg
-				 (read-from-minibuffer "Name of the new term:")
-			       nil)))
-		      (trivialfis/new-term #'(lambda () (trivialfis/vterm)))
-		      (if name
-			  (rename-buffer name))))
-	 ("<mouse-1>" . war/vterm-mouse-set-point))
-   ;; (:map vterm-copy-mode-map
-   ;; 	 ("M-w" . #'vterm-copy-mode-done))
-   )
-  :commands vterm
-  :autoload vterm-send-key vterm vterm-reset-cursor-point vterm-copy-mode-done)
+(unless (eq system-type 'windows-nt)
+  (use-package vterm
+    :config
+    (use-package bind-key)
+    (setq vterm-kill-buffer-on-exit t
+	  vterm-max-scrollback 100000
+	  ;; vterm-copy-exclude-prompt nil
+	  )
+    (set-face-foreground 'vterm-color-blue "#CCFFCC")
+    (set-face-foreground 'vterm-color-magenta "#cc99ff")
+    :defer t
+    :bind
+    ((:map vterm-mode-map
+	   ;; ("M-p"   . (lambda () (interactive) (vterm-send-key "p" nil nil t))) ; C-p
+	   ;; ("M-n"   . (lambda () (interactive) (vterm-send-key "n" nil nil t))) ; C-n
+	   ("M-\\"  . (lambda () (interactive) (vterm-send-key "\\" nil t nil))); M-\
+	   ("C-S-n" . (lambda (&optional name)
+			"Provide optional NAME for a new term."
+			(interactive
+			 (list (if current-prefix-arg
+				   (read-from-minibuffer "Name of the new term:")
+				 nil)))
+			(trivialfis/new-term #'(lambda () (trivialfis/vterm)))
+			(if name
+			    (rename-buffer name))))
+	   ("<mouse-1>" . war/vterm-mouse-set-point))
+     ;; (:map vterm-copy-mode-map
+     ;; 	 ("M-w" . #'vterm-copy-mode-done))
+     )
+    :commands vterm
+    :autoload vterm-send-key vterm vterm-reset-cursor-point vterm-copy-mode-done))
 
 (use-package eat
   :defer t
@@ -252,14 +253,15 @@ move the cursor to the prompt area."
   "Open vterm."
   (interactive)
   ;; Add this to gnome shortcut key `emacs --eval "(trivialfis/vterm)"'
-
-  (vterm t) ;; addtional argument to make sure it spwans a new shell
-  ;; Don't ask on exit
-  (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)
-  ;; FIXME: Enable per-buffer highlight
-  (global-hl-line-mode -1)
-  (set-window-scroll-bars (selected-window) nil 'right)
-  (set-frame-parameter (selected-frame) 'alpha-background 65))
+  (if (eq system-type 'windows-nt)
+      (user-error "vterm is disabled on Windows")
+    (vterm t) ;; addtional argument to make sure it spwans a new shell
+    ;; Don't ask on exit
+    (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)
+    ;; FIXME: Enable per-buffer highlight
+    (global-hl-line-mode -1)
+    (set-window-scroll-bars (selected-window) nil 'right)
+    (set-frame-parameter (selected-frame) 'alpha-background 65)))
 
 (defun trivialfis/remove-blank-lines ()
   "Remove all blank lines in current buffer."
@@ -338,10 +340,13 @@ FROM TO are range markers."
     :commands codespaces-connect codespaces-setup))
 
 (defun trivialfis/cp-bfn()
-  "Copy buffer file name."
+  "Copy buffer file name.
+For remote files, copy the local path without the Tramp prefix."
   (interactive)
   (let ((fname (buffer-file-name)))
-    (kill-new fname)))
+    (kill-new (if (file-remote-p fname)
+                  (file-local-name fname)
+                fname))))
 
 (defun trivialfis/cp-bfn-base ()
   "Copy the filename of (buffer-file-name)."
