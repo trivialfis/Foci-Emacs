@@ -1,12 +1,11 @@
-"""Dired in right click menu of nautilus.  Put this file under:
+"""Agent shell in right click menu of nautilus.  Put this file under:
 
-  ~/.local/share/nautilus-python/extensions/dired.py
+  ~/.local/share/nautilus-python/extensions/agent-shell-nautilus.py
 
 and install `python3-nautilus` on Ubuntu.  Restart nautilus service if necessary.
 
 """
 
-import os
 import subprocess
 from typing import List
 from urllib.parse import unquote, urlparse
@@ -14,13 +13,16 @@ from urllib.parse import unquote, urlparse
 from gi.repository import GObject, Nautilus
 
 
-class DiredExtension(GObject.GObject, Nautilus.MenuProvider):
-    def menu_activate_dired(
+class AgentShellExtension(GObject.GObject, Nautilus.MenuProvider):
+    def menu_activate_agent_shell(
         self, menu: Nautilus.MenuItem, f: Nautilus.FileInfo
     ) -> None:
         parsed = urlparse(f.get_uri())
         path = unquote(parsed.path)
-        cmd = f'emacs --chdir="{path}" {path}'
+        cmd = (
+            f'emacs --chdir="{path}"'
+            f' --eval "(agent-shell)"'
+        )
         if f.is_directory():
             subprocess.Popen(cmd, shell=True)
 
@@ -28,12 +30,12 @@ class DiredExtension(GObject.GObject, Nautilus.MenuProvider):
         self, current_folder: Nautilus.FileInfo
     ) -> List[Nautilus.MenuItem]:
         item = Nautilus.MenuItem(
-            name="MenuProvider::Dired",
-            label="Open in Dired",
-            tip="Open Dired here.",
+            name="MenuProvider::AgentShell",
+            label="Open in Agent Shell",
+            tip="Start agent shell here.",
             icon="",
         )
-        item.connect("activate", self.menu_activate_dired, current_folder)
+        item.connect("activate", self.menu_activate_agent_shell, current_folder)
         return [
             item,
         ]
