@@ -50,7 +50,7 @@ The first element is the command name, and the rest are command parameters."
   :group 'agent-shell)
 
 (defvar agent-shell-cursor-acp-whitelisted-commands
-  '("pytest" "ninja" "python" "git show" "git log" "wc" "head" "tail"))
+  '("cd" "pytest" "ninja" "python" "mypy" "git show" "git log" "wc" "head" "tail" "grep" "sed"))
 
 ;; ---------------------------------------------------------------------------
 ;;; Agent configuration
@@ -137,14 +137,13 @@ Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
     cmd))
 
 (defun agent-shell-cursor-acp--whitelisted-entry-p (cmd)
-  "Return non-nil if CMD matches a whitelisted command or `cd'."
+  "Return non-nil if CMD matches a whitelisted command."
   (let ((trimmed (string-trim cmd)))
-    (or (string-match-p "\\`cd\\(?:[ \t]\\|\\'\\)" trimmed)
-        (seq-some
-         (lambda (entry)
-           (or (string= trimmed entry)
-               (string-prefix-p (concat entry " ") trimmed)))
-         agent-shell-cursor-acp-whitelisted-commands))))
+    (seq-some
+     (lambda (entry)
+       (or (string= trimmed entry)
+           (string-prefix-p (concat entry " ") trimmed)))
+     agent-shell-cursor-acp-whitelisted-commands)))
 
 (defun agent-shell-cursor-acp--whitelisted-command-p (title)
   "Return non-nil if TITLE contains only whitelisted commands.
