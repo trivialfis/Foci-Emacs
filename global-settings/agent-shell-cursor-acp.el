@@ -51,7 +51,7 @@ The first element is the command name, and the rest are command parameters."
 
 (defvar agent-shell-cursor-acp-whitelisted-commands
   '("cd" "pytest" "ninja" "python" "mypy"
-    "git show" "git log" "git diff"
+    "git show" "git log" "git diff" "git status"
     "wc" "head" "tail" "grep" "sed" "ruff" "cat"))
 
 ;; ---------------------------------------------------------------------------
