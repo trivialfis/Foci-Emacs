@@ -50,7 +50,9 @@ The first element is the command name, and the rest are command parameters."
   :group 'agent-shell)
 
 (defvar agent-shell-cursor-acp-whitelisted-commands
-  '("cd" "pytest" "ninja" "python" "mypy" "git show" "git log" "wc" "head" "tail" "grep" "sed" "ruff"))
+  '("cd" "pytest" "ninja" "python" "mypy"
+    "git show" "git log" "git diff"
+    "wc" "head" "tail" "grep" "sed" "ruff" "cat"))
 
 ;; ---------------------------------------------------------------------------
 ;;; Agent configuration
@@ -182,9 +184,14 @@ PERMISSION is an alist with :tool-call, :options, and :respond."
       (agent-shell-cursor-acp--approve respond options))
 
      ((agent-shell-cursor-acp--whitelisted-command-p title)
-      (agent-shell-cursor-acp--approve respond options))
+      (let ((response (agent-shell-cursor-acp--approve respond options)))
+	(message "response %s" response)
+	response))
 
-     (t nil))))
+     (t
+      (progn
+	(message "not whitelisted: %s" (agent-shell-cursor-acp--whitelisted-command-p title))
+	nil)))))
 
 (defun agent-shell-cursor-acp--setup-permissions ()
   "Set up per-buffer permission policy for Cursor ACP sessions."
