@@ -76,7 +76,8 @@
 
 (ert-deftest acp-whitelisted-cmd/edge-cases ()
   (should-not (agent-shell-cursor-acp--whitelisted-command-p nil))
-  (should-not (agent-shell-cursor-acp--whitelisted-command-p "")))
+  (should-not (agent-shell-cursor-acp--whitelisted-command-p ""))
+  (should-not (agent-shell-cursor-acp--whitelisted-command-p "``")))
 
 (ert-deftest acp-whitelisted-cmd/examples ()
   "The three motivating examples from the task description."
@@ -95,6 +96,12 @@
     ;; Compound commands with various separators.
     (should (funcall ok "cd /tmp ; ninja -j4"))
     (should (funcall ok "ninja -j4 || tail -1 /tmp/log"))))
+
+(ert-deftest acp-whitelisted-cmd/backtick-wrapped ()
+  (let ((ok #'agent-shell-cursor-acp--whitelisted-command-p))
+    (should (funcall ok "`ninja -j4`"))
+    (should (funcall ok "`cd /tmp && ninja -j4`"))
+    (should-not (funcall ok "`curl http://example.com`"))))
 
 (ert-deftest acp-whitelisted-cmd/reject ()
   (let ((ok #'agent-shell-cursor-acp--whitelisted-command-p))

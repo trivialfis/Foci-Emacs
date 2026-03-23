@@ -50,7 +50,7 @@ The first element is the command name, and the rest are command parameters."
   :group 'agent-shell)
 
 (defvar agent-shell-cursor-acp-whitelisted-commands
-  '("cd" "pytest" "ninja" "python" "mypy" "git show" "git log" "wc" "head" "tail" "grep" "sed"))
+  '("cd" "pytest" "ninja" "python" "mypy" "git show" "git log" "wc" "head" "tail" "grep" "sed" "ruff"))
 
 ;; ---------------------------------------------------------------------------
 ;;; Agent configuration
@@ -150,7 +150,8 @@ Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
 Handles compound commands (&&, ||, ;, |), `timeout N' prefixes,
 and shell redirections."
   (when (and title (not (string-empty-p title)))
-    (let* ((cleaned (agent-shell-cursor-acp--strip-redirections title))
+    (let* ((bare (string-trim title "`" "`"))
+           (cleaned (agent-shell-cursor-acp--strip-redirections bare))
            (parts (split-string cleaned "[;&|]+" t "[ \t\n]+"))
            (commands (mapcar (lambda (part)
                                (agent-shell-cursor-acp--strip-timeout
