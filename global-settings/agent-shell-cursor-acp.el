@@ -141,30 +141,30 @@ Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
 (defun agent-shell-cursor-acp--whitelisted-entry-p (cmd)
   "Return non-nil if CMD matches a whitelisted command."
   (let* ((trimmed (string-trim cmd))
-	 (res (seq-some
-	       (lambda (entry)
-		 (or (string= trimmed entry)
-		     (string-prefix-p (concat entry " ") trimmed)))
-	       agent-shell-cursor-acp-whitelisted-commands)))
+         (res (seq-some
+               (lambda (entry)
+                 (or (string= trimmed entry)
+                     (string-prefix-p (concat entry " ") trimmed)))
+               agent-shell-cursor-acp-whitelisted-commands)))
     res))
 
 (defun agent-shell-cursor-acp--whitelisted-command-p (title)
   "Return non-nil if TITLE contains only whitelisted commands.
   Handles compound commands (&&, ||, ;, |), `timeout N' prefixes,
-				 and shell redirections."
+                                 and shell redirections."
   (when (and title (not (string-empty-p title)))
     (let* ((bare (string-trim title "`" "`"))
            (cleaned (agent-shell-cursor-acp--strip-redirections bare))
            (parts (split-string cleaned "[;&|]+" t "[ \t\n]+"))
-	   (commands (mapcar (lambda (part)
-			       (agent-shell-cursor-acp--strip-timeout
-				(string-trim part)))
-			     parts)))
+           (commands (mapcar (lambda (part)
+                               (agent-shell-cursor-acp--strip-timeout
+                                (string-trim part)))
+                             parts)))
       (message "title %s" title)
       (message "commands %s" commands)
       (and commands
-	   (seq-every-p #'agent-shell-cursor-acp--whitelisted-entry-p
-			commands)))))
+           (seq-every-p #'agent-shell-cursor-acp--whitelisted-entry-p
+                        commands)))))
 
 (defun agent-shell-cursor-acp--permission-responder (permission)
   "Custom permission policy for Cursor ACP sessions.
@@ -186,13 +186,13 @@ PERMISSION is an alist with :tool-call, :options, and :respond."
 
      ((agent-shell-cursor-acp--whitelisted-command-p title)
       (let ((response (agent-shell-cursor-acp--approve respond options)))
-	(message "response %s" response)
-	response))
+        (message "response %s" response)
+        response))
 
      (t
       (progn
-	(message "not whitelisted: %s" (agent-shell-cursor-acp--whitelisted-command-p title))
-	nil)))))
+        (message "not whitelisted: %s" (agent-shell-cursor-acp--whitelisted-command-p title))
+        nil)))))
 
 (defun agent-shell-cursor-acp--setup-permissions ()
   "Set up per-buffer permission policy for Cursor ACP sessions."
