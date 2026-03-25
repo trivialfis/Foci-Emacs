@@ -53,7 +53,8 @@ The first element is the command name, and the rest are command parameters."
   '("pytest" "ninja" "python" "mypy"
     "git show" "git log" "git diff" "git status" "git stash"
     "gh run view"
-    "cd" "wc" "head" "tail" "grep" "sed" "ruff" "cat"))
+    "cd" "wc" "head" "tail" "grep" "sed" "ruff" "cat"
+    "xargs" "sort" "find" "sort"))
 
 ;; ---------------------------------------------------------------------------
 ;;; Agent configuration
