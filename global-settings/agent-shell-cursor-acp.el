@@ -50,10 +50,10 @@ The first element is the command name, and the rest are command parameters."
   :group 'agent-shell)
 
 (defvar agent-shell-cursor-acp-whitelisted-commands
-  '("cd" "pytest" "ninja" "python" "mypy"
-    "git show" "git log" "git diff" "git status"
+  '("pytest" "ninja" "python" "mypy"
+    "git show" "git log" "git diff" "git status" "git stash"
     "gh run view"
-    "wc" "head" "tail" "grep" "sed" "ruff" "cat"))
+    "cd" "wc" "head" "tail" "grep" "sed" "ruff" "cat"))
 
 ;; ---------------------------------------------------------------------------
 ;;; Agent configuration
@@ -151,8 +151,7 @@ Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
 
 (defun agent-shell-cursor-acp--whitelisted-command-p (title)
   "Return non-nil if TITLE contains only whitelisted commands.
-  Handles compound commands (&&, ||, ;, |), `timeout N' prefixes,
-                                 and shell redirections."
+Handles compound commands (&&, ||, ;, |), `timeout N' prefixes, and shell redirections."
   (when (and title (not (string-empty-p title)))
     (let* ((bare (string-trim title "`" "`"))
            (cleaned (agent-shell-cursor-acp--strip-redirections bare))
@@ -162,7 +161,6 @@ Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
                                 (string-trim part)))
                              parts)))
       (message "title %s" title)
-      (message "commands %s" commands)
       (and commands
            (seq-every-p #'agent-shell-cursor-acp--whitelisted-entry-p
                         commands)))))
