@@ -32,5 +32,14 @@ Alternatively, go to the repository and run:
   nix profile install .
 #+END_SRC
 
+* Compiling
+
+#+BEGIN_SRC sh
+  cd ~/.emacs.d && nix run .
+  # or
+  make -k -C ~/.emacs.d recompile
+#+END_SRC
+
+
 * License
 GPL-v3
