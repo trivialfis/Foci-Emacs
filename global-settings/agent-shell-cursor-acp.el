@@ -55,7 +55,8 @@ The first element is the command name, and the rest are command parameters."
     "gh run view" "gh issue view"
     "cd" "wc" "head" "tail" "grep" "sed" "ruff" "cat"
     "xargs" "sort" "find" "sort"
-    "mvn"))
+    "mvn"
+    "curl"))
 
 ;; ---------------------------------------------------------------------------
 ;;; Agent configuration
