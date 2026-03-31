@@ -51,6 +51,8 @@ org-roam.db
 eln-cache
 projects
 .agent-shell
+agent-shell
+agent
 elpy
 
 # ts
