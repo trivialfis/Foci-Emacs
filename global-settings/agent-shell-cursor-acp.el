@@ -16,6 +16,7 @@
 (use-package agent-shell
   :defer t
   :autoload
+  agent-shell-cwd
   agent-shell-make-agent-config
   agent-shell--make-acp-client
   agent-shell--dwim
@@ -153,8 +154,9 @@ Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
     res))
 
 (defun agent-shell-cursor-acp--whitelisted-command-p (title)
-  "Return non-nil if TITLE contains only whitelisted commands.
-Handles compound commands (&&, ||, ;, |), `timeout N' prefixes, and shell redirections."
+  "Return non-nil if TITLE contain only whitelisted commands.
+Handles compound commands (&&, ||, ;, |), `timeout N' prefixes, and
+shell redirections."
   (when (and title (not (string-empty-p title)))
     (let* ((bare (string-trim title "`" "`"))
            (cleaned (agent-shell-cursor-acp--strip-redirections bare))
@@ -214,6 +216,13 @@ PERMISSION is an alist with :tool-call, :options, and :respond."
         (message (string-trim-left
                   (shell-maker-welcome-message config) "\n")))
     (concat "\n\n" art "\n\n" message)))
+
+(defun my/agent-shell-dot-subdir (subdir)
+  "Find a global dir for agent shell SUBDIR."
+  (let* ((cwd (string-remove-suffix "/" (agent-shell-cwd)))
+         (sanitized (replace-regexp-in-string "/" "-" (string-remove-prefix "/" cwd))))
+    (expand-file-name subdir (locate-user-emacs-file (concat "agent-shell/" sanitized)))))
+
 
 (defun agent-shell-cursor-acp--ascii-art ()
   "Cursor ASCII art."
@@ -429,8 +438,6 @@ ORIG-FN and ARGS are the advised function and its arguments."
 ;;; Integration with agent-shell
 ;; ---------------------------------------------------------------------------
 
-(require 'agent-shell)
-
 (with-eval-after-load 'agent-shell
   (setq agent-shell-session-strategy 'new
         agent-shell-show-session-id t
@@ -443,6 +450,7 @@ ORIG-FN and ARGS are the advised function and its arguments."
                (lambda (config)
                  (eq (map-elt config :identifier) 'cursor-acp))
                agent-shell-agent-configs)))
+  (setopt agent-shell-dot-subdir-function #'my/agent-shell-dot-subdir)
 
   (add-hook 'agent-shell-mode-hook
             #'agent-shell-cursor-acp--setup-permissions)
