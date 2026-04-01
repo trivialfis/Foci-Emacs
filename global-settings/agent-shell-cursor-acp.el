@@ -88,18 +88,25 @@ The first element is the command name, and the rest are command parameters."
 
 (defun agent-shell-cursor-acp--conda-env-vars ()
   "Return environment variable overrides for the conda env, or nil.
-Searches upward from `default-directory' for a `.conda-env.json' file."
+Searches upward from `default-directory' for a `.conda-env.json' file.
+Also loads project-specific ACP command whitelist entries from the
+`acp-whitelist' field in that file."
   (when-let* ((path (locate-dominating-file "." ".conda-env.json"))
               (project-file (expand-file-name ".conda-env.json" path))
               (json-str (f-read-text project-file))
-              (config (json-parse-string json-str))
-              (project-name (gethash "project-name" config))
-              (dirpath (trivialfis/conda-env-name-to-dir project-name))
-              (bin-dir (expand-file-name "bin" dirpath)))
-    (message "Cursor ACP: using conda env %s" project-name)
-    (list (format "PATH=%s:%s" bin-dir (getenv "PATH"))
-          (format "CONDA_PREFIX=%s" (directory-file-name dirpath))
-          (format "CONDA_DEFAULT_ENV=%s" project-name))))
+              (config (json-parse-string json-str)))
+    (when-let* ((acp-whitelist (gethash "acp-whitelist" config))
+                (entries (append acp-whitelist nil)))
+      (dolist (entry entries)
+        (unless (member entry agent-shell-cursor-acp-whitelisted-commands)
+          (push entry agent-shell-cursor-acp-whitelisted-commands))))
+    (when-let* ((project-name (gethash "project-name" config))
+                (dirpath (trivialfis/conda-env-name-to-dir project-name))
+                (bin-dir (expand-file-name "bin" dirpath)))
+      (message "Cursor ACP: using conda env %s" project-name)
+      (list (format "PATH=%s:%s" bin-dir (getenv "PATH"))
+            (format "CONDA_PREFIX=%s" (directory-file-name dirpath))
+            (format "CONDA_DEFAULT_ENV=%s" project-name)))))
 
 (cl-defun agent-shell-cursor-acp-make-client (&key buffer)
   "Create a Cursor ACP client with BUFFER as context.
