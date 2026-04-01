@@ -138,6 +138,14 @@ Returns non-nil if a suitable option was found and the response was sent."
     (funcall respond (map-elt choice :option-id))
     t))
 
+(defun agent-shell-cursor-acp--strip-quoted-strings (cmd)
+  "Replace quoted string contents in CMD to prevent false operator splits.
+Handles double-quoted strings (with backslash escapes) and
+single-quoted strings."
+  (replace-regexp-in-string
+   "\"\\(?:[^\"\\\\]\\|\\\\.\\)*\"\\|'[^']*'"
+   "\"\"" cmd))
+
 (defun agent-shell-cursor-acp--strip-redirections (cmd)
   "Strip shell I/O redirections from CMD.
 Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
@@ -167,7 +175,8 @@ Handles compound commands (&&, ||, ;, |), `timeout N' prefixes, and
 shell redirections."
   (when (and title (not (string-empty-p title)))
     (let* ((bare (string-trim title "`" "`"))
-           (cleaned (agent-shell-cursor-acp--strip-redirections bare))
+           (no-strings (agent-shell-cursor-acp--strip-quoted-strings bare))
+           (cleaned (agent-shell-cursor-acp--strip-redirections no-strings))
            (parts (split-string cleaned "[;&|]+" t "[ \t\n]+"))
            (commands (mapcar (lambda (part)
                                (agent-shell-cursor-acp--strip-timeout
