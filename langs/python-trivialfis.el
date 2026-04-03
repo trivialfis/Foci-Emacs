@@ -162,13 +162,15 @@
   "Elpy configuration.  VENV is the virtual env to be activated."
   (define-key elpy-mode-map (kbd "<C-return>") 'nil)
   (local-set-key (kbd "C-c l = =") #'trivialfis/ruff-format-buffer)
-  (setq-local
-   flycheck-flake8-maximum-line-length 88 ; black
-   fill-column 88)
+  (setq-local fill-column 88)
   ;; pylint is way too slow, pycompile couldn't find path on Windows
-  (if (string= system-type "windows-nt")
-      (setq-local flycheck-disabled-checkers '(python-pylint python-pycompile))
-    (setq-local flycheck-disabled-checkers '(python-pylint)))
+  (let ((disabled '(python-pylint)))
+    (when (string= system-type "windows-nt")
+      (push 'python-pycompile disabled))
+    (if (executable-find "ruff")
+	(push 'python-flake8 disabled)
+      (setq-local flycheck-flake8-maximum-line-length 88))
+    (setq-local flycheck-disabled-checkers disabled))
 
   (unless current-env
     (setq current-env venv)
