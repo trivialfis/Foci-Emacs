@@ -456,19 +456,28 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (add-hook 'markdown-mode-hook 'trivialfis/markdown)
 (add-to-list 'auto-mode-alist '("\\.Rmd\\'" . markdown-mode))
 
-(eval-when-compile
-  (use-package magit))
+(declare-function magit-display-buffer-traditional "magit-mode")
 
-(add-hook 'magit-diff-mode-hook
-	  #'(lambda ()
-	      (setq magit-diff-refine-hunk 'all
-		    magit-diff-refine-ignore-whitespace 'nil)
-	      (when (string= system-type "windows-nt")
-		(add-to-list 'exec-path "C:/Program Files/Git/usr/bin/"))))
-(add-hook 'magit-status-mode-hook
-	  #'(lambda ()
-	      (transient-append-suffix 'magit-log "-A"
-		'("-m" "No merges" "--no-merges"))))
+(defun trivialfis/magit-display-buffer (buffer)
+  "Display magit BUFFER reusing an existing window when possible."
+  (if (> (count-windows) 1)
+      (display-buffer buffer '(display-buffer-use-some-window))
+    (magit-display-buffer-traditional buffer)))
+
+(use-package magit
+  :defer t
+  :commands (magit-status magit-dispatch magit-file-dispatch)
+  :init
+  (setq magit-display-buffer-function #'trivialfis/magit-display-buffer
+	split-window-preferred-function 'split-window-sensibly
+	split-height-threshold 128)
+  :config
+  (setq magit-diff-refine-hunk 'all
+	magit-diff-refine-ignore-whitespace nil)
+  (when (string= system-type "windows-nt")
+    (add-to-list 'exec-path "C:/Program Files/Git/usr/bin/"))
+  (transient-append-suffix 'magit-log "-A"
+    '("-m" "No merges" "--no-merges")))
 
 (provide 'init.el)
 ;;; init.el ends here
