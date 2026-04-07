@@ -353,6 +353,17 @@ For remote files, copy the local path without the Tramp prefix."
   (interactive)
   (let* ((path (buffer-file-name))
 	 (fname (if path
+		    (file-name-sans-extension (file-name-nondirectory path))
+		  nil)))
+    (if fname
+	(kill-new fname)
+      (kill-new ""))))
+
+(defun trivialfis/cp-bfn-base-no-ext ()
+  "Copy the filename of (buffer-file-name)."
+  (interactive)
+  (let* ((path (buffer-file-name))
+	 (fname (if path
 		    (file-name-nondirectory path)
 		  nil)))
     (if fname

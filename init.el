@@ -123,7 +123,8 @@
    trivialfis/swap-windows-horizontal
    trivialfis/ghcs
    trivialfis/cp-bfn
-   trivialfis/cp-bfn-base))
+   trivialfis/cp-bfn-base
+   trivialfis/cp-bfn-base-no-ext))
 
 (use-package gh-log
   :defer t
