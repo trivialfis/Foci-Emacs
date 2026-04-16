@@ -348,7 +348,7 @@ For remote files, copy the local path without the Tramp prefix."
                   (file-local-name fname)
                 fname))))
 
-(defun trivialfis/cp-bfn-base ()
+(defun trivialfis/cp-bfn-base-no-ext ()
   "Copy the filename of (buffer-file-name)."
   (interactive)
   (let* ((path (buffer-file-name))
@@ -359,7 +359,7 @@ For remote files, copy the local path without the Tramp prefix."
 	(kill-new fname)
       (kill-new ""))))
 
-(defun trivialfis/cp-bfn-base-no-ext ()
+(defun trivialfis/cp-bfn-base ()
   "Copy the filename of (buffer-file-name)."
   (interactive)
   (let* ((path (buffer-file-name))
