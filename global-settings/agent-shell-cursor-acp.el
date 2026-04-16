@@ -53,7 +53,7 @@ The first element is the command name, and the rest are command parameters."
 (defvar agent-shell-cursor-acp-whitelisted-commands
   '("pytest" "ninja" "python" "mypy"
     "git show" "git log" "git diff" "git status" "git stash" "git branch --list"
-    "gh run view" "gh issue view"
+    "gh run view" "gh issue view" "gh pr view"
     "cd" "wc" "head" "tail" "grep" "sed" "ruff" "cat" "ls" "echo" "touch"
     "xargs" "sort" "find" "sort"
     "mvn"
@@ -78,8 +78,8 @@ The first element is the command name, and the rest are command parameters."
    :authenticate-request-maker
    (lambda ()
      (acp-make-authenticate-request :method-id "cursor_login"))
-   :default-model-id
-   (lambda () "claude-opus-4-6[thinking=true,context=200k,effort=high,fast=false]")
+   ;; :default-model-id
+   ;; (lambda () "claude-4.6-opus-max-thinking[thinking=true,context=200k,effort=high,fast=false]")
    :client-maker
    (lambda (buffer)
      (agent-shell-cursor-acp-make-client :buffer buffer))
