@@ -438,6 +438,9 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/tla+ "tla+-trivialfis")
 (add-to-list 'auto-mode-alist '("\\.tla\\'" . trivialfis/tla+))
 
+(autoload 'trivialfis/alloy "alloy-trivialfis")
+(add-to-list 'auto-mode-alist '("\\.als\\'" . trivialfis/alloy))
+
 (autoload 'tablegen-mode "tablegen-mode")
 (add-to-list 'auto-mode-alist '("\\.td\\'" . tablegen-mode))
 
