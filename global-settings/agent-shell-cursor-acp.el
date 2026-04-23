@@ -57,7 +57,8 @@ The first element is the command name, and the rest are command parameters."
     "cd" "wc" "head" "tail" "grep" "sed" "ruff" "cat" "ls" "echo" "touch"
     "xargs" "sort" "find" "sort" "rg" "which" "sleep"
     "mvn"
-    "curl"))
+    "curl"
+    "nvidia-smi"))
 
 ;; ---------------------------------------------------------------------------
 ;;; Agent configuration
