@@ -55,7 +55,7 @@ The first element is the command name, and the rest are command parameters."
     "git show" "git log" "git diff" "git status" "git stash" "git branch --list"
     "gh run view" "gh issue view" "gh pr view"
     "cd" "wc" "head" "tail" "grep" "sed" "ruff" "cat" "ls" "echo" "touch"
-    "xargs" "sort" "find" "sort" "rg" "which" "sleep"
+    "xargs" "sort" "find" "rg" "which" "sleep"
     "mvn"
     "curl"
     "nvidia-smi"))
