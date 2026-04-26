@@ -109,7 +109,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   flyspell-correct-helm
   # langs
   nix-mode
-  php-mode
   kotlin-mode
   nginx-mode
   json-mode

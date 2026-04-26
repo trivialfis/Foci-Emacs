@@ -372,10 +372,6 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/go "go-trivialfis")
 (add-hook 'go-mode-hook 'trivialfis/go)
 
-;; php mode
-(autoload 'trivialfis/php "php-trivialfis")
-(add-hook 'php-mode-hook 'trivialfis/php)
-
 ;; bash mode
 (autoload 'trivialfis/bash "bash-trivialfis")
 (add-hook 'sh-mode-hook 'trivialfis/bash)
