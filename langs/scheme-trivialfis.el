@@ -1,4 +1,4 @@
-;;; scheme-trivialfis.el --- Summary
+;;; scheme-trivialfis.el --- Summary -*- lexical-binding: t; -*-
 ;;;
 ;;; Copyright © 2016-2018 Fis Trivial <ybbs.daans@hotmail.com>
 ;;;
@@ -23,7 +23,7 @@
 (require 'geiser)
 (require 'geiser-mode)
 (require 'geiser-repl)
-(require 'geiser-guile)
+(require 'geiser-guile nil t)
 (require 'geiser-compile)
 
 (use-package repl-trivialfis
@@ -32,7 +32,9 @@
 
 (cl-defun trivialfis/scheme (&optional (impl 'guile))
   "Run Geiser."
-  (setq geiser-active-implementations '(guile chez chicken racket))
+  (setq geiser-active-implementations
+        (append (when (featurep 'geiser-guile) '(guile))
+                '(chez chicken racket)))
   (setq geiser-repl-query-on-kill-p nil)
 
   (define-key geiser-mode-map (kbd "C-c C-a")
@@ -46,12 +48,14 @@
   (save-window-excursion
     (eval-after-load 'geiser
       (cond ((string-suffix-p ".rkt" (buffer-file-name))
-	     (run-geiser 'racket))
-	    ((string-suffix-p ".scm" (buffer-file-name))
-	     (run-geiser impl)))))
+	     (geiser 'racket))
+	    ((and (string-suffix-p ".scm" (buffer-file-name))
+                  (memq impl geiser-active-implementations))
+	     (geiser impl)))))
 
 
-  (add-to-list 'geiser-guile-load-path "~/.config/guix/latest"))
+  (when (boundp 'geiser-guile-load-path)
+    (add-to-list 'geiser-guile-load-path "~/.config/guix/latest")))
 
 (provide 'scheme-trivialfis)
 ;;; scheme-trivialfis.el ends here
