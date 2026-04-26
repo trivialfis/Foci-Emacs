@@ -54,6 +54,9 @@
 (ert-deftest acp-strip-timeout ()
   (let ((s #'agent-shell-cursor-acp--strip-timeout))
     (should (equal (funcall s "timeout 120 ninja -j4") "ninja -j4"))
+    (should (equal (funcall s "timeout 10s ninja -j4") "ninja -j4"))
+    (should (equal (funcall s "timeout 2m pytest")     "pytest"))
+    (should (equal (funcall s "timeout 0.5s cmd")      "cmd"))
     (should (equal (funcall s "timeout 5 cmd")         "cmd"))
     (should (equal (funcall s "ninja -j4")             "ninja -j4"))
     (should (equal (funcall s "timeout cmd")           "timeout cmd"))))
@@ -85,6 +88,7 @@
     (should (funcall ok "git log --oneline -10"))
     ;; Timeout prefix.
     (should (funcall ok "timeout 10 cd /some/path"))
+    (should (funcall ok "timeout 10s cd /some/path"))
     (should (funcall ok "timeout 120 pytest -s -v tests/test_foo.py"))
     ;; Redirections.
     (should (funcall ok "ninja -C build/ >/tmp/out 2>/tmp/err"))

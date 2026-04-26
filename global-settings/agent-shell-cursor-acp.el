@@ -154,8 +154,10 @@ Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
    "" cmd))
 
 (defun agent-shell-cursor-acp--strip-timeout (cmd)
-  "Strip a leading `timeout N' wrapper from CMD string."
-  (if (string-match "\\`timeout[ \t]+[0-9]+[ \t]+" cmd)
+  "Strip a leading `timeout DURATION' wrapper from CMD string.
+DURATION may include a decimal part and a GNU timeout unit suffix
+\(`s', `m', `h', or `d')."
+  (if (string-match "\\`timeout[ \t]+[0-9]+\\(?:\\.[0-9]+\\)?[smhd]?[ \t]+" cmd)
       (substring cmd (match-end 0))
     cmd))
 
@@ -171,7 +173,7 @@ Handles 2>&1, N>/path, &>/path, &>>/path, and similar patterns."
 
 (defun agent-shell-cursor-acp--whitelisted-command-p (title)
   "Return non-nil if TITLE contain only whitelisted commands.
-Handles compound commands (&&, ||, ;, |), `timeout N' prefixes, and
+Handles compound commands (&&, ||, ;, |), `timeout DURATION' prefixes, and
 shell redirections."
   (when (and title (not (string-empty-p title)))
     (let* ((bare (string-trim title "`" "`"))
