@@ -9,9 +9,45 @@
 
 (use-package programming-trivialfis)
 
+(defvar treesit-simple-indent-rules)
+
+(defvar trivialfis/alloy--indent-rules
+  '((alloy
+     ;; Closing delimiters must be tested before container rules like
+     ;; `block_expression', otherwise fact/pred/fun bodies indent `}' as body
+     ;; content.
+     ((node-is "}") parent-bol 0)
+     ((node-is "]") parent-bol 0)
+     ((node-is ")") parent-bol 0)
+     ;; Top-level: no indent
+     ((parent-is "source_file") column-0 0)
+     ;; Inside blocks/braces: indent
+     ((parent-is "block_expression") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "sig_body") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "set_comprehension") parent-bol alloy-ts-mode-indent-offset)
+     ;; Parameters
+     ((parent-is "decl_list") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "expr_list") parent-bol alloy-ts-mode-indent-offset)
+     ;; General continuation
+     ((parent-is "sig_decl") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "pred_decl") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "fun_decl") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "fact_decl") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "assert_decl") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "command") parent-bol alloy-ts-mode-indent-offset)
+     ((parent-is "enum_decl") parent-bol alloy-ts-mode-indent-offset)
+     ;; Default: no change
+     (no-node parent-bol 0)))
+  "Indentation rules for `alloy-ts-mode' with closing delimiters first.")
+
+(defun trivialfis/alloy--configure-indentation ()
+  "Install corrected tree-sitter indentation rules for Alloy."
+  (setq-local treesit-simple-indent-rules trivialfis/alloy--indent-rules))
+
 (use-package alloy-ts-mode
   :defer t
-  :commands alloy-ts-mode)
+  :commands alloy-ts-mode
+  :hook (alloy-ts-mode . trivialfis/alloy--configure-indentation))
 
 (use-package lsp-trivialfis
   :autoload trivialfis/lsp)
