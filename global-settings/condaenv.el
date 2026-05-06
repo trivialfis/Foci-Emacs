@@ -86,9 +86,15 @@
 	 (project-file (if path (concat path hook) 'nil))
 	 (json-str (if project-file (f-read-text project-file) 'nil))
 	 (config (if json-str (json-parse-string json-str) 'nil))
+	 (env-manager (if config (gethash "environment-manager" config) 'nil))
+	 (conda-config-p (or (not env-manager) (string= env-manager "conda")))
 	 (project-name (if config (gethash "project-name" config) 'nil))
-	 (dirpath (if project-name (trivialfis/conda-env-name-to-dir project-name) 'nil)))
-    (if (and project-name dirpath)
+	 (dirpath (if (and conda-config-p project-name)
+		      (trivialfis/conda-env-name-to-dir project-name)
+		    'nil)))
+    (if (and conda-config-p
+	     project-name
+	     dirpath)
 	(progn
 	  ;; Caller should handle the tramp path.
 	  (if (not (file-remote-p dirpath))

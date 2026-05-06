@@ -62,6 +62,10 @@
   trivialfis/python-from-which
   trivialfis/find-activate-conda-env)
 
+(use-package pixienv
+  :commands
+  trivialfis/find-activate-pixi-env)
+
 (cl-defstruct
     (python-env
      (:constructor new-python--env))
@@ -95,7 +99,8 @@
 
 (cl-defun new-python-env ()
   "Create a new Python env struct."
-  (let* ((options '((trivialfis/find-activate-conda-env . conda-env)
+  (let* ((options '((trivialfis/find-activate-pixi-env . pixi-env)
+		    (trivialfis/find-activate-conda-env . conda-env)
 		    (trivialfis/find-activate-virtualenv . virtual-env)
 		    (trivialfis/filename-python-p . file-name)
 		    (trivialfis/python-from-shebang . shebang)))
@@ -156,7 +161,8 @@
       (concat "python" version))))
 
 
-(defvar current-env 'nil)
+(defvar-local current-env nil
+  "Python environment selected for the current buffer.")
 
 (defun trivialfis/elpy-setup(venv)
   "Elpy configuration.  VENV is the virtual env to be activated."
@@ -172,8 +178,8 @@
       (setq-local flycheck-flake8-maximum-line-length 88))
     (setq-local flycheck-disabled-checkers disabled))
 
-  (unless current-env
-    (setq current-env venv)
+  (unless (and (local-variable-p 'current-env) current-env)
+    (setq-local current-env venv)
     ;; Set the mypy cache for flycheck to a global directory to avoid polluting the source
     ;; dir.
     (let* ((command (python-env-path current-env))
@@ -224,8 +230,8 @@
 
 (defun trivialfis/python-lsp-setup(venv)
   "Setup for Python lsp mode.  `VENV' is the virtual environment."
-  (if (not current-env)
-      (setq current-env venv))
+  (unless (and (local-variable-p 'current-env) current-env)
+    (setq-local current-env venv))
 
   (if (file-remote-p default-directory)
       ;; Tramp, find virtualenv or conda env
@@ -235,20 +241,22 @@
 	       (conda-path (python-env-path current-env)))
 	  (cond
 	   ((eq (python-env-from current-env) 'virtual-env)
-	    (progn
-	      (message "Remote virtualenv path: %s, %s" current-env (buffer-file-name))
-	      (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path)))))
+	    (message "Remote virtualenv path: %s, %s" current-env (buffer-file-name))
+	    (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path))))
 	   ((eq (python-env-from current-env) 'conda-env)
-	    (progn
-	      (message "Remote conda path: %s, filename: %s" conda-path (buffer-file-name))
-	      (add-to-list 'tramp-remote-path
-			   (trivialfis/get--local-path (f-join (f-dirname venv-path)))))))
+	    (message "Remote conda path: %s, filename: %s" conda-path (buffer-file-name))
+	    (add-to-list 'tramp-remote-path
+			 (trivialfis/get--local-path (f-join (f-dirname venv-path)))))
+	   ((eq (python-env-from current-env) 'pixi-env)
+	    (message "Remote pixi path: %s, filename: %s" venv-path (buffer-file-name))
+	    (add-to-list 'tramp-remote-path
+			 (trivialfis/get--local-path (f-dirname venv-path))))))
 	  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)))
     ;; local file
     (let* ((command (python-env-path current-env))
 	   (dir (if command (f-dirname command) 'nil)))
       (if dir
-	  (setq-local lsp-pylsp-server-command (f-join dir "pylsp")))))
+	  (setq-local lsp-pylsp-server-command (f-join dir "pylsp"))))
 
   (let ((max-line-length 88)
 	(pydoc-ignore ["D205" "D213" "D400" "D401" "D415"]))
@@ -426,9 +434,11 @@ point."
   (setq python-shell-completion-native-disabled-interpreters
 	(cons "python3" python-shell-completion-native-disabled-interpreters))
   ;; Use elpy on local but lsp on remote.
-  ;; fixme: this limits emacs to a single project.
-  (let ((venv (if current-env current-env (new-python-env))))
+  (let ((venv (if (and (local-variable-p 'current-env) current-env)
+                  current-env
+                (new-python-env))))
     (if (or
+	 (eq (python-env-from venv) 'pixi-env)
 	 (eq (python-env-from venv) 'conda-env)
 	 (eq (python-env-from venv) 'virtual-env))
 	(progn

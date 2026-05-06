@@ -102,6 +102,8 @@ Also loads project-specific ACP command whitelist entries from the
         (unless (member entry agent-shell-cursor-acp-whitelisted-commands)
           (push entry agent-shell-cursor-acp-whitelisted-commands))))
     (when-let* ((project-name (gethash "project-name" config))
+                (_ (let ((env-manager (gethash "environment-manager" config)))
+                     (or (not env-manager) (string= env-manager "conda"))))
                 (dirpath (trivialfis/conda-env-name-to-dir project-name))
                 (bin-dir (expand-file-name "bin" dirpath)))
       (message "Cursor ACP: using conda env %s" project-name)
