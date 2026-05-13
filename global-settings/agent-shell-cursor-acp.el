@@ -10,6 +10,7 @@
   (require 'cl-lib))
 (require 'shell-maker)
 (require 'acp)
+(require 'json)
 (require 'map)
 (require 'seq)
 
@@ -28,6 +29,12 @@
 (use-package condaenv
   :defer t
   :autoload trivialfis/conda-env-name-to-dir)
+
+(use-package pixienv
+  :defer t
+  :autoload (trivialfis/pixi--bin-dir
+             trivialfis/pixi--env-config
+             trivialfis/pixi-env-dir))
 
 (use-package f
   :defer t
@@ -87,42 +94,77 @@ The first element is the command name, and the rest are command parameters."
    :install-instructions
    "Install Cursor CLI."))
 
-(defun agent-shell-cursor-acp--conda-env-vars ()
-  "Return environment variable overrides for the conda env, or nil.
-Searches upward from `default-directory' for a `.conda-env.json' file.
-Also loads project-specific ACP command whitelist entries from the
-`acp-whitelist' field in that file."
+(defun agent-shell-cursor-acp--project-env-config ()
+  "Return project env config from `.conda-env.json', or nil."
   (when-let* ((path (locate-dominating-file "." ".conda-env.json"))
               (project-file (expand-file-name ".conda-env.json" path))
               (json-str (f-read-text project-file))
               (config (json-parse-string json-str)))
-    (when-let* ((acp-whitelist (gethash "acp-whitelist" config))
-                (entries (append acp-whitelist nil)))
-      (dolist (entry entries)
-        (unless (member entry agent-shell-cursor-acp-whitelisted-commands)
-          (push entry agent-shell-cursor-acp-whitelisted-commands))))
-    (when-let* ((project-name (gethash "project-name" config))
-                (_ (let ((env-manager (gethash "environment-manager" config)))
-                     (or (not env-manager) (string= env-manager "conda"))))
-                (dirpath (trivialfis/conda-env-name-to-dir project-name))
-                (bin-dir (expand-file-name "bin" dirpath)))
-      (message "Cursor ACP: using conda env %s" project-name)
-      (list (format "PATH=%s:%s" bin-dir (getenv "PATH"))
-            (format "CONDA_PREFIX=%s" (directory-file-name dirpath))
-            (format "CONDA_DEFAULT_ENV=%s" project-name)))))
+    config))
+
+(defun agent-shell-cursor-acp--load-project-whitelist (config)
+  "Load project-specific ACP command whitelist entries from CONFIG."
+  (when-let* ((acp-whitelist (gethash "acp-whitelist" config))
+              (entries (append acp-whitelist nil)))
+    (dolist (entry entries)
+      (unless (member entry agent-shell-cursor-acp-whitelisted-commands)
+        (push entry agent-shell-cursor-acp-whitelisted-commands)))))
+
+(defun agent-shell-cursor-acp--conda-env-vars (&optional config)
+  "Return environment variable overrides for the conda env in CONFIG.
+When CONFIG is nil, read it from `.conda-env.json'."
+  (when-let* ((config (or config (agent-shell-cursor-acp--project-env-config)))
+              (project-name (gethash "project-name" config))
+              (_ (let ((env-manager (gethash "environment-manager" config)))
+                   (or (not env-manager) (string= env-manager "conda"))))
+              (dirpath (trivialfis/conda-env-name-to-dir project-name))
+              (bin-dir (expand-file-name "bin" dirpath)))
+    (agent-shell-cursor-acp--load-project-whitelist config)
+    (message "Cursor ACP: using conda env %s" project-name)
+    (list (format "PATH=%s:%s" bin-dir (getenv "PATH"))
+          (format "CONDA_PREFIX=%s" (directory-file-name dirpath))
+          (format "CONDA_DEFAULT_ENV=%s" project-name))))
+
+(defun agent-shell-cursor-acp--pixi-env-vars (config)
+  "Return environment variable overrides for the pixi env in CONFIG."
+  (when (string= (gethash "environment-manager" config) "pixi")
+    (when-let* ((env-dir (trivialfis/pixi-env-dir default-directory))
+                (_ (file-directory-p env-dir))
+                (bin-dir (trivialfis/pixi--bin-dir env-dir))
+                (path-separator (if (eq system-type 'windows-nt) ";" ":"))
+                (root-and-config (trivialfis/pixi--env-config default-directory))
+                (project-root (car root-and-config)))
+      (message "Cursor ACP: using pixi env %s" env-dir)
+      (list (format "PATH=%s%s%s" bin-dir path-separator (getenv "PATH"))
+            (format "CONDA_PREFIX=%s" (directory-file-name env-dir))
+            (format "VIRTUAL_ENV=%s" (directory-file-name env-dir))
+            (format "PIXI_ENVIRONMENT_NAME=%s" (file-name-nondirectory
+                                                (directory-file-name env-dir)))
+            (format "PIXI_PROJECT_ROOT=%s" (directory-file-name project-root))))))
+
+(defun agent-shell-cursor-acp--project-env-vars ()
+  "Return environment variable overrides for the project env, or nil.
+Searches upward from `default-directory' for a `.conda-env.json' file.
+Also loads project-specific ACP command whitelist entries from the
+`acp-whitelist' field in that file."
+  (when-let ((config (agent-shell-cursor-acp--project-env-config)))
+    (agent-shell-cursor-acp--load-project-whitelist config)
+    (or (agent-shell-cursor-acp--pixi-env-vars config)
+        (agent-shell-cursor-acp--conda-env-vars config))))
 
 (cl-defun agent-shell-cursor-acp-make-client (&key buffer)
   "Create a Cursor ACP client with BUFFER as context.
 When a `.conda-env.json' file is found in the project, the agent
-process is started with the conda environment activated."
+process is started with the selected environment activated."
   (unless buffer
     (error "Missing required argument: :buffer"))
-  (let ((conda-vars (with-current-buffer buffer
-                      (agent-shell-cursor-acp--conda-env-vars))))
+  (let ((project-env-vars (with-current-buffer buffer
+                            (agent-shell-cursor-acp--project-env-vars))))
     (agent-shell--make-acp-client
      :command (car agent-shell-cursor-acp-cli-command)
      :command-params (cdr agent-shell-cursor-acp-cli-command)
-     :environment-variables (append conda-vars agent-shell-cursor-acp-environment)
+     :environment-variables (append project-env-vars
+                                    agent-shell-cursor-acp-environment)
      :context-buffer buffer)))
 
 ;; ---------------------------------------------------------------------------

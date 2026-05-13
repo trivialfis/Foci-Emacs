@@ -17,12 +17,18 @@
 ;;; Code:
 
 (require 'ert)
+(require 'cl-lib)
 (require 'seq)
 (require 'map)
 
 (add-to-list 'load-path (file-name-directory (or load-file-name
                                                   buffer-file-name)))
 (require 'agent-shell-cursor-acp)
+
+(defun acp-test--write-file (file contents)
+  "Write CONTENTS to FILE."
+  (with-temp-file file
+    (insert contents)))
 
 ;; ---------------------------------------------------------------------------
 ;;; Stripping helpers
@@ -116,6 +122,45 @@
     (should-not (funcall ok "rm \"safe|name\" -rf /"))
     ;; One bad segment poisons the whole pipeline.
     (should-not (funcall ok "ninja -j4 | rm -rf /"))))
+
+;; ---------------------------------------------------------------------------
+;;; Project environment activation
+;; ---------------------------------------------------------------------------
+
+(ert-deftest acp-project-env-vars/conda ()
+  (let* ((tmp (make-temp-file "acp-conda" t))
+         (env-dir (expand-file-name "envs/demo" tmp))
+         (default-directory tmp)
+         (process-environment '("PATH=/usr/bin")))
+    (make-directory (expand-file-name "bin" env-dir) t)
+    (acp-test--write-file
+     (expand-file-name ".conda-env.json" tmp)
+     "{\"environment-manager\":\"conda\",\"project-name\":\"demo\"}")
+    (cl-letf (((symbol-function 'trivialfis/conda-env-name-to-dir)
+               (lambda (_name) (file-name-as-directory env-dir))))
+      (should
+       (equal (agent-shell-cursor-acp--project-env-vars)
+              (list (format "PATH=%s:/usr/bin" (expand-file-name "bin" env-dir))
+                    (format "CONDA_PREFIX=%s" env-dir)
+                    "CONDA_DEFAULT_ENV=demo"))))))
+
+(ert-deftest acp-project-env-vars/pixi ()
+  (let* ((tmp (make-temp-file "acp-pixi" t))
+         (env-dir (expand-file-name ".pixi/envs/dev" tmp))
+         (default-directory tmp)
+         (process-environment '("PATH=/usr/bin")))
+    (make-directory (expand-file-name "bin" env-dir) t)
+    (acp-test--write-file
+     (expand-file-name ".conda-env.json" tmp)
+     "{\"environment-manager\":\"pixi\",\"project-name\":\"dev\"}")
+    (acp-test--write-file (expand-file-name "pixi.toml" tmp) "")
+    (should
+     (equal (agent-shell-cursor-acp--project-env-vars)
+            (list (format "PATH=%s:/usr/bin" (expand-file-name "bin" env-dir))
+                  (format "CONDA_PREFIX=%s" env-dir)
+                  (format "VIRTUAL_ENV=%s" env-dir)
+                  "PIXI_ENVIRONMENT_NAME=dev"
+                  (format "PIXI_PROJECT_ROOT=%s" tmp))))))
 
 (provide 'test-agent-shell-cursor-acp)
 
