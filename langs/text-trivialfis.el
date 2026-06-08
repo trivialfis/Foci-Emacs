@@ -26,7 +26,7 @@
   (require 'use-package)
   (defvar flyspell-mode-map))
 
-(defvar accepted-mode-list '(text-mode org-mode markdown-mode mu4e-compose-mode rst-mode))
+(defvar accepted-mode-list '(text-mode org-mode markdown-mode rst-mode))
 
 (defun trivialfis/_text ()
   "Configuration for normal text."

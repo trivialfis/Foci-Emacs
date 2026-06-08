@@ -138,11 +138,7 @@
      ("C-c r s" .  trivialfis/org-region-src)
      ("C-c r e" .  trivialfis/org-region-example)
      )
-   )
-  (autoload 'fpg-mode "fpg-mode" "\
-Minor mode for using org and mu4e to manage projects (Foci playground).
-
-\(fn)" t nil))
+   ))
 
 (setq org-directory (concat (getenv "HOME") "/workspace/roam/"))
 

@@ -161,13 +161,9 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   lsp-java
   # treemacs
   treemacs
-  # mu
-  mu4e-alert
   # llm
   gptel
   aidermacs
-  copilot
-  copilot-chat
   agent-shell
 ]) ++ (with epkgs.elpaPackages; [
   auctex         # ; LaTeX mode
@@ -192,6 +188,5 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   alloy-ts-mode
   alloy-lsp
 ]) ++ (with pkgs; [
-  mu
   alloy6                        # Alloy CLI + bundled language server
 ]))

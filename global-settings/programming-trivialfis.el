@@ -104,16 +104,6 @@ MODE: the major programming mode"
 Enabled by specific programming language."
   (auto-update-file-header))
 
-;; https://github.com/copilot-emacs/copilot.el
-;; https://www.npmjs.com/package/@github/copilot-language-server
-(use-package copilot
-  :defer t
-  :config
-  (company-box-mode)
-  (define-key (current-global-map) (kbd "C-<tab>") 'copilot-accept-completion)
-  :commands
-  copilot-mode)
-
 (use-package company-box
   :defer t
   :commands
