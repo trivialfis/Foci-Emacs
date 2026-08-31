@@ -136,6 +136,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   cargo                         # Rust
   scala-mode
   toml-mode
+  toml
   vala-mode
   cython-mode
   ess                           # R/S
