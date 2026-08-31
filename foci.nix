@@ -164,8 +164,6 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   treemacs
   # llm
   gptel
-  aidermacs
-  agent-shell
 ]) ++ (with epkgs.elpaPackages; [
   auctex         # ; LaTeX mode
   sml-mode
