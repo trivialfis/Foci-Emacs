@@ -134,14 +134,7 @@
 (use-package llm-trivialfis
   :defer t
   :commands
-  (trivialfis/make-gptel-claude
-   trivialfis/aidermacs-minor-mode))
-
-(use-package agent-shell-cursor-acp
-  :defer t
-  :init
-  (with-eval-after-load 'agent-shell
-    (require 'agent-shell-cursor-acp)))
+  (trivialfis/make-gptel-claude))
 
 ;; ANSI
 (autoload 'ansi-color-mode "stupid-color-mode"

@@ -1,0 +1,3 @@
+[pixi]
+manifest-path = "pixi.toml"
+environment = "default"

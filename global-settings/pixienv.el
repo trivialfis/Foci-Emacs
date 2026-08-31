@@ -3,68 +3,69 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'json)
 (require 'seq)
 (require 'subr-x)
-(require 'f)
+(require 'projectenv)
 
-(defconst trivialfis/pixi-config-file ".conda-env.json"
-  "Project-local environment configuration file.")
+(defconst trivialfis/pixi-default-manifest "pixi.toml"
+  "Default Pixi manifest path, relative to the project file.")
 
-(defconst trivialfis/pixi-manager-field "environment-manager"
-  "JSON field that selects the environment manager.")
+(defconst trivialfis/pixi-default-environment "default"
+  "Default Pixi environment name.")
 
-(defconst trivialfis/pixi-workspace-file "pixi.toml"
-  "File that marks the pixi workspace root.")
-
-(defun trivialfis/pixi--workspace-root (directory config-dir)
-  "Return pixi workspace root for DIRECTORY, falling back to CONFIG-DIR."
-  (when-let ((root (or (locate-dominating-file
-                        (or directory default-directory)
-                        trivialfis/pixi-workspace-file)
-                       (locate-dominating-file
-                        (or directory default-directory)
-                        ".pixi")
-                       config-dir)))
-    (file-name-as-directory (expand-file-name root))))
+(defun trivialfis/pixi--string-option (table key default)
+  "Read string KEY from TOML TABLE, falling back to DEFAULT."
+  (let ((entry (assoc-string key table)))
+    (if (not entry)
+        default
+      (let ((value (cdr entry)))
+        (unless (and (stringp value) (not (string-empty-p value)))
+          (error "Project setting pixi.%s must be a non-empty string" key))
+        value))))
 
 (defun trivialfis/pixi--env-config (&optional directory)
   "Read pixi environment config from DIRECTORY or `default-directory'.
 
-Return a cons cell (WORKSPACE-ROOT . CONFIG) when `.conda-env.json'
-exists and selects pixi via `environment-manager'.  Return nil
-otherwise."
-  (let* ((config-dir (locate-dominating-file
-                      (or directory default-directory)
-                      trivialfis/pixi-config-file))
-         (config-file (when config-dir
-                        (expand-file-name trivialfis/pixi-config-file config-dir)))
-         (config (when config-file
-                   (json-parse-string (f-read-text config-file)))))
-    (when (and config
-               (equal (gethash trivialfis/pixi-manager-field config)
-                      "pixi"))
-      (cons (trivialfis/pixi--workspace-root directory config-dir) config))))
+Return a plist containing the project file, manifest path, workspace
+root, and environment name.  Return nil when the project has no
+`pixi' table or its manifest does not exist.
 
-(defun trivialfis/pixi--env-name (config)
-  "Return pixi environment name from CONFIG."
-  (let ((project-name (gethash "project-name" config)))
-    (if (and (stringp project-name)
-             (not (string-empty-p project-name)))
-        project-name
-      "default")))
+Relative `manifest-path' values are resolved from the directory that
+contains `foci.toml'."
+  (when-let* ((project (trivialfis/project-config directory))
+              (project-file (car project))
+              (config (cdr project))
+              (pixi (trivialfis/project-config-get config "pixi")))
+    (unless (listp pixi)
+      (error "Project setting pixi must be a TOML table"))
+    (let* ((project-root (file-name-directory project-file))
+           (manifest-setting
+            (trivialfis/pixi--string-option
+             pixi "manifest-path" trivialfis/pixi-default-manifest))
+           (manifest-path (expand-file-name manifest-setting project-root))
+           (workspace-root
+            (if (file-directory-p manifest-path)
+                (file-name-as-directory manifest-path)
+              (file-name-directory manifest-path)))
+           (environment
+            (trivialfis/pixi--string-option
+             pixi "environment" trivialfis/pixi-default-environment)))
+      (when (file-exists-p manifest-path)
+        (list :project-file project-file
+              :config config
+              :manifest-path manifest-path
+              :workspace-root workspace-root
+              :environment environment)))))
 
 (defun trivialfis/pixi-env-dir (&optional directory)
   "Return pixi environment directory for DIRECTORY, or nil.
 
-The environment is resolved as `.pixi/envs/<project-name>' from the
-project root.  `project-name' defaults to `default'."
-  (when-let* ((root-and-config (trivialfis/pixi--env-config directory))
-              (root (car root-and-config))
-              (config (cdr root-and-config)))
+The environment is resolved as `.pixi/envs/<environment>' relative to
+the configured manifest.  `environment' defaults to `default'."
+  (when-let ((config (trivialfis/pixi--env-config directory)))
     (expand-file-name
-     (f-join ".pixi" "envs" (trivialfis/pixi--env-name config))
-     root)))
+     (concat ".pixi/envs/" (plist-get config :environment))
+     (plist-get config :workspace-root))))
 
 (defun trivialfis/pixi--bin-dir (env-dir)
   "Return the executable directory for ENV-DIR."
@@ -81,6 +82,17 @@ project root.  `project-name' defaults to `default'."
                            (list (expand-file-name "python.exe" env-dir))
                          (list (expand-file-name "python" bin-dir)
                                (expand-file-name "python3" bin-dir)))))
+      (seq-find #'file-executable-p candidates))))
+
+(defun trivialfis/pixi-r-command (&optional directory)
+  "Return the pixi R executable for DIRECTORY, or nil."
+  (when-let* ((env-dir (trivialfis/pixi-env-dir directory))
+              (_ (file-directory-p env-dir)))
+    (let ((candidates
+           (if (eq system-type 'windows-nt)
+               (mapcar (lambda (path) (expand-file-name path env-dir))
+                       '("R.exe" "Scripts/R.exe" "Library/bin/R.exe" "bin/R.exe"))
+             (list (expand-file-name "bin/R" env-dir)))))
       (seq-find #'file-executable-p candidates))))
 
 (defun trivialfis/pixi--setenv-local (name value)
@@ -100,33 +112,59 @@ project root.  `project-name' defaults to `default'."
                  (split-string (or (getenv "PATH") "") separator t)))
    separator))
 
-(defun trivialfis/pixi-activate-path (env-dir)
-  "Make pixi environment ENV-DIR visible to Emacs subprocesses."
-  (let* ((env-dir (directory-file-name env-dir))
-         (bin-dir (trivialfis/pixi--bin-dir env-dir))
-         (path-separator (if (eq system-type 'windows-nt) ";" ":")))
-    (setq-local exec-path (cons bin-dir (remove bin-dir exec-path)))
-    (trivialfis/pixi--setenv-local
-     "PATH" (trivialfis/pixi--prepend-path bin-dir path-separator))
-    (trivialfis/pixi--setenv-local "CONDA_PREFIX" env-dir)
-    (trivialfis/pixi--setenv-local "VIRTUAL_ENV" env-dir)
-    (trivialfis/pixi--setenv-local "PIXI_ENVIRONMENT_NAME"
-                                   (file-name-nondirectory env-dir))
-    (when-let* ((root-and-config (trivialfis/pixi--env-config default-directory))
-                (project-root (car root-and-config)))
-      (trivialfis/pixi--setenv-local "PIXI_PROJECT_ROOT"
-                                     (directory-file-name project-root)))))
+(defun trivialfis/pixi-environment-variables (&optional directory)
+  "Return Pixi environment variable overrides for DIRECTORY, or nil."
+  (when-let* ((config (trivialfis/pixi--env-config directory))
+              (env-dir (trivialfis/pixi-env-dir directory))
+              (_ (file-directory-p env-dir)))
+    (let* ((env-dir (directory-file-name env-dir))
+           (bin-dir (trivialfis/pixi--bin-dir env-dir))
+           (separator (if (eq system-type 'windows-nt) ";" ":"))
+           (workspace-root
+            (directory-file-name (plist-get config :workspace-root)))
+           (manifest-path (plist-get config :manifest-path))
+           (environment (plist-get config :environment)))
+      (list (format "PATH=%s"
+                    (trivialfis/pixi--prepend-path bin-dir separator))
+            (format "CONDA_PREFIX=%s" env-dir)
+            (format "VIRTUAL_ENV=%s" env-dir)
+            (format "PIXI_ENVIRONMENT_NAME=%s" environment)
+            (format "PIXI_PROJECT_ROOT=%s" workspace-root)
+            (format "PIXI_PROJECT_MANIFEST=%s" manifest-path)))))
 
-(defun trivialfis/find-activate-pixi-env ()
-  "Activate pixi env if `.conda-env.json' selects pixi.
+(defun trivialfis/pixi-activate (&optional directory)
+  "Make the configured Pixi environment visible in the current buffer.
+
+Return its environment directory, or nil."
+  (when-let* ((env-dir (trivialfis/pixi-env-dir directory))
+              (variables (trivialfis/pixi-environment-variables directory)))
+    (unless (file-remote-p env-dir)
+      (let ((bin-dir (trivialfis/pixi--bin-dir env-dir)))
+        (setq-local exec-path (cons bin-dir (remove bin-dir exec-path)))
+        (dolist (entry variables)
+          (when (string-match "\\`\\([^=]+\\)=\\(.*\\)\\'" entry)
+            (trivialfis/pixi--setenv-local
+             (match-string 1 entry)
+             (match-string 2 entry))))))
+    env-dir))
+
+(defun trivialfis/find-activate-pixi-python ()
+  "Activate the project Pixi environment for Python.
 
 Return the environment's Python executable on success, or nil."
   (when-let* ((python (trivialfis/pixi-python-command default-directory))
-              (env-dir (trivialfis/pixi-env-dir default-directory)))
-    (unless (file-remote-p env-dir)
-      (trivialfis/pixi-activate-path env-dir))
+              (env-dir (trivialfis/pixi-activate default-directory)))
     (message "Pixi project env: %s" env-dir)
     python))
+
+(defun trivialfis/find-activate-pixi-r ()
+  "Activate the project Pixi environment for R.
+
+Return the environment's R executable on success, or nil."
+  (when-let* ((r-command (trivialfis/pixi-r-command default-directory))
+              (env-dir (trivialfis/pixi-activate default-directory)))
+    (message "Pixi project env: %s" env-dir)
+    r-command))
 
 (provide 'pixienv)
 ;;; pixienv.el ends here

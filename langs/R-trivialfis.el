@@ -1,20 +1,25 @@
-;;; R-trivialfis.el --- Summary
+;;; R-trivialfis.el --- Summary  -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
+
+(require 'subr-x)
 
 (eval-when-compile
   (require 'use-package))
 
 (use-package ess-r-mode)
 
-(use-package condaenv
+(use-package pixienv
   :defer t
-  :autoload trivialfis/find-activate-conda-env)
+  :autoload trivialfis/find-activate-pixi-r)
 (use-package lsp-trivialfis
   :autoload trivialfis/lsp)
-(use-package lsp-ui-mode
+(use-package lsp-ui
   :defer t
   :commands lsp-ui-mode)
+(use-package flycheck
+  :defer t
+  :commands flycheck-mode)
 (use-package files
   :defer t
   :autoload locate-dominating-file)
@@ -27,30 +32,33 @@
   :defer t
   :commands lsp
   :config
-  ;; check renv first, then anaconda.
-  (let ((profile (locate-dominating-file "." ".Rprofile")))
-    (if (and profile
-	     ;; Make sure the `.Rprfoile' under the home directory is not used
-	     (not (string=
-		   (file-name-as-directory (expand-file-name profile))
-		   (file-name-as-directory (getenv "HOME")))))
-	(let* ((activate-path (f-join profile "renv" "activate.R"))
-	       ;; Otherwise renv will bootstrap at current working directory
-	       (chdir (format "setwd('%s')" profile))
-	       (activate (format "source('%s')" activate-path))
-	       (server-run "languageserver::run()")
-	       (run (format "%s;%s;%s" chdir activate server-run)))
-	  (trivialfis/lsp)
-	  (message "renv activate script: %s" activate)
-	  (setq-local lsp-clients-r-server-command `("R" "--slave" "-e" ,run))
-	  (lsp-ui-mode 1))
-      (let ((condapy (trivialfis/find-activate-conda-env)))
-	(if condapy
-	    (progn
-	      (trivialfis/lsp)
-	      (lsp-ui-mode 1))))))
   (use-package lsp-r))
 
+(defun trivialfis/R--renv-root ()
+  "Return the current project's renv root, or nil."
+  (when-let ((profile (locate-dominating-file "." ".Rprofile")))
+    ;; Do not treat the user's home-level .Rprofile as a project renv.
+    (unless (string=
+             (file-name-as-directory (expand-file-name profile))
+             (file-name-as-directory (expand-file-name (getenv "HOME"))))
+      profile)))
+
+(defun trivialfis/R--configure-environment ()
+  "Configure the R command for renv or the project Pixi environment."
+  (if-let ((profile (trivialfis/R--renv-root)))
+      (let* ((activate-path (f-join profile "renv" "activate.R"))
+             ;; Otherwise renv bootstraps in `default-directory'.
+             (chdir (format "setwd('%s')" profile))
+             (activate (format "source('%s')" activate-path))
+             (server-run "languageserver::run()")
+             (run (format "%s;%s;%s" chdir activate server-run)))
+        (message "renv activate script: %s" activate)
+        (setq-local lsp-clients-r-server-command
+                    `("R" "--slave" "-e" ,run)))
+    (when-let ((r-command (trivialfis/find-activate-pixi-r)))
+      (setq-local inferior-ess-r-program r-command
+                  lsp-clients-r-server-command
+                  `(,r-command "--slave" "-e" "languageserver::run()")))))
 
 (defun trivialfis/ess ()
   "Configuration for ess."
@@ -62,6 +70,10 @@
 (defun trivialfis/R ()
   "R configuration."
   (trivialfis/ess)
+  (require 'lsp-mode)
+  (trivialfis/R--configure-environment)
+  (trivialfis/lsp)
+  (lsp-ui-mode 1)
   (lsp))
 
 (provide 'R-trivialfis)

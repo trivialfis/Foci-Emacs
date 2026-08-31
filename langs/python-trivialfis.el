@@ -26,6 +26,7 @@
 (require 'f)
 (require 'python)
 (require 'flycheck)
+(require 'subr-x)
 
 (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
@@ -57,14 +58,20 @@
 (use-package repl-trivialfis
   :commands (trivialfis/comint-send-input))
 
-(use-package condaenv
-  :commands
-  trivialfis/python-from-which
-  trivialfis/find-activate-conda-env)
-
 (use-package pixienv
   :commands
-  trivialfis/find-activate-pixi-env)
+  trivialfis/find-activate-pixi-python)
+
+(defun trivialfis/python-from-which ()
+  "Return the first Python executable available through the shell."
+  (message "Python from `command -v'")
+  (let ((path
+         (string-trim
+          (shell-command-to-string
+           "command -v python3 || command -v python || command -v python2"))))
+    (if (string-empty-p path)
+        "python"
+      (car (split-string path "\n" t)))))
 
 (cl-defstruct
     (python-env
@@ -99,8 +106,7 @@
 
 (cl-defun new-python-env ()
   "Create a new Python env struct."
-  (let* ((options '((trivialfis/find-activate-pixi-env . pixi-env)
-		    (trivialfis/find-activate-conda-env . conda-env)
+  (let* ((options '((trivialfis/find-activate-pixi-python . pixi-env)
 		    (trivialfis/find-activate-virtualenv . virtual-env)
 		    (trivialfis/filename-python-p . file-name)
 		    (trivialfis/python-from-shebang . shebang)))
@@ -234,19 +240,14 @@
     (setq-local current-env venv))
 
   (if (file-remote-p default-directory)
-      ;; Tramp, find virtualenv or conda env
+      ;; Tramp, find a project environment.
       (progn
 	;; (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-	(let* ((venv-path (python-env-path current-env))
-	       (conda-path (python-env-path current-env)))
+	(let ((venv-path (python-env-path current-env)))
 	  (cond
 	   ((eq (python-env-from current-env) 'virtual-env)
 	    (message "Remote virtualenv path: %s, %s" current-env (buffer-file-name))
 	    (add-to-list 'tramp-remote-path (f-join (f-dirname venv-path))))
-	   ((eq (python-env-from current-env) 'conda-env)
-	    (message "Remote conda path: %s, filename: %s" conda-path (buffer-file-name))
-	    (add-to-list 'tramp-remote-path
-			 (trivialfis/get--local-path (f-join (f-dirname venv-path)))))
 	   ((eq (python-env-from current-env) 'pixi-env)
 	    (message "Remote pixi path: %s, filename: %s" venv-path (buffer-file-name))
 	    (add-to-list 'tramp-remote-path
@@ -439,7 +440,6 @@ point."
                 (new-python-env))))
     (if (or
 	 (eq (python-env-from venv) 'pixi-env)
-	 (eq (python-env-from venv) 'conda-env)
 	 (eq (python-env-from venv) 'virtual-env))
 	(progn
 	  (message "Found a virtual environment: venv: %s, file: %s" venv (buffer-file-name))

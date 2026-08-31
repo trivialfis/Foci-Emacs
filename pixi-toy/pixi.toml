@@ -1,0 +1,15 @@
+[workspace]
+authors = ["Jiaming Yuan <jm.yuan@outlook.com>"]
+channels = ["conda-forge"]
+name = "pixi-toy"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+hello = "python hello.py"
+lint = "ruff check ."
+
+[dependencies]
+python = ">=3.14.4,<3.15"
+ruff = ">=0.15.11,<0.16"
+python-lsp-server = ">=1.14.0,<2"

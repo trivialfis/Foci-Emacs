@@ -32,18 +32,6 @@ Alternatively, go to the repository and run:
   nix profile install .
 #+END_SRC
 
-* Project environments
-
-Projects can select a Pixi environment with =foci.toml=:
-
-#+BEGIN_SRC toml
-  [pixi]
-  manifest-path = "pixi.toml"
-  environment = "default"
-#+END_SRC
-
-=manifest-path= is relative to =foci.toml= and defaults to =pixi.toml=. =environment= defaults to =default=.  Python mode, ESS/R, and other Emacs subprocesses use executables from the selected environment.  Pixi is currently the only supported project environment provider.
-
 * Compiling
 
 #+BEGIN_SRC sh

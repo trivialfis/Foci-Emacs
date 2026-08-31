@@ -68,20 +68,5 @@
 			  :key key
 			  :models '(claude-3.7)))))
 
-(defun trivialfis/aidermacs-minor-mode ()
-  "Enable aidermacs."
-  (interactive)
-  (use-package aidermacs
-    :defer t
-    :bind (("C-c a" . aidermacs-transient-menu))
-    :commands
-    aidermacs-transient-menu
-    :config
-    (setq aidermacs-default-chat-mode 'architect)))
-
-(use-package condaenv
-  :autoload trivialfis/find-activate-conda-env
-  :defer t)
-
 (provide 'llm-trivialfis)
 ;;; llm-trivialfis.el ends here
