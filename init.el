@@ -241,6 +241,11 @@
 
 ;; company mode
 (require 'company-dabbrev)
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") 'company-select-next)
+  (define-key company-active-map (kbd "M-p") 'company-select-previous)
+  (define-key company-active-map (kbd "C-n") nil)
+  (define-key company-active-map (kbd "C-p") nil))
 (setq company-dabbrev-downcase 0
       company-async-timeout 10
       company-idle-delay 0)
