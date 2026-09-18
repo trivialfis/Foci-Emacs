@@ -374,6 +374,26 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/bash "bash-trivialfis")
 (add-hook 'sh-mode-hook 'trivialfis/bash)
 
+;; Nix mode
+(declare-function lsp-deferred "lsp-mode")
+(declare-function nix-mode "nix-mode")
+(defvar lsp-enabled-clients)
+
+(use-package lsp-mode
+  :defer t
+  :commands lsp-deferred)
+
+(defun trivialfis/nix-start-lsp ()
+  "Start `lsp-mode' for the current Nix buffer using nil."
+  (require 'lsp-nix)
+  (setq-local lsp-enabled-clients '(nix-nil))
+  (lsp-deferred))
+
+(use-package nix-mode
+  :defer t
+  :mode ("\\.nix\\'" . nix-mode)
+  :hook (nix-mode . trivialfis/nix-start-lsp))
+
 ;; java mode
 (autoload 'trivialfis/java "java-trivialfis")
 (add-hook 'java-mode-hook 'trivialfis/java)
