@@ -444,6 +444,15 @@ KEY-COMMANDS: A list containing one or more (key command)"
 (autoload 'trivialfis/haskell "haskell-trivialfis")
 (add-hook 'haskell-mode-hook 'trivialfis/haskell)
 
+;; F# mode
+(autoload 'trivialfis/fsharp "fsharp-trivialfis")
+(use-package fsharp-ts-mode
+  :defer t
+  :mode (("\\.\\(fs\\|fsx\\|fsscript\\)\\'" . fsharp-ts-mode)
+         ("\\.fsi\\'" . fsharp-ts-signature-mode))
+  :hook ((fsharp-ts-mode . trivialfis/fsharp)
+         (fsharp-ts-signature-mode . trivialfis/fsharp)))
+
 (autoload 'trivialfis/gnus "gnus-trivialfis" :interactive t)
 
 (autoload 'trivialfis/json "json-trivialfis")

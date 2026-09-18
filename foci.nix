@@ -6,6 +6,15 @@ let
   emacsPackages = pkgs.emacsPackagesFor emacsPgtk;
   emacsWithPackages = emacsPackages.emacsWithPackages;
 
+  # nixpkgs packages the F# implementation grammar only.  Build the signature
+  # grammar from the same source for fsharp-ts-signature-mode (.fsi files).
+  tree-sitter-fsharp-signature = pkgs.tree-sitter.buildGrammar {
+    language = "fsharp_signature";
+    inherit (pkgs.tree-sitter-grammars.tree-sitter-fsharp) src version;
+    location = "fsharp_signature";
+    meta.homepage = "https://github.com/ionide/tree-sitter-fsharp";
+  };
+
   # --- Alloy 6 support (not packaged in nixpkgs) --------------------------
   # Tree-sitter grammar for the Alloy 6 specification language.
   tree-sitter-alloy = pkgs.tree-sitter.buildGrammar {
@@ -143,6 +152,7 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
   geiser                        # Scheme
   go-mode
   haskell-mode
+  fsharp-ts-mode                 # F# (bbatsov/fsharp-ts-mode)
   markdown-mode
   markdown-toc
   powershell
@@ -180,9 +190,9 @@ emacsWithPackages (epkgs: (with epkgs.melpaPackages; [
 ]) ++ (with epkgs; [
   bind-key
   cask
-  # Tree sitter: all nixpkgs grammars plus our out-of-tree Alloy grammar
+  # Tree sitter: all nixpkgs grammars plus Alloy and F# signatures
   (treesit-grammars.with-grammars
-    (g: (builtins.attrValues g) ++ [ tree-sitter-alloy ]))
+    (g: (builtins.attrValues g) ++ [ tree-sitter-alloy tree-sitter-fsharp-signature ]))
   # Alloy 6 support (out-of-tree; see `let` bindings above)
   alloy-ts-mode
   alloy-lsp
